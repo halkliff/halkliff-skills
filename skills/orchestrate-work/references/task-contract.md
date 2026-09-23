@@ -20,6 +20,8 @@ Workspace / base state: Absolute path; revision and dirty prerequisites if relev
 Inputs: Specific files, symbols, decisions, source URLs, or prior result paths.
 Constraints: Relevant user decisions, compatibility, excluded changes.
 Ownership: Files or areas this agent may edit; shared files owned elsewhere.
+Execution routing: Luna-owned execution units; parent-owned decisions, review, and integration.
+Parent execution exception, if needed: Task, applicable exception, evidence, and bounded scope.
 Dependencies: Accepted prerequisites, exact artifact revisions, and interface contracts.
 Consumers: Known downstream tasks and which outputs they need.
 Acceptance: Concrete examples, edge cases, checks, and required documentation.
@@ -50,6 +52,7 @@ Outcome: What actually changed or was established.
 Artifacts: Versioned manifest per communication.md, actual output locations, and scope.
 Evidence: Criterion -> command/observation/source -> result -> artifact version.
 Limitations: Failed or unrun checks, uncertainty, missing sources, remaining scope.
+Parent execution, if any: Work performed, exception record, and available usage evidence.
 Decisions needed: Open question IDs and basis for any resolved question.
 Hold acknowledgment: Last safe state and any running operations, when applicable.
 ```

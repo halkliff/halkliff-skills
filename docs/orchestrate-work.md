@@ -8,6 +8,12 @@ define the detailed behavior. Update the affected diagrams when those rules chan
 
 The main view uses one node per role. Each Sol owns a workstream and its own Luna workers. Separate Sol tasks require an explicit request; otherwise the workflow uses subagents. Worker counts follow the actual runtime capacity.
 
+Substantial execution goes to Luna by default. Sol delegates research,
+implementation, tests, and documentation while retaining coordination and review.
+Astra and Sol record a bounded exception before substantial direct execution;
+they queue work when Luna slots are full. See the skill's
+[Luna-first execution rule](../skills/orchestrate-work/SKILL.md#luna-first-execution).
+
 ## Workflow
 
 ```mermaid

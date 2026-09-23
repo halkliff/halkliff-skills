@@ -60,6 +60,11 @@ Invoke `$orchestrate-work` with the work you want to pursue. It starts through
 `define-goal`, requires `unslop` for authored prose, and follows the communication
 and uncertainty rules in the [skill](skills/orchestrate-work/SKILL.md).
 
+Execution is Luna-first: substantial research, implementation, tests, and document
+drafts go to Luna. Astra and Sol handle decisions, coordination, review, and
+integration. Substantial parent execution requires a recorded, bounded exception;
+occupied worker slots mean queueing work, not moving it to a larger model.
+
 See the [workflow diagrams](docs/orchestrate-work.md) for the goal loop,
 uncertainty escalation, and artifact handoffs. The editable Mermaid blocks render
 directly in GitHub's Markdown preview.

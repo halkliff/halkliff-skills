@@ -60,21 +60,46 @@ within existing review instead of spawning another reviewer for every message.
 | Role | Model / effort | Owns |
 | --- | --- | --- |
 | Orchestrator | GPT-6 Astra / high | Outcome, architecture, shared contracts, workstream boundaries, final acceptance |
-| Coordinator | GPT-6 Sol / high | Task briefs, Luna assignments, artifact review, workstream integration and documentation |
+| Coordinator | GPT-6 Sol / high | Task briefs, Luna assignments, artifact review, workstream integration and coordination records |
 | Difficult coordination | GPT-6 Sol / xhigh | Ambiguous interfaces, difficult diagnosis, unresolved contradictory evidence |
 | Worker | GPT-6 Luna / max | Bounded research, summaries, implementation, tests, and accompanying documentation |
 
 Keep these model choices unless the user changes them. Treat Luna Max as the
 chosen quality baseline, not a measured cost optimum. Workers are leaves.
-Coordinators may spawn workers; they do not create more coordinator layers.
+Coordinators delegate execution to Luna workers; they do not create more
+coordinator layers.
+
+### Luna-first execution
+
+Assign substantial research, summaries, implementation, test creation and execution,
+and product documentation drafts to Luna. Sol must delegate these execution tasks
+within its workstream. Astra owns goal definition, architecture, shared decisions,
+and final acceptance; Sol owns decomposition, coordination, review, and integration.
+These parent responsibilities remain with their assigned roles.
+
+Astra or Sol may execute worker-type work directly only for:
+
+- A small, tightly coupled task where delegation adds no useful independent work.
+- A focused independent verification or bounded evidence check needed for a parent
+  decision; broader investigation goes to Luna.
+- Integration edits required to combine accepted artifacts, limited to that scope.
+- Recovery after repeated failed corrections under the correction rule below, or
+  a fallback explicitly authorized by the author.
+
+Before substantial parent execution, record the task, applicable exception, evidence
+for it, and bounded scope in the task brief or ledger; report the actual work in
+the result. Convenience, confidence, and occupied worker slots are not exceptions.
+Queue execution until a Luna slot is available, reusing a suitable worker when
+possible. If the runtime cannot support delegation, follow the runtime adapter's
+escalation and authorized-fallback rules. Uncertainty always follows the hold
+protocol, including during direct execution.
 
 When the user explicitly requests separate task threads, use the task-thread
 topology: Astra coordinates durable Sol tasks; each Sol delegates to Luna
 subagents in its own task. Otherwise use subagents within the current task.
 This skill alone is not an explicit user request to create sidebar tasks.
 
-Complete small, tightly coupled work locally when delegation would add no useful
-independent work. For substantial work, delegate one coherent workstream to a Sol
+For substantial work, delegate one coherent workstream to a Sol
 coordinator while the root resolves architecture, acceptance, or another useful
 independent responsibility. In task-thread mode, start with two independent Sol
 workstreams, increasing only when dependencies, integration capacity, and actual
@@ -157,6 +182,9 @@ starts review; it is not acceptance.
 Sol inspects the actual artifact against the brief. Check behavior, edge cases,
 ownership, relevant callers, tests, and documentation. Run an independent check
 that could disprove a material claim; reusing the worker's summary is insufficient.
+Target the acceptance risk rather than repeating Luna's entire investigation or
+implementation. Preserve required independent checks and broaden them when the
+evidence exposes a gap.
 For summaries and research, inspect consequential source passages and preserve
 counterevidence. Mark the workstream accepted only when every criterion has
 evidence and no unresolved assumptions, or explicitly report what remains unmet.
@@ -201,6 +229,8 @@ every open question, and confirms no required child work remains active or unver
 When tuning efficiency, compare completed tasks at the same acceptance bar.
 Record wall time, agents spawned, retries, failed acceptance checks, and actual
 per-agent usage when the runtime exposes it. Otherwise mark token/cost data
-unavailable. Account usage percentages and word counts are not per-task token
-measurements. Prefer the simplest topology that meets the quality bar. Change
-the user's model/effort baseline only after proposing a measured alternative.
+unavailable. Include parent execution exceptions in the evaluation. Compare total
+cost or usage per accepted task, including coordination and retries; do not impose
+a Luna token-share quota. Account usage percentages and word counts are not
+per-task token measurements. Prefer the simplest topology that meets the quality
+bar. Change the user's model/effort baseline only after proposing a measured alternative.

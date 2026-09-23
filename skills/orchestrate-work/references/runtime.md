@@ -83,7 +83,7 @@ With `collaboration.spawn_agent`, set both `model` and `reasoning_effort` explic
   "model": "gpt-6-sol",
   "reasoning_effort": "high",
   "fork_turns": "none",
-  "message": "ROLE: coordinator. Read the supplied skill path and task brief. Own the assigned workstream. You have the explicitly allocated worker slots. Spawn bounded Luna workers only while doing useful independent coordination or review. Return acceptance evidence."
+  "message": "ROLE: coordinator. Read the supplied skill path and task brief. Own the assigned workstream. Delegate substantial execution to bounded Luna workers within your allocated slots while doing useful independent coordination or review. Queue excess work. Record any parent execution exception under the skill's Luna-first rule. Return acceptance evidence."
 }
 ```
 
