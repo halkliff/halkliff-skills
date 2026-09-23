@@ -1,0 +1,452 @@
+{
+  "schema_version": 1,
+  "upstreams": [
+    {
+      "id": "cursor-pstack",
+      "path": "upstream/cursor-plugins",
+      "url": "https://github.com/cursor/plugins.git",
+      "commit": "86ecc82055e4d3cb567e72c56f390800a4978c9b"
+    },
+    {
+      "id": "mattpocock",
+      "path": "upstream/mattpocock-skills",
+      "url": "https://github.com/mattpocock/skills.git",
+      "commit": "c55ee46073ed923f86ce59a5eb3b6d895095d1b7"
+    }
+  ],
+  "skills": [
+    {
+      "name": "orchestrate-work",
+      "files": [
+        {
+          "source": "skills/orchestrate-work/agents/openai.yaml",
+          "target": "agents/openai.yaml"
+        },
+        {
+          "source": "skills/orchestrate-work/CONTEXT.md",
+          "target": "CONTEXT.md"
+        },
+        {
+          "source": "skills/orchestrate-work/references/communication.md",
+          "target": "references/communication.md"
+        },
+        {
+          "source": "skills/orchestrate-work/references/goals.md",
+          "target": "references/goals.md"
+        },
+        {
+          "source": "skills/orchestrate-work/references/runtime.md",
+          "target": "references/runtime.md"
+        },
+        {
+          "source": "skills/orchestrate-work/references/task-contract.md",
+          "target": "references/task-contract.md"
+        },
+        {
+          "source": "skills/orchestrate-work/references/uncertainty.md",
+          "target": "references/uncertainty.md"
+        },
+        {
+          "source": "skills/orchestrate-work/SKILL.md",
+          "target": "SKILL.md"
+        },
+        {
+          "source": "LICENSE",
+          "target": "LICENSE.txt"
+        }
+      ]
+    },
+    {
+      "name": "define-goal",
+      "files": [
+        {
+          "source": "skills/define-goal/agents/openai.yaml",
+          "target": "agents/openai.yaml"
+        },
+        {
+          "source": "skills/define-goal/LICENSE.txt",
+          "target": "LICENSE.txt"
+        },
+        {
+          "source": "skills/define-goal/SKILL.md",
+          "target": "SKILL.md"
+        }
+      ]
+    },
+    {
+      "name": "pstack-principles",
+      "files": [
+        {
+          "source": "adapters/pstack-principles/references/principle-boundary-discipline.md",
+          "target": "references/principle-boundary-discipline.md"
+        },
+        {
+          "source": "adapters/pstack-principles/references/principle-build-the-lever.md",
+          "target": "references/principle-build-the-lever.md"
+        },
+        {
+          "source": "adapters/pstack-principles/references/principle-encode-lessons-in-structure.md",
+          "target": "references/principle-encode-lessons-in-structure.md"
+        },
+        {
+          "source": "upstream/cursor-plugins/pstack/skills/principle-exhaust-the-design-space/SKILL.md",
+          "target": "references/principle-exhaust-the-design-space.md"
+        },
+        {
+          "source": "adapters/pstack-principles/references/principle-experience-first.md",
+          "target": "references/principle-experience-first.md"
+        },
+        {
+          "source": "adapters/pstack-principles/references/principle-fix-root-causes.md",
+          "target": "references/principle-fix-root-causes.md"
+        },
+        {
+          "source": "adapters/pstack-principles/references/principle-foundational-thinking.md",
+          "target": "references/principle-foundational-thinking.md"
+        },
+        {
+          "source": "adapters/pstack-principles/references/principle-guard-the-context-window.md",
+          "target": "references/principle-guard-the-context-window.md"
+        },
+        {
+          "source": "adapters/pstack-principles/references/principle-laziness-protocol.md",
+          "target": "references/principle-laziness-protocol.md"
+        },
+        {
+          "source": "upstream/cursor-plugins/pstack/skills/principle-make-operations-idempotent/SKILL.md",
+          "target": "references/principle-make-operations-idempotent.md"
+        },
+        {
+          "source": "adapters/pstack-principles/references/principle-migrate-callers-then-delete-legacy-apis.md",
+          "target": "references/principle-migrate-callers-then-delete-legacy-apis.md"
+        },
+        {
+          "source": "adapters/pstack-principles/references/principle-minimize-reader-load.md",
+          "target": "references/principle-minimize-reader-load.md"
+        },
+        {
+          "source": "adapters/pstack-principles/references/principle-model-the-domain.md",
+          "target": "references/principle-model-the-domain.md"
+        },
+        {
+          "source": "adapters/pstack-principles/references/principle-never-block-on-the-human.md",
+          "target": "references/principle-never-block-on-the-human.md"
+        },
+        {
+          "source": "upstream/cursor-plugins/pstack/skills/principle-outcome-oriented-execution/SKILL.md",
+          "target": "references/principle-outcome-oriented-execution.md"
+        },
+        {
+          "source": "adapters/pstack-principles/references/principle-prove-it-works.md",
+          "target": "references/principle-prove-it-works.md"
+        },
+        {
+          "source": "adapters/pstack-principles/references/principle-redesign-from-first-principles.md",
+          "target": "references/principle-redesign-from-first-principles.md"
+        },
+        {
+          "source": "adapters/pstack-principles/references/principle-separate-before-serializing-shared-state.md",
+          "target": "references/principle-separate-before-serializing-shared-state.md"
+        },
+        {
+          "source": "adapters/pstack-principles/references/principle-sequence-verifiable-units.md",
+          "target": "references/principle-sequence-verifiable-units.md"
+        },
+        {
+          "source": "adapters/pstack-principles/references/principle-subtract-before-you-add.md",
+          "target": "references/principle-subtract-before-you-add.md"
+        },
+        {
+          "source": "adapters/pstack-principles/references/principle-type-system-discipline.md",
+          "target": "references/principle-type-system-discipline.md"
+        },
+        {
+          "source": "adapters/pstack-principles/SKILL.md",
+          "target": "SKILL.md"
+        },
+        {
+          "source": "upstream/cursor-plugins/pstack/LICENSE",
+          "target": "LICENSE.upstream.txt"
+        }
+      ],
+      "origin": {
+        "upstream": "cursor-pstack",
+        "path": "upstream/cursor-plugins/pstack/skills"
+      }
+    },
+    {
+      "name": "unslop",
+      "files": [
+        {
+          "source": "adapters/unslop/SKILL.md",
+          "target": "SKILL.md"
+        },
+        {
+          "source": "upstream/cursor-plugins/pstack/LICENSE",
+          "target": "LICENSE.upstream.txt"
+        }
+      ],
+      "origin": {
+        "upstream": "cursor-pstack",
+        "path": "upstream/cursor-plugins/pstack/skills/unslop"
+      }
+    },
+    {
+      "name": "how",
+      "files": [
+        {
+          "source": "adapters/how/references/critic-prompt.md",
+          "target": "references/critic-prompt.md"
+        },
+        {
+          "source": "adapters/how/references/critique-rubric.md",
+          "target": "references/critique-rubric.md"
+        },
+        {
+          "source": "adapters/how/references/explainer-prompt.md",
+          "target": "references/explainer-prompt.md"
+        },
+        {
+          "source": "adapters/how/references/explorer-prompt.md",
+          "target": "references/explorer-prompt.md"
+        },
+        {
+          "source": "adapters/how/SKILL.md",
+          "target": "SKILL.md"
+        },
+        {
+          "source": "upstream/cursor-plugins/pstack/LICENSE",
+          "target": "LICENSE.upstream.txt"
+        }
+      ],
+      "origin": {
+        "upstream": "cursor-pstack",
+        "path": "upstream/cursor-plugins/pstack/skills/how"
+      }
+    },
+    {
+      "name": "why",
+      "files": [
+        {
+          "source": "adapters/why/references/epistemics.md",
+          "target": "references/epistemics.md"
+        },
+        {
+          "source": "adapters/why/references/investigator-prompt.md",
+          "target": "references/investigator-prompt.md"
+        },
+        {
+          "source": "adapters/why/references/source-playbook.md",
+          "target": "references/source-playbook.md"
+        },
+        {
+          "source": "upstream/cursor-plugins/pstack/skills/why/references/sources/code-archaeology.md",
+          "target": "references/sources/code-archaeology.md"
+        },
+        {
+          "source": "adapters/why/references/sources/databricks.md",
+          "target": "references/sources/databricks.md"
+        },
+        {
+          "source": "adapters/why/references/sources/datadog.md",
+          "target": "references/sources/datadog.md"
+        },
+        {
+          "source": "adapters/why/references/sources/incident-postmortem.md",
+          "target": "references/sources/incident-postmortem.md"
+        },
+        {
+          "source": "adapters/why/references/sources/linear.md",
+          "target": "references/sources/linear.md"
+        },
+        {
+          "source": "adapters/why/references/sources/notion.md",
+          "target": "references/sources/notion.md"
+        },
+        {
+          "source": "adapters/why/references/sources/sentry.md",
+          "target": "references/sources/sentry.md"
+        },
+        {
+          "source": "adapters/why/references/sources/slack.md",
+          "target": "references/sources/slack.md"
+        },
+        {
+          "source": "adapters/why/references/synthesizer-prompt.md",
+          "target": "references/synthesizer-prompt.md"
+        },
+        {
+          "source": "adapters/why/SKILL.md",
+          "target": "SKILL.md"
+        },
+        {
+          "source": "upstream/cursor-plugins/pstack/LICENSE",
+          "target": "LICENSE.upstream.txt"
+        }
+      ],
+      "origin": {
+        "upstream": "cursor-pstack",
+        "path": "upstream/cursor-plugins/pstack/skills/why"
+      }
+    },
+    {
+      "name": "blast-radius",
+      "files": [
+        {
+          "source": "adapters/blast-radius/SKILL.md",
+          "target": "SKILL.md"
+        },
+        {
+          "source": "upstream/cursor-plugins/pstack/LICENSE",
+          "target": "LICENSE.upstream.txt"
+        }
+      ],
+      "origin": {
+        "upstream": "cursor-pstack",
+        "path": "upstream/cursor-plugins/pstack/skills/blast-radius"
+      }
+    },
+    {
+      "name": "no-comments",
+      "files": [
+        {
+          "source": "adapters/no-comments/SKILL.md",
+          "target": "SKILL.md"
+        },
+        {
+          "source": "upstream/cursor-plugins/pstack/LICENSE",
+          "target": "LICENSE.upstream.txt"
+        }
+      ],
+      "origin": {
+        "upstream": "cursor-pstack",
+        "path": "upstream/cursor-plugins/pstack/skills/no-comments"
+      }
+    },
+    {
+      "name": "grilling",
+      "files": [
+        {
+          "source": "upstream/mattpocock-skills/skills/productivity/grilling/agents/openai.yaml",
+          "target": "agents/openai.yaml"
+        },
+        {
+          "source": "upstream/mattpocock-skills/skills/productivity/grilling/SKILL.md",
+          "target": "SKILL.md"
+        },
+        {
+          "source": "upstream/mattpocock-skills/LICENSE",
+          "target": "LICENSE.upstream.txt"
+        }
+      ],
+      "origin": {
+        "upstream": "mattpocock",
+        "path": "upstream/mattpocock-skills/skills/productivity/grilling"
+      }
+    },
+    {
+      "name": "writing-for-agents",
+      "files": [
+        {
+          "source": "upstream/mattpocock-skills/skills/productivity/writing-for-agents/agents/openai.yaml",
+          "target": "agents/openai.yaml"
+        },
+        {
+          "source": "adapters/writing-for-agents/SKILL-MECHANICS.md",
+          "target": "SKILL-MECHANICS.md"
+        },
+        {
+          "source": "upstream/mattpocock-skills/skills/productivity/writing-for-agents/SKILL.md",
+          "target": "SKILL.md"
+        },
+        {
+          "source": "upstream/mattpocock-skills/LICENSE",
+          "target": "LICENSE.upstream.txt"
+        }
+      ],
+      "origin": {
+        "upstream": "mattpocock",
+        "path": "upstream/mattpocock-skills/skills/productivity/writing-for-agents"
+      }
+    },
+    {
+      "name": "domain-modeling",
+      "files": [
+        {
+          "source": "upstream/mattpocock-skills/skills/engineering/domain-modeling/ADR-FORMAT.md",
+          "target": "ADR-FORMAT.md"
+        },
+        {
+          "source": "upstream/mattpocock-skills/skills/engineering/domain-modeling/agents/openai.yaml",
+          "target": "agents/openai.yaml"
+        },
+        {
+          "source": "upstream/mattpocock-skills/skills/engineering/domain-modeling/CONTEXT-FORMAT.md",
+          "target": "CONTEXT-FORMAT.md"
+        },
+        {
+          "source": "upstream/mattpocock-skills/skills/engineering/domain-modeling/SKILL.md",
+          "target": "SKILL.md"
+        },
+        {
+          "source": "upstream/mattpocock-skills/LICENSE",
+          "target": "LICENSE.upstream.txt"
+        }
+      ],
+      "origin": {
+        "upstream": "mattpocock",
+        "path": "upstream/mattpocock-skills/skills/engineering/domain-modeling"
+      }
+    },
+    {
+      "name": "codebase-design",
+      "files": [
+        {
+          "source": "upstream/mattpocock-skills/skills/engineering/codebase-design/agents/openai.yaml",
+          "target": "agents/openai.yaml"
+        },
+        {
+          "source": "upstream/mattpocock-skills/skills/engineering/codebase-design/DEEPENING.md",
+          "target": "DEEPENING.md"
+        },
+        {
+          "source": "upstream/mattpocock-skills/skills/engineering/codebase-design/DESIGN-IT-TWICE.md",
+          "target": "DESIGN-IT-TWICE.md"
+        },
+        {
+          "source": "upstream/mattpocock-skills/skills/engineering/codebase-design/SKILL.md",
+          "target": "SKILL.md"
+        },
+        {
+          "source": "upstream/mattpocock-skills/LICENSE",
+          "target": "LICENSE.upstream.txt"
+        }
+      ],
+      "origin": {
+        "upstream": "mattpocock",
+        "path": "upstream/mattpocock-skills/skills/engineering/codebase-design"
+      }
+    },
+    {
+      "name": "research",
+      "files": [
+        {
+          "source": "upstream/mattpocock-skills/skills/engineering/research/agents/openai.yaml",
+          "target": "agents/openai.yaml"
+        },
+        {
+          "source": "adapters/research/SKILL.md",
+          "target": "SKILL.md"
+        },
+        {
+          "source": "upstream/mattpocock-skills/LICENSE",
+          "target": "LICENSE.upstream.txt"
+        }
+      ],
+      "origin": {
+        "upstream": "mattpocock",
+        "path": "upstream/mattpocock-skills/skills/engineering/research"
+      }
+    }
+  ]
+}

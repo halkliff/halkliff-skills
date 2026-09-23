@@ -1,0 +1,6 @@
+interface:
+  display_name: "Orchestrate work"
+  short_description: "Astra plans, Sol verifies, Luna executes"
+  default_prompt: "Use $orchestrate-work and $define-goal to establish the objective and acceptance criteria first. Once those are resolved, create or reuse the top-level goal and create Sol workstream tasks with Luna workers as needed. Apply $unslop to all authored prose and escalate uncertainty through the hierarchy."
+policy:
+  allow_implicit_invocation: false
