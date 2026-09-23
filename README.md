@@ -60,6 +60,10 @@ Invoke `$orchestrate-work` with the work you want to pursue. It starts through
 `define-goal`, requires `unslop` for authored prose, and follows the communication
 and uncertainty rules in the [skill](skills/orchestrate-work/SKILL.md).
 
+See the [workflow diagrams](docs/orchestrate-work.md) for the goal loop,
+uncertainty escalation, and artifact handoffs. The editable Mermaid blocks render
+directly in GitHub's Markdown preview.
+
 The orchestration runtime targets Codex: it needs the model, goal, task, and
 subagent capabilities described in its runtime reference. Installing Markdown
 does not grant unavailable tools or models. Other agent runtimes need a reviewed
