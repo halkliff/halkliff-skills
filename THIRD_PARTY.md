@@ -38,9 +38,10 @@ they are not dependencies of `orchestrate-work`. Only the reusable `grilling`
 skill is needed here. Likewise, the package excludes upstream issue-tracker setup
 and publishing workflows.
 
-Two narrow compatibility changes are maintained in this collection: an assigned
-research worker performs its own investigation instead of recursively spawning
-another agent, and the writing-for-agents invocation reference describes Codex's
+The research adaptation lets an assigned worker investigate directly without
+recursive delegation. Bounded findings may be returned in native messages;
+substantial reusable findings and contract-required reports remain Markdown
+artifacts. The writing-for-agents invocation reference describes Codex's
 `agents/openai.yaml` policy. The latter preserves the required skill description
 and does not treat another client's frontmatter as Codex configuration.
 

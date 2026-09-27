@@ -27,20 +27,12 @@
           "target": "CONTEXT.md"
         },
         {
-          "source": "skills/orchestrate-work/references/communication.md",
-          "target": "references/communication.md"
-        },
-        {
-          "source": "skills/orchestrate-work/references/goals.md",
-          "target": "references/goals.md"
+          "source": "skills/orchestrate-work/references/git.md",
+          "target": "references/git.md"
         },
         {
           "source": "skills/orchestrate-work/references/runtime.md",
           "target": "references/runtime.md"
-        },
-        {
-          "source": "skills/orchestrate-work/references/task-contract.md",
-          "target": "references/task-contract.md"
         },
         {
           "source": "skills/orchestrate-work/references/uncertainty.md",
@@ -53,6 +45,18 @@
         {
           "source": "LICENSE",
           "target": "LICENSE.txt"
+        },
+        {
+          "source": "skills/orchestrate-work/references/protocol.md",
+          "target": "references/protocol.md"
+        },
+        {
+          "source": "skills/orchestrate-work/references/worker.md",
+          "target": "references/worker.md"
+        },
+        {
+          "source": "skills/orchestrate-work/scripts/git_workflow.py",
+          "target": "scripts/git_workflow.py"
         }
       ]
     },

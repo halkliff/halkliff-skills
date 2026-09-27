@@ -1,97 +1,109 @@
 # Orchestrate-work
 
-These diagrams summarize the [skill](../skills/orchestrate-work/SKILL.md).
-The [goal lifecycle](../skills/orchestrate-work/references/goals.md),
-[uncertainty protocol](../skills/orchestrate-work/references/uncertainty.md), and
-[communication protocol](../skills/orchestrate-work/references/communication.md)
-define the detailed behavior. Update the affected diagrams when those rules change.
+These Mermaid diagrams summarize [workflow revision 2](../skills/orchestrate-work/SKILL.md).
+They inherit the renderer's light or dark theme. Edit the blocks directly;
+GitHub renders them in Markdown previews.
 
-The main view uses one node per role. Each Sol owns a workstream and its own Luna workers. Separate Sol tasks require an explicit request; otherwise the workflow uses subagents. Worker counts follow the actual runtime capacity.
-
-Substantial execution goes to Luna by default. Sol delegates research,
-implementation, tests, and documentation while retaining coordination and review.
-Astra and Sol record a bounded exception before substantial direct execution;
-they queue work when Luna slots are full. See the skill's
-[Luna-first execution rule](../skills/orchestrate-work/SKILL.md#luna-first-execution).
-
-## Workflow
+## Roles and goal loop
 
 ```mermaid
 flowchart TB
     author([Author])
-    definition["define-goal<br/>Scope + acceptance criteria"]
-    astra["Astra · GPT-6 High<br/>Contracts · integration · acceptance"]
-    sol["Sol · GPT-6 High / xHigh<br/>Coordinate · verify"]
-    luna["Luna · GPT-6 Max<br/>Research · summarize · implement · test"]
-    acceptance{"Acceptance met?"}
+    astra["Astra · High<br/>Architecture · goal · integration"]
+    research["Luna · xHigh<br/>Research · claim checks"]
+    sol["Sol · High / xHigh<br/>Decompose · delegate · verify"]
+    luna["Luna · xHigh<br/>Research · implement · test"]
+    complex["Sol · High / xHigh<br/>Complex implementation"]
+    acceptance{"Goal criteria met?"}
     complete([Complete])
 
-    author -->|Invoke| definition
-    definition -->|Defined objective| astra
-    astra -->|Task contracts| sol
-    sol -->|Bounded briefs| luna
-    luna -.->|Artifacts / questions| sol
-    sol -.->|Review / escalation| astra
-    astra -->|Integration checks| acceptance
+    author -->|define-goal| astra
+    astra -->|Research question| research
+    research -.->|Findings / uncertainty| astra
+    astra -->|Workstream contract| sol
+    sol -->|Worker guide + brief| luna
+    sol -->|Worker guide + complex brief| complex
+    luna -.->|Results / questions| sol
+    complex -.->|Results / questions| sol
+    sol -.->|Accepted slices / escalation| astra
+    astra -->|Integrated checks| acceptance
     acceptance -->|Yes| complete
     acceptance -->|Remaining work| astra
-    astra -.->|Unresolved: hold + ask| author
-    author -->|Decision: revise + resume| astra
+    astra -.->|Author decision needed| author
 ```
 
-Astra creates or reuses a top-level goal only when explicitly requested. Acceptance means every requirement has current evidence, no questions remain unresolved, and no required child work remains. Until then, Astra dispatches ready work and keeps affected dependencies on hold.
+Each Sol owns an autonomous workstream and reviews its workers against the parent
+contract and its derived criteria. Sol implementation workers remain leaves;
+research and summaries use Luna, with the skill's bounded trivial-lookup exception. Separate Sol tasks and a top-level goal each
+require the author's explicit request. Worker counts follow runtime capacity;
+excess work queues. xHigh is an effort setting, not a termination guarantee.
 
-## Uncertainty and scoped holds
+## Decisions and scoped holds
 
 ```mermaid
 flowchart TB
-    doubt["Luna is uncertain"]
-    localHold["Stop the affected assignment<br/>Preserve work · send question + evidence"]
-    sol{"Can Sol resolve it<br/>from the contract + evidence?"}
-    astra{"Can Astra resolve it<br/>with accepted decisions + bounded research?"}
-    hold["Hold affected work + dependents<br/>Send stop requests · track stopped ACKs"]
-    author["Ask the author immediately<br/>Do not wait for every stop ACK"]
-    answer["Record the answer + its authority<br/>Revise affected contracts and evidence"]
-    resume["Sol applies the revision and briefs workers<br/>Resume only work whose holds are resolved"]
-    independent["Continue already-authorized independent work<br/>Only when independence is established"]
+    question["Worker encounters uncertainty"]
+    bounded{"Reversible internal choice<br/>within accepted requirements?"}
+    choose["Choose · record reason · verify"]
+    sol["Sol reviews the question"]
+    fact["Luna investigates a missing fact"]
+    astra["Astra resolves shared decisions"]
+    author["Author resolves intent or conflict"]
+    hold["Hold affected work and dependents<br/>Track stopped ACKs"]
+    resume["Update affected contracts<br/>Resume resolved scope"]
 
-    doubt --> localHold --> sol
-    sol -->|Yes: evidence-backed answer| answer
-    sol -->|No: escalate and hold dependents| astra
-    astra -->|Yes: evidence-backed answer| answer
-    astra -->|No, or an author choice is missing| hold
-    hold --> author
-    hold -.-> independent
-    author -->|Explicit guidance| answer
-    answer --> resume
+    question --> bounded
+    bounded -->|Yes| choose
+    bounded -->|No or unclear| hold
+    hold --> sol
+    sol -->|Fact needed| fact
+    fact -.->|Evidence| sol
+    sol -->|Resolved| resume
+    sol -->|Unresolved| astra
+    astra -->|New factual question| fact
+    fact -.->|Evidence to assigning parent| astra
+    astra -->|Resolved| resume
+    astra -->|Missing intent / conflicting requirements| author
+    author -->|Decision| resume
 ```
 
-## Artifact handoffs
+Known requirement conflicts go promptly to the author; agents do not repeat
+research to avoid that decision. Independent work may continue only when none of
+the unresolved alternatives affects it. Only holds require ACKs. An explicit goal
+pause stops all goal work. See [uncertainty](../skills/orchestrate-work/references/uncertainty.md)
+and [goal lifecycle](../skills/orchestrate-work/references/runtime.md#goals).
+
+## Work and evidence handoff
 
 ```mermaid
 sequenceDiagram
-    participant LA as Luna A
-    participant SA as Sol A
+    participant W as Worker
+    participant S as Sol A
     participant A as Astra
-    participant SB as Sol B
-    participant LB as Luna B
+    participant I as Integration clone
+    participant M as Author checkout
+    participant B as Sol B
 
-    LA->>SA: Versioned artifacts + checks + questions
-    SA->>SA: Inspect artifacts and independently verify
-    SA->>A: Reviewed manifest + exact artifact revisions
-    A->>A: Check evidence, acceptance and dependency effects
-    A->>SB: Relevant artifacts + revision + requested action
-    SB->>SB: Check access, authority, revisions and holds
-    SB->>LB: Apply relevant changes to the worker brief
-    SB-->>A: Applied ACK with evidence
-    Note over SA,SB: Markdown is the durable record. Native messages notify recipients
-    Note over A,SB: Receipt, application, acceptance and integration are separate states
+    W->>W: Implement and test in agent clone
+    W->>S: Commit + results + remaining limits
+    S->>S: Review diff and behavior against criteria
+    S->>A: Accepted slice + base + prerequisites
+    A->>I: Integrate small accepted slice
+    A->>M: Apply scoped changes, uncommitted
+    A->>M: Check integrated acceptance
+    A->>B: Accepted checkpoint + relevant findings
+    B->>B: Sync own clone and continue assigned work
+    Note over W,B: Native messages carry questions and reports.<br/>Files hold reusable work
+    Note over I,M: Agents commit in their clones.<br/>The author commits in their repository
 ```
 
-All roles apply pstack-principles and unslop. Published Markdown messages and artifacts are versioned; native notifications point to the exact records. A worker being ready does not mean its work has been accepted or integrated.
+Workers run local checks, Sol reviews their evidence and behavior, and Astra
+checks the integrated result. Repeat checks only when changed inputs or missing
+evidence justify it. Research reports can travel independently of code commits.
+Receipt, local acceptance, integration and goal acceptance remain distinct.
 
-Goal continuation remains subject to actual runtime and budget limits. A scoped execution hold is distinct from the goal tool's paused or blocked status. An explicit goal pause stops all goal work, including otherwise independent assignments.
-
-Edit the Mermaid blocks in this document directly. GitHub renders them in the
-Markdown preview; no image export or plugin is required. The blocks leave theme
-selection to the renderer.
+Use one absolute coordination directory with a compact current ledger and
+rewritten workstream state. Archive meaningful history outside the default read
+path. Apply pstack-principles throughout and unslop to author-facing prose and
+deliverables. See [work protocol](../skills/orchestrate-work/references/protocol.md) and
+[Git isolation](../skills/orchestrate-work/references/git.md) for the operational rules.

@@ -1,8 +1,8 @@
 # halkliff-skills
 
 Personal Codex skills, including `orchestrate-work` and the dependencies it uses.
-The workflow defines a goal, coordinates Astra/Sol/Luna work, passes versioned
-artifacts between tasks, and escalates uncertainty to the author. It runs only
+The workflow defines a goal, coordinates Astra/Sol/Luna work, uses native task messages and versioned work products, and escalates consequential
+uncertainty to the author. It runs only
 when explicitly invoked.
 
 Original work is [MIT licensed](LICENSE). Upstream adaptations retain their
@@ -57,13 +57,30 @@ folder through a generic single-skill downloader does not install its dependenci
 ## Use
 
 Invoke `$orchestrate-work` with the work you want to pursue. It starts through
-`define-goal`, requires `unslop` for authored prose, and follows the communication
+`define-goal`, requires `unslop` for author-facing prose and deliverables, and follows the communication
 and uncertainty rules in the [skill](skills/orchestrate-work/SKILL.md).
 
-Execution is Luna-first: substantial research, implementation, tests, and document
-drafts go to Luna. Astra and Sol handle decisions, coordination, review, and
-integration. Substantial parent execution requires a recorded, bounded exception;
-occupied worker slots mean queueing work, not moving it to a larger model.
+Execution is Luna-first: research, claim checks and summaries use Luna xHigh,
+including research assigned directly by Astra. Parents may resolve a trivial lookup
+with one known file read or targeted read-only command; larger investigations remain
+delegated. Autonomous Sol High/xHigh
+coordinators decompose work, dispatch workers and verify until their assignment
+is complete or held. They normally use Luna xHigh for implementation and may use
+a Sol High/xHigh leaf worker when complexity warrants it. Full worker slots mean
+queueing work. Model effort does not guarantee termination.
+
+Reversible internal decisions stay with the responsible agent. Questions about
+public behavior, scope, compatibility, security, irreversible actions or conflicting
+requirements escalate. Native messages carry routine coordination; only holds
+require explicit ACKs. Current-state ledgers stay compact. Agents commit in their
+own local clones; Astra integrates accepted slices into the author's checkout as
+uncommitted changes. The author owns commits, branches and pushes there.
+
+Workflow revision 2 is a repository update. Existing installations and live runs
+are not migrated automatically. See the [revision and rollout notes](docs/orchestration-v2.md)
+before adopting it in an existing run. Workers load a compact worker guide and
+their brief. Packaged Git helpers handle dirty baseline capture and scoped delivery;
+run their `--help` through the skill's Git reference.
 
 See the [workflow diagrams](docs/orchestrate-work.md) for the goal loop,
 uncertainty escalation, and artifact handoffs. The editable Mermaid blocks render

@@ -1,236 +1,86 @@
 ---
 name: orchestrate-work
-description: Explicitly invoked personal workflow for Astra orchestration, Sol workstreams, and Luna workers, with define-goal, uncertainty escalation, artifact handoffs, and unslop.
+description: Explicitly invoked workflow for Astra orchestration, autonomous Sol workstreams, and Luna-first execution with defined goals, bounded decisions, and evidence-based acceptance.
 ---
 
 # Orchestrate work
 
-Run only when the author explicitly invokes this skill, including delegated
-assignments within that invoked run. Do not select it automatically for an
-ordinary task, a complex project, or a generic mention of agents or goals.
+Run on the author's explicit invocation, including bounded assignments within
+that run. Optimize for accepted outcomes per unit of model work. Apply
+pstack-principles; the author owns scope and consequential decisions.
 
-Use a small team to deliver the user's outcome. This skill requests delegation
-for substantial independent work. It does not expand the user's scope or authorize
-external actions. Apply `pstack-principles`; load other skills only at the role
-and point where they change the work. Use [CONTEXT.md](CONTEXT.md) when defining
-task contracts or resolving terminology; it is the vocabulary, not a second spec.
+## Define and route
 
-## Decision authority and uncertainty
+Astra runs `define-goal` before implementation: establish scope, requirements,
+acceptance evidence and reserved decisions. Editing this skill creates no goal.
+Use [runtime.md](references/runtime.md) for goal and dispatch operations.
 
-Agents must not fill any gap with an assumption. Act only on explicit requirements,
-verified evidence, or choices explicitly delegated by the task contract. If an
-agent is doubtful about what to do, what a requirement means, or whether evidence
-establishes a needed fact, stop the affected work and escalate immediately:
-Luna to its Sol, Sol to Astra, and Astra to the author when research cannot resolve
-it. Seniority and confidence are not evidence or permission to invent a requirement.
-
-Before dispatch, read [uncertainty.md](references/uncertainty.md). Include the
-escalation route, contract revision, and stop/resume protocol in every brief.
-At an unresolved Astra escalation, immediately hold affected work and its
-dependents, ask the author, and await guidance for those assignments. Continue
-unrelated authorized work only when its independence is established and recorded;
-uncertain independence means hold and escalate. Cooperative stop requests with
-acknowledgment tracking are accepted. Preserve work and report pending stops.
-
-## Begin with define-goal
-
-Before substantive orchestration, Astra must read and execute `define-goal`, then
-follow [goals.md](references/goals.md). Establish the outcome, scope, acceptance
-evidence, and uncertainty stop rule before implementation assignments. Resolve
-definition gaps first; do not substitute an informal plan for this entry step.
-If the skill is unavailable, report the missing prerequisite instead of silently
-inventing a replacement. Astra alone owns the top-level goal; Sol and Luna receive
-bounded assignments. Creating a goal still requires an explicit user request for
-goal-backed execution; drafting this workflow is not such a request. Continue
-authorized execution until every requirement has current acceptance evidence,
-subject to applicable holds and actual runtime limits. An explicit user request
-for goal-free work takes precedence.
-
-## Required prose pass
-
-Every role must read and apply `unslop` when authoring prose. Apply it while
-drafting and before publishing briefs, messages, research, implementation reports,
-documentation, or replies to the author. Preserve quotations, citations, technical
-meaning, code, and required schema fields. Parent review includes the prose itself;
-an "unslop applied" label is not evidence of readable writing. Correct prose issues
-within existing review instead of spawning another reviewer for every message.
-
-## Roles and scale
-
-| Role | Model / effort | Owns |
+| Role | Model / effort | Responsibility |
 | --- | --- | --- |
-| Orchestrator | GPT-6 Astra / high | Outcome, architecture, shared contracts, workstream boundaries, final acceptance |
-| Coordinator | GPT-6 Sol / high | Task briefs, Luna assignments, artifact review, workstream integration and coordination records |
-| Difficult coordination | GPT-6 Sol / xhigh | Ambiguous interfaces, difficult diagnosis, unresolved contradictory evidence |
-| Worker | GPT-6 Luna / max | Bounded research, summaries, implementation, tests, and accompanying documentation |
+| Orchestrator | Astra / high | Architecture, goal, shared contracts, author interaction, integration, final acceptance |
+| Coordinator | Sol / high or xhigh | Decompose and complete a workstream; assign workers and verify results |
+| Default worker | Luna / xhigh | Research, claim checks, summaries, implementation, tests, documentation |
+| Complex implementation worker | Sol / high or xhigh | Bounded implementation too complex for Luna; remains a leaf |
 
-Keep these model choices unless the user changes them. Treat Luna Max as the
-chosen quality baseline, not a measured cost optimum. Workers are leaves.
-Coordinators delegate execution to Luna workers; they do not create more
-coordinator layers.
+Research and summarization go to Luna xHigh, including Astra's fact-finding.
+A parent may resolve a trivial lookup with one known file read or one targeted
+read-only command. If unresolved, delegate; repeated lookups or a command wrapping
+an investigation do not qualify. Sol implementation workers receive implementation
+assignments, never research assignments. Researchers return complete relevant
+findings, sources, counterevidence and limits, without raw search transcripts.
 
-### Luna-first execution
+Sol selects High normally and xHigh for difficult coordination. Use a Sol worker
+for complex implementation with a short reason. Occupied slots mean queueing,
+not promotion. Workers remain leaves. xHigh is not a termination guarantee.
 
-Assign substantial research, summaries, implementation, test creation and execution,
-and product documentation drafts to Luna. Sol must delegate these execution tasks
-within its workstream. Astra owns goal definition, architecture, shared decisions,
-and final acceptance; Sol owns decomposition, coordination, review, and integration.
-These parent responsibilities remain with their assigned roles.
+## Read by role
 
-Astra or Sol may execute worker-type work directly only for:
+- Astra: this entrypoint, [protocol.md](references/protocol.md), and runtime;
+  [uncertainty.md](references/uncertainty.md) when deciding or holding work.
+- Sol: this entrypoint and protocol; runtime when dispatching, uncertainty when
+  resolving questions. Continue through decomposition, implementation, review and
+  correction until the assignment is complete or held.
+- Workers: send only [worker.md](references/worker.md) plus a sufficient brief.
+  They do not load this manual or coordinator references by default.
+- Git owners: [git.md](references/git.md) before repository setup or delivery.
+  [CONTEXT.md](CONTEXT.md) resolves workflow-specific terminology when needed.
 
-- A small, tightly coupled task where delegation adds no useful independent work.
-- A focused independent verification or bounded evidence check needed for a parent
-  decision; broader investigation goes to Luna.
-- Integration edits required to combine accepted artifacts, limited to that scope.
-- Recovery after repeated failed corrections under the correction rule below, or
-  a fallback explicitly authorized by the author.
+## Keep execution economical
 
-Before substantial parent execution, record the task, applicable exception, evidence
-for it, and bounded scope in the task brief or ledger; report the actual work in
-the result. Convenience, confidence, and occupied worker slots are not exceptions.
-Queue execution until a Luna slot is available, reusing a suitable worker when
-possible. If the runtime cannot support delegation, follow the runtime adapter's
-escalation and authorized-fallback rules. Uncertainty always follows the hold
-protocol, including during direct execution.
+Delegate coherent, independently checkable chunks. Batch related small work into
+one assignment; reuse a suitable worker while its context remains relevant.
+Start fresh when unrelated history outweighs reuse. Parents keep decisions,
+review and integration; a tightly coupled implementation fix may stay local when
+dispatch adds no useful independence. Record a bounded reason for substantial
+parent implementation. This exception does not expand research routing.
 
-When the user explicitly requests separate task threads, use the task-thread
-topology: Astra coordinates durable Sol tasks; each Sol delegates to Luna
-subagents in its own task. Otherwise use subagents within the current task.
-This skill alone is not an explicit user request to create sidebar tasks.
+Allocate actual worker capacity and queue excess work. Dispatch only ready work
+with usable prerequisites; integrate accepted slices before growing an avoidable
+backlog. Task contracts and status use protocol; rollout policy lives there too.
+Only load supporting skills when they change the current task: interface design,
+domain terminology, regression risk, investigation or agent-document writing.
+`grilling` requires the author's request.
 
-For substantial work, delegate one coherent workstream to a Sol
-coordinator while the root resolves architecture, acceptance, or another useful
-independent responsibility. In task-thread mode, start with two independent Sol
-workstreams, increasing only when dependencies, integration capacity, and actual
-usage permit. This is a tuning baseline, not a product limit. Add coordinators
-only when each has separate ownership and enough capacity for its workers.
-Explain any departure from a user-requested
-mandatory hierarchy.
+Use [uncertainty](references/uncertainty.md) for bounded discretion, escalation,
+hold acknowledgments, resumption and abandoning an approach.
 
-Before dispatch, read [runtime.md](references/runtime.md) and check the current
-tools, model settings, and capacity. Within one subagent tree, count managers and
-workers against the same tree limit. Separate tasks must inspect their own runtime
-capacity; do not infer unlimited account concurrency. Allocate worker slots to each
-coordinator explicitly. On a four-slot tree including the root, one Astra, one Sol,
-and two Lunas fit. In a separate four-slot Sol task, Sol can potentially run three
-Lunas; verify the actual limit there. Queue work beyond available capacity.
+## Acceptance and cost
 
-## Define work before dispatch
+Workers run meaningful checks and report evidence. Sol reviews the actual diff
+and behavior against the parent contract and its derived criteria. Astra checks
+the integrated result against the goal. Reuse valid lower-level checks; repeat
+only for changed inputs, conflicting evidence or a specific gap. Mechanical
+inventories run once by script. Acceptance states live in protocol.
 
-Astra owns one concise task ledger at the project's existing planning location,
-or `work/orchestration/<task>/plan.md` when none exists. Record outcome, constraints,
-acceptance criteria, shared interfaces, task dependencies, owners, state, and
-evidence pointers, contract revision, open questions, and any execution hold.
-In task-thread mode also record each Sol task ID, host, workspace,
-base revision, integration owner, and last result cursor. Sol owns its workstream's task records. Workers own their
-artifacts and result records. Keep one writer per record.
+After two failed corrections, Sol changes the method, refines the brief or
+escalates. Known requirement conflicts need the author's decision immediately.
+Complete only with every requirement evidenced, relevant integrated checks
+passing and no required child work or blocking question outstanding.
 
-Before dispatch, read [communication.md](references/communication.md). Establish
-one accessible coordination directory and a registry of task IDs, parent routes,
-workspaces, dependencies, and artifact consumers. Publish immutable Markdown
-messages and versioned artifacts there; use native agent/task messages to notify
-recipients. Astra routes relevant Sol outputs to other Sol tasks with explicit
-context, authority, and requested action. Files alone do not deliver notifications.
+Apply `unslop` to author-facing prose, deliverables and product documentation.
+Routine native messages need concise facts, not a separate prose pass.
 
-Use [task-contract.md](references/task-contract.md) to dispatch and accept work.
-Split by independently verifiable outcomes, not arbitrary file counts or roles
-such as "all tests" versus "all implementation." Each implementation task includes
-the tests and documentation needed to establish its behavior.
-
-Resolve shared interfaces before parallel implementation. Assign one owner for
-shared configuration, lockfiles, public types, and integration edits. Preserve
-existing dirty changes. Give separate Git task threads separate worktrees by
-default, with an agreed starting state and integration owner. For overlapping edits, serialize work or use isolated
-checkouts with an explicit integration owner and base revision. Isolation does
-not resolve incompatible interfaces or copy uncommitted prerequisites for you.
-
-For genuinely unknown design facts, Astra may dispatch an explicit research task.
-State the question, evidence standard, and decision owner. A research assignment
-authorizes gathering evidence, not acting on an unconfirmed hypothesis. Uncertainty
-about the research assignment itself follows the same escalation protocol. Convert
-accepted findings into a revised implementation brief before work resumes.
-
-## Keep context small and sufficient
-
-Start workers with a compact brief and exact artifact paths, using a fresh
-conversation when the runtime supports it. Include relevant user decisions,
-constraints, dependencies, and instructions explicitly. A fresh conversation still
-has runtime overhead; do not describe it as zero context.
-
-Give each role only the skills it needs. Read authoritative artifacts once per
-decision, then send paths, findings, and changes rather than transcripts or full
-logs. Reuse an agent for a correction or closely related task; start fresh when
-the old context would obscure unrelated work. Keep result summaries short enough
-to inspect, with full evidence on disk. Concision must preserve failures,
-uncertainty, and instructions needed to reproduce the result.
-
-For separate tasks, pass the outcome and contract explicitly; task creation does
-not imply shared conversation history or automatic upward result delivery. Keep
-the main task active to collect results, or use an authorized follow-up automation
-when the user requests later monitoring. Use meaningful follow-ups and completion events. Avoid repeated status polling,
-duplicate investigation, and idle narration. Target brief/results at roughly
-300-600 words when practical; this is a reporting heuristic, not a token cap or
-a reason to omit necessary evidence.
-
-## Verify different things at each level
-
-Luna proves its local behavior and returns artifacts, exact checks and outcomes,
-source references for research, and unresolved issues. A worker's `ready` result
-starts review; it is not acceptance.
-
-Sol inspects the actual artifact against the brief. Check behavior, edge cases,
-ownership, relevant callers, tests, and documentation. Run an independent check
-that could disprove a material claim; reusing the worker's summary is insufficient.
-Target the acceptance risk rather than repeating Luna's entire investigation or
-implementation. Preserve required independent checks and broaden them when the
-evidence exposes a gap.
-For summaries and research, inspect consequential source passages and preserve
-counterevidence. Mark the workstream accepted only when every criterion has
-evidence and no unresolved assumptions, or explicitly report what remains unmet.
-
-Astra verifies Sol's acceptance decisions against the user outcome, shared
-contracts, and integrated behavior. Inspect consequential or risky changes
-directly and run the required final integration checks. Avoid mechanically
-repeating every local check when the existing evidence remains valid. Repeat
-checks when integration or later edits invalidate them. If Sol materially changes
-an implementation during review, Astra or an independent reviewer checks that
-change before acceptance.
-
-For corrections, return the failed criterion, concrete evidence, and required
-behavior. After two unsuccessful corrections to the same issue, Sol diagnoses or
-implements the fix, or escalates a contract decision to Astra. This changes the
-method; it does not abandon required work. This retry rule applies only when the
-contract and required behavior are already clear. Any doubt invokes the uncertainty
-protocol immediately, without waiting for retries. Parent agents own finishing
-failed or interrupted tasks once the relevant hold is resolved.
-
-## Compose existing skills
-
-- Astra: `define-goal` for the required entry step; `codebase-design` for module interfaces; `domain-modeling` for terminology
-  and durable decisions; `grilling` only when the user requests that interview.
-- Sol: `blast-radius` for concrete regression risks; `how` or `why` when runtime
-  flow or historical intent matters; `writing-for-agents` for agent documents.
-- Luna: `research` for sourced investigations and the relevant domain skill for
-  implementation. `no-comments` when comment review is useful.
-- `unslop` is mandatory at every role's publication step as defined above.
-
-Read the selected skill through its available path. Do not load the whole catalog
-or assume a separate Skill tool exists.
-
-## Completion and tuning
-
-Record delivered artifacts, acceptance evidence, unresolved limitations, and
-decisions needed for continuation. Update canonical product/contributor docs where
-behavior changed; keep orchestration logs out of permanent product documentation.
-Complete a top-level goal only after Astra accepts the integrated result, resolves
-every open question, and confirms no required child work remains active or unverified.
-
-When tuning efficiency, compare completed tasks at the same acceptance bar.
-Record wall time, agents spawned, retries, failed acceptance checks, and actual
-per-agent usage when the runtime exposes it. Otherwise mark token/cost data
-unavailable. Include parent execution exceptions in the evaluation. Compare total
-cost or usage per accepted task, including coordination and retries; do not impose
-a Luna token-share quota. Account usage percentages and word counts are not
-per-task token measurements. Prefer the simplest topology that meets the quality
-bar. Change the user's model/effort baseline only after proposing a measured alternative.
+Measure messages per accepted requirement, hold ACK share, assignments affected
+per hold, ledger/artifact size, author questions, integration backlog, retries and
+wall time. Record usage/cost only when exposed. Prefer useful independent work
+while waiting; an unchanged blocker warrants no invented progress or extra tests.

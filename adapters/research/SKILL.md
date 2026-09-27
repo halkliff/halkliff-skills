@@ -1,22 +1,25 @@
 ---
 name: research
-description: Investigate a question against high-trust primary sources and capture the findings as a Markdown file in the repo. Use when the user wants a topic researched, docs or API facts gathered, or reading legwork delegated to a background agent.
+description: Investigate a question against high-trust primary sources and return complete cited findings. Use when the user wants a topic researched, docs or API facts gathered, or reading legwork delegated to a background agent.
 ---
 
-Investigate the assigned question and produce a cited Markdown report.
+Investigate the assigned question and return a complete, cited answer.
 
-If you are already the assigned research worker, do the investigation yourself.
-Otherwise, delegate a bounded investigation only when the current runtime and
-parent assignment permit it and useful independent work can continue alongside it.
-Respect leaf-worker and capacity constraints; do not create recursive research
-agents merely because this skill was loaded.
+If you are already the assigned research worker, investigate directly. Otherwise,
+delegate a bounded investigation only when the runtime and parent assignment
+permit it and useful independent work can continue. Respect model, leaf-worker
+and capacity constraints; loading this skill does not create recursive agents.
 
-1. Investigate against primary sources: official docs, source code, specifications,
-   or first-party interfaces. Follow each claim to the source that owns it.
-2. Write findings to one Markdown file, citing each claim's source and preserving
-   uncertainty and conflicting evidence. Apply `unslop` to authored prose.
-3. Use the output location in the task contract, or the repository's established
-   research location. Report the path to the assigning parent.
+1. Use primary sources: official docs, source code, specifications, or first-party
+   interfaces. Follow each claim to the source that owns it.
+2. Return findings, citations, counterevidence, uncertainty and practical limits.
+   Use a native reply for a bounded answer. Write one Markdown report when the
+   findings are substantial/reusable or the task contract requests an artifact;
+   give the parent the conclusion and absolute report path. Do not create a file
+   merely to pass a message.
+3. For reports, use the contract's output path or the established research location.
+   Apply `unslop` to research deliverables and author-facing prose; routine internal
+   exchanges need no separate prose pass.
 
 An unclear assignment or evidence standard follows the parent's escalation
-protocol. A research finding does not authorize a change in product requirements.
+protocol. Research does not authorize a change in product requirements.
