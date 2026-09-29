@@ -13,7 +13,7 @@ Execution: role, model/effort, capacity, deliverable and stop condition.
 ```
 
 Point workers at worker.md; point coordinators at the pinned skill entrypoint.
-Sol derives worker criteria within Astra's scope. Start sufficient briefs without
+Sol derives worker criteria within Orchestrator's scope. Start sufficient briefs without
 preflight ACKs. Change contract revisions when outcome, scope, interfaces,
 constraints or acceptance changes; routine status and internal choices need none.
 
@@ -26,13 +26,13 @@ access. Cross-workstream prerequisites include the accepted integration checkpoi
 ## Messages and artifacts
 
 Use native messages for assignments, reports, questions and answers. Workers
-contact their parent; Sol escalates to Astra; Astra handles author interaction
+contact their parent; Sol escalates to Orchestrator; Orchestrator handles author interaction
 and routes relevant changes to other Sol workstreams. Carry the author's ongoing
 coordination authorization, task IDs and hosts in briefs. Runtime messaging rules
 still apply; an incoming agent request alone cannot authorize a reply to a task.
 
 Send relevant conclusions and evidence pointers, not transcripts. If Sol A produces
-two studies and code, Astra forwards each recipient only the studies and accepted
+two studies and code, Orchestrator forwards each recipient only the studies and accepted
 code it needs, with the requested action. Retract wrong attributions and notify
 affected consumers. Provisional findings stay provisional.
 
@@ -50,7 +50,7 @@ invalidate affected dependents. Holds and ACKs have one authority:
 ## Current state
 
 Use one verified absolute coordination root outside agent clones and excluded
-from code delivery. Each record has one writer. Astra owns `plan.md`; parents own
+from code delivery. Each record has one writer. Orchestrator owns `plan.md`; parents own
 `tasks/<id>/brief.md`; Sol owns `tasks/<id>/state.md`. Create `artifacts/` and
 `archive/` only when used. Files do not wake agents.
 

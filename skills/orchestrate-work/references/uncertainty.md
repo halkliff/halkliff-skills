@@ -8,9 +8,9 @@ reason and continue. Existing code may establish an internal baseline; it cannot
 override author intent. Escalate consequential uncertainty, conflicting requirements,
 or an unclear boundary between internal choice and reserved decision.
 
-Workers ask their Sol; Sol resolves from contract/evidence or escalates to Astra;
-Astra resolves shared architecture or asks the author. Direct Astra workers report
-to Astra. Research routing is defined in [SKILL.md](../SKILL.md#define-and-route).
+Workers ask their Sol; Sol resolves from contract/evidence or escalates to Orchestrator;
+Orchestrator resolves shared architecture or asks the author. Direct Orchestrator workers report
+to Orchestrator. Research routing is defined in [SKILL.md](../SKILL.md#define-and-route).
 Research must target a missing fact with a discriminating question and stop
 condition. Repeating an investigation at each tier adds no authority. Missing
 author intent and known conflicts go promptly to the author, naming incompatible
@@ -39,7 +39,7 @@ clear newer or unrelated holds. Missing or contradictory resolution keeps the
 scope held. Other holds remain active. The next report identifies the applied
 revision; no separate resume ACK is required. Time and wakeups resolve nothing.
 
-Astra may abandon an approach after evidence or author input shows it cannot usefully
+Orchestrator may abandon an approach after evidence or author input shows it cannot usefully
 continue. Stop it, track pending operations, preserve useful commits/findings and
 replan unmet requirements. Only the author changes goal scope. A dependency hold
 is distinct from a goal pause; use live goal-tool rules through runtime.md.

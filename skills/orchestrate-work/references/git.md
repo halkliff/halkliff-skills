@@ -1,6 +1,6 @@
 # Git ownership and delivery
 
-Agents work and commit in separate local clones. Astra owns the integration clone.
+Agents work and commit in separate local clones. Orchestrator owns the integration clone.
 Never commit, create branches, fetch into refs or push in the author's repository;
 deliver accepted slices there as uncommitted changes. The author reviews/commits.
 An explicit author instruction can change this boundary. For non-Git work use
@@ -30,14 +30,14 @@ postchecks detect races but cannot promise rollback of concurrent work.
 ## Slices
 
 Start workstream clones from the committed baseline; remove their push destination.
-Retain source commits. Sol reviews base-to-result diffs and evidence. Astra fetches
+Retain source commits. Sol reviews base-to-result diffs and evidence. Orchestrator fetches
 explicit source refs into its clone and integrates small accepted slices, recording
 source-to-integration commit mapping. It reopens local review only for an integration
 issue or evidence gap. Avoid ZIPs, whole-repo evidence copies and manual file transfers.
 
 Delivery reports include clone and commit range for
 `git -C <clone> log -p <from>..<to>`, preserving slice review in a dirty checkout.
-Delivery is not behavioral acceptance: Astra runs relevant integrated checks before
+Delivery is not behavioral acceptance: Orchestrator runs relevant integrated checks before
 publishing that checkpoint as a dependency. Candidate/delivered/accepted state
 lives in [protocol.md](protocol.md).
 

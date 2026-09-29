@@ -1,7 +1,7 @@
 # halkliff-skills
 
 Personal Codex skills, including `orchestrate-work` and the dependencies it uses.
-The workflow defines a goal, coordinates Astra/Sol/Luna work, uses native task messages and versioned work products, and escalates consequential
+The workflow defines a goal, coordinates an orchestrator, Sol workstreams and Luna workers, uses native task messages and versioned work products, and escalates consequential
 uncertainty to the author. It runs only
 when explicitly invoked.
 
@@ -60,20 +60,24 @@ Invoke `$orchestrate-work` with the work you want to pursue. It starts through
 `define-goal`, requires `unslop` for author-facing prose and deliverables, and follows the communication
 and uncertainty rules in the [skill](skills/orchestrate-work/SKILL.md).
 
+Before invoking, select GPT-6 Astra High or GPT-6.1 Sol xHigh for the main
+orchestrator in the model selector. Sol coordinators and complex implementation
+workers use GPT-6.1 Sol High/xHigh.
+
 Execution is Luna-first: research, claim checks and summaries use Luna xHigh,
-including research assigned directly by Astra. Parents may resolve a trivial lookup
+including research assigned directly by the orchestrator. Parents may resolve a trivial lookup
 with one known file read or targeted read-only command; larger investigations remain
-delegated. Autonomous Sol High/xHigh
+delegated. Autonomous GPT-6.1 Sol High/xHigh
 coordinators decompose work, dispatch workers and verify until their assignment
 is complete or held. They normally use Luna xHigh for implementation and may use
-a Sol High/xHigh leaf worker when complexity warrants it. Full worker slots mean
+a GPT-6.1 Sol High/xHigh leaf worker when complexity warrants it. Full worker slots mean
 queueing work. Model effort does not guarantee termination.
 
 Reversible internal decisions stay with the responsible agent. Questions about
 public behavior, scope, compatibility, security, irreversible actions or conflicting
 requirements escalate. Native messages carry routine coordination; only holds
 require explicit ACKs. Current-state ledgers stay compact. Agents commit in their
-own local clones; Astra integrates accepted slices into the author's checkout as
+own local clones; the orchestrator integrates accepted slices into the author's checkout as
 uncommitted changes. The author owns commits, branches and pushes there.
 
 Workflow revision 2 is a repository update. Existing installations and live runs

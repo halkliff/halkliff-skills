@@ -7,7 +7,7 @@ Disclose a known model mismatch; use only an author-approved fallback.
 ## Dispatch and workspace
 
 Separate Sol tasks require an explicit author request. Use `create_thread` with
-`model: "gpt-6-sol"`, `thinking: "high"` or `"xhigh"`; list projects first for a
+`model: "gpt-6.1-sol"`, `thinking: "high"` or `"xhigh"`; list projects first for a
 project target. Otherwise use subagents. Pass the role, compact protocol brief,
 pinned instruction path, authorized parent route and actual capacity.
 
@@ -18,7 +18,7 @@ before dispatching implementation. Respect filesystem permissions; a prompt does
 not rebind the UI checkout or grant access. If this fails, resolve access with
 the host/author instead of editing the author's checkout.
 
-Tested 2026-09-27: a projectless Sol High task successfully read/wrote a separate
+Tested 2026-09-27: a projectless GPT-6 Sol High task successfully read/wrote a separate
 local clone outside its default task directory through explicit `workdir`.
 Its profile was unrestricted, approval policy never. This verifies that route
 on this host, not sandboxed profiles or automatic clone registration. The probe
@@ -30,7 +30,7 @@ creation before APIs requiring the latter and emit required creation directives.
 
 For worker subagents use `spawn_agent`, `model: "gpt-6-luna"`,
 `reasoning_effort: "xhigh"`, `fork_turns: "none"`. Sol implementation exceptions
-use `gpt-6-sol` with high/xhigh. The spawn message supplies the absolute
+use `gpt-6.1-sol` with high/xhigh. The spawn message supplies the absolute
 `references/worker.md` path and task-specific brief, not the whole skill.
 Full-history forks inherit model/effort and cannot take overrides in this runtime.
 Use `send_message` for active agents, `followup_task` for idle ones. Count live
@@ -45,10 +45,10 @@ ongoing coordination authorization, including replies. Tasks are app peers;
 a parent ID alone grants no messaging permission.
 
 Sol continues its accepted assignment within the current execution. If a task
-ends incomplete, Astra evaluates its report and sends a scoped continuation;
-a finished turn is not task acceptance. While active, Astra collects meaningful
+ends incomplete, Orchestrator evaluates its report and sends a scoped continuation;
+a finished turn is not task acceptance. While active, Orchestrator collects meaningful
 results, integrates and dispatches ready work without polling unchanged history.
-Ending Astra's turn does not guarantee a wakeup from child completion. Later
+Ending Orchestrator's turn does not guarantee a wakeup from child completion. Later
 monitoring needs author-requested automation; files are not watchers.
 
 Separate-task stops are cooperative when no direct interrupt exists. Send a hold;

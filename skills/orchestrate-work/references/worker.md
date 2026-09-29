@@ -4,7 +4,7 @@ Use this guide and your assignment; coordinator manuals are not default inputs.
 You are a leaf. Work only in the supplied absolute workspace and owned scope;
 verify the repository root before edits. Follow applicable project instructions.
 Ask your assigning parent if required input or an authority boundary is missing.
-Astra's direct researchers report to Astra; other workers report to their Sol.
+Orchestrator's direct researchers report to Orchestrator; other workers report to their Sol.
 
 Choose reversible internal details within accepted requirements, note a short
 reason and verify. Public behavior, scope, compatibility, security, irreversible

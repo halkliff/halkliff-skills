@@ -9,27 +9,27 @@ GitHub renders them in Markdown previews.
 ```mermaid
 flowchart TB
     author([Author])
-    astra["Astra · High<br/>Architecture · goal · integration"]
+    orchestrator["Orchestrator<br/>Astra High / Sol 6.1 xHigh"]
     research["Luna · xHigh<br/>Research · claim checks"]
-    sol["Sol · High / xHigh<br/>Decompose · delegate · verify"]
+    sol["Sol 6.1 · High / xHigh<br/>Decompose · delegate · verify"]
     luna["Luna · xHigh<br/>Research · implement · test"]
-    complex["Sol · High / xHigh<br/>Complex implementation"]
+    complex["Sol 6.1 · High / xHigh<br/>Complex implementation"]
     acceptance{"Goal criteria met?"}
     complete([Complete])
 
-    author -->|define-goal| astra
-    astra -->|Research question| research
-    research -.->|Findings / uncertainty| astra
-    astra -->|Workstream contract| sol
+    author -->|define-goal| orchestrator
+    orchestrator -->|Research question| research
+    research -.->|Findings / uncertainty| orchestrator
+    orchestrator -->|Workstream contract| sol
     sol -->|Worker guide + brief| luna
     sol -->|Worker guide + complex brief| complex
     luna -.->|Results / questions| sol
     complex -.->|Results / questions| sol
-    sol -.->|Accepted slices / escalation| astra
-    astra -->|Integrated checks| acceptance
+    sol -.->|Accepted slices / escalation| orchestrator
+    orchestrator -->|Integrated checks| acceptance
     acceptance -->|Yes| complete
-    acceptance -->|Remaining work| astra
-    astra -.->|Author decision needed| author
+    acceptance -->|Remaining work| orchestrator
+    orchestrator -.->|Author decision needed| author
 ```
 
 Each Sol owns an autonomous workstream and reviews its workers against the parent
@@ -47,7 +47,7 @@ flowchart TB
     choose["Choose · record reason · verify"]
     sol["Sol reviews the question"]
     fact["Luna investigates a missing fact"]
-    astra["Astra resolves shared decisions"]
+    orchestrator["Orchestrator resolves shared decisions"]
     author["Author resolves intent or conflict"]
     hold["Hold affected work and dependents<br/>Track stopped ACKs"]
     resume["Update affected contracts<br/>Resume resolved scope"]
@@ -59,11 +59,11 @@ flowchart TB
     sol -->|Fact needed| fact
     fact -.->|Evidence| sol
     sol -->|Resolved| resume
-    sol -->|Unresolved| astra
-    astra -->|New factual question| fact
-    fact -.->|Evidence to assigning parent| astra
-    astra -->|Resolved| resume
-    astra -->|Missing intent / conflicting requirements| author
+    sol -->|Unresolved| orchestrator
+    orchestrator -->|New factual question| fact
+    fact -.->|Evidence to assigning parent| orchestrator
+    orchestrator -->|Resolved| resume
+    orchestrator -->|Missing intent / conflicting requirements| author
     author -->|Decision| resume
 ```
 
@@ -79,7 +79,7 @@ and [goal lifecycle](../skills/orchestrate-work/references/runtime.md#goals).
 sequenceDiagram
     participant W as Worker
     participant S as Sol A
-    participant A as Astra
+    participant A as Orchestrator
     participant I as Integration clone
     participant M as Author checkout
     participant B as Sol B
@@ -97,7 +97,7 @@ sequenceDiagram
     Note over I,M: Agents commit in their clones.<br/>The author commits in their repository
 ```
 
-Workers run local checks, Sol reviews their evidence and behavior, and Astra
+Workers run local checks, Sol reviews their evidence and behavior, and Orchestrator
 checks the integrated result. Repeat checks only when changed inputs or missing
 evidence justify it. Research reports can travel independently of code commits.
 Receipt, local acceptance, integration and goal acceptance remain distinct.

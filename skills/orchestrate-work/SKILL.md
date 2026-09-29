@@ -1,6 +1,6 @@
 ---
 name: orchestrate-work
-description: Explicitly invoked workflow for Astra orchestration, autonomous Sol workstreams, and Luna-first execution with defined goals, bounded decisions, and evidence-based acceptance.
+description: Explicitly invoked workflow for user-selected orchestration, autonomous Sol workstreams, and Luna-first execution with defined goals, bounded decisions, and evidence-based acceptance.
 ---
 
 # Orchestrate work
@@ -11,18 +11,22 @@ pstack-principles; the author owns scope and consequential decisions.
 
 ## Define and route
 
-Astra runs `define-goal` before implementation: establish scope, requirements,
+Orchestrator runs `define-goal` before implementation: establish scope, requirements,
 acceptance evidence and reserved decisions. Editing this skill creates no goal.
 Use [runtime.md](references/runtime.md) for goal and dispatch operations.
 
+Select GPT-6 Astra High or GPT-6.1 Sol xHigh in the model selector before invoking
+the skill. That main thread is the Orchestrator; Sol coordinator and worker roles
+use GPT-6.1 Sol. The skill does not switch the running model.
+
 | Role | Model / effort | Responsibility |
 | --- | --- | --- |
-| Orchestrator | Astra / high | Architecture, goal, shared contracts, author interaction, integration, final acceptance |
-| Coordinator | Sol / high or xhigh | Decompose and complete a workstream; assign workers and verify results |
+| Orchestrator | GPT-6 Astra / high or GPT-6.1 Sol / xhigh | Architecture, goal, shared contracts, author interaction, integration, final acceptance |
+| Coordinator | GPT-6.1 Sol / high or xhigh | Decompose and complete a workstream; assign workers and verify results |
 | Default worker | Luna / xhigh | Research, claim checks, summaries, implementation, tests, documentation |
-| Complex implementation worker | Sol / high or xhigh | Bounded implementation too complex for Luna; remains a leaf |
+| Complex implementation worker | GPT-6.1 Sol / high or xhigh | Bounded implementation too complex for Luna; remains a leaf |
 
-Research and summarization go to Luna xHigh, including Astra's fact-finding.
+Research and summarization go to Luna xHigh, including Orchestrator's fact-finding.
 A parent may resolve a trivial lookup with one known file read or one targeted
 read-only command. If unresolved, delegate; repeated lookups or a command wrapping
 an investigation do not qualify. Sol implementation workers receive implementation
@@ -35,7 +39,7 @@ not promotion. Workers remain leaves. xHigh is not a termination guarantee.
 
 ## Read by role
 
-- Astra: this entrypoint, [protocol.md](references/protocol.md), and runtime;
+- Orchestrator: this entrypoint, [protocol.md](references/protocol.md), and runtime;
   [uncertainty.md](references/uncertainty.md) when deciding or holding work.
 - Sol: this entrypoint and protocol; runtime when dispatching, uncertainty when
   resolving questions. Continue through decomposition, implementation, review and
@@ -67,7 +71,7 @@ hold acknowledgments, resumption and abandoning an approach.
 ## Acceptance and cost
 
 Workers run meaningful checks and report evidence. Sol reviews the actual diff
-and behavior against the parent contract and its derived criteria. Astra checks
+and behavior against the parent contract and its derived criteria. Orchestrator checks
 the integrated result against the goal. Reuse valid lower-level checks; repeat
 only for changed inputs, conflicting evidence or a specific gap. Mechanical
 inventories run once by script. Acceptance states live in protocol.

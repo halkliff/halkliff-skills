@@ -1,6 +1,6 @@
 interface:
   display_name: "Orchestrate work"
-  short_description: "Astra plans, autonomous Sol verifies, Luna executes"
-  default_prompt: "Use $orchestrate-work and $define-goal to define this outcome, then coordinate autonomous Sol workstreams with Luna xHigh execution, bounded decisions, and evidence-based acceptance."
+  short_description: "Choose the orchestrator; Sol 6.1 verifies, Luna executes"
+  default_prompt: "Use $orchestrate-work and $define-goal to define this outcome, then use the selected GPT-6 Astra High or GPT-6.1 Sol xHigh orchestrator to coordinate autonomous GPT-6.1 Sol workstreams with Luna xHigh execution, bounded decisions, and evidence-based acceptance."
 policy:
   allow_implicit_invocation: false
