@@ -76,9 +76,13 @@ queueing work. Model effort does not guarantee termination.
 Reversible internal decisions stay with the responsible agent. Questions about
 public behavior, scope, compatibility, security, irreversible actions or conflicting
 requirements escalate. Native messages carry routine coordination; only holds
-require explicit ACKs. Current-state ledgers stay compact. Agents commit in their
-own local clones; the orchestrator integrates accepted slices into the author's checkout as
-uncommitted changes. The author owns commits, branches and pushes there.
+require explicit ACKs. Current-state ledgers stay compact. The orchestrator chooses
+shared main-checkout work or isolated clones/worktrees for each phase; the author's
+choice prevails. Shared workers have explicit nonoverlapping scopes. Agents commit
+in owned isolated checkouts and leave main-checkout changes uncommitted. The author
+owns commits, branches and pushes there. Coordinators report completed isolated
+work; the orchestrator confirms integration and releases checkouts for cleanup
+once no further work needs them.
 
 Workflow revision 2 is a repository update. Existing installations and live runs
 are not migrated automatically. See the [revision and rollout notes](docs/orchestration-v2.md)

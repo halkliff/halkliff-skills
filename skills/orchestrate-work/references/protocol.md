@@ -7,7 +7,8 @@ Give fresh agents enough task-specific context to act without conversation histo
 ```text
 Task / parent ID and authorized route / contract revision / requirement IDs:
 Outcome and observable acceptance:
-Workspace: absolute clone and coordination paths; owned files; base commit.
+Workspace: shared main checkout or isolated clone/worktree; absolute paths;
+owned files and shared resources; base commit where applicable.
 Inputs: relevant source/artifact revisions, prerequisites and constraints.
 Execution: role, model/effort, capacity, deliverable and stop condition.
 ```
@@ -18,10 +19,12 @@ preflight ACKs. Change contract revisions when outcome, scope, interfaces,
 constraints or acceptance changes; routine status and internal choices need none.
 
 Results identify task/revision/state, work, criterion-to-evidence mapping, limits
-and next action. Code results name clone, base and result commits. Each delivery
-report also names the integration clone and exact delivered range, with
+and next action. Code results identify workspace and owned files; isolated work
+also names base and result commits. Isolated delivery reports name the integration
+clone and exact delivered range, with
 `git -C <clone> log -p <from>..<to>` for author review. A summary alone is not code
-access. Cross-workstream prerequisites include the accepted integration checkpoint.
+access. Cross-workstream prerequisites identify the accepted integration checkpoint
+or reviewed shared-checkout state.
 
 ## Messages and artifacts
 
@@ -31,7 +34,7 @@ and routes relevant changes to other Sol workstreams. Carry the author's ongoing
 coordination authorization, task IDs and hosts in briefs. Runtime messaging rules
 still apply; an incoming agent request alone cannot authorize a reply to a task.
 
-Send relevant conclusions and evidence pointers, not transcripts. If Sol A produces
+Send relevant conclusions and evidence pointers, not transcripts. If a workstream produces
 two studies and code, Orchestrator forwards each recipient only the studies and accepted
 code it needs, with the requested action. Retract wrong attributions and notify
 affected consumers. Provisional findings stay provisional.

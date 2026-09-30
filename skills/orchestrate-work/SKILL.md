@@ -13,6 +13,9 @@ pstack-principles; the author owns scope and consequential decisions.
 
 Orchestrator runs `define-goal` before implementation: establish scope, requirements,
 acceptance evidence and reserved decisions. Editing this skill creates no goal.
+Describe the expected work and agree with the author on a workspace approach:
+recommend isolated clones/worktrees for complex parallel work that risks
+interference, or the shared main worktree for simpler independent work.
 Use [runtime.md](references/runtime.md) for goal and dispatch operations.
 
 Select GPT-6 Astra High or GPT-6.1 Sol xHigh in the model selector before invoking
@@ -46,7 +49,8 @@ not promotion. Workers remain leaves. xHigh is not a termination guarantee.
   correction until the assignment is complete or held.
 - Workers: send only [worker.md](references/worker.md) plus a sufficient brief.
   They do not load this manual or coordinator references by default.
-- Git owners: [git.md](references/git.md) before repository setup or delivery.
+- Workspace owners: [git.md](references/git.md) before assigning shared/isolated
+  workspaces, integration or retirement; the author's workspace choice prevails.
   [CONTEXT.md](CONTEXT.md) resolves workflow-specific terminology when needed.
 
 ## Keep execution economical
@@ -58,7 +62,9 @@ review and integration; a tightly coupled implementation fix may stay local when
 dispatch adds no useful independence. Record a bounded reason for substantial
 parent implementation. This exception does not expand research routing.
 
-Allocate actual worker capacity and queue excess work. Dispatch only ready work
+Use as many Sol coordinators as the task needs; there is no fixed coordinator
+count. Limit concurrent coordinators and workers to runtime capacity and queue
+excess work. Dispatch only ready work
 with usable prerequisites; integrate accepted slices before growing an avoidable
 backlog. Task contracts and status use protocol; rollout policy lives there too.
 Only load supporting skills when they change the current task: interface design,

@@ -32,11 +32,13 @@ flowchart TB
     orchestrator -.->|Author decision needed| author
 ```
 
-Each Sol owns an autonomous workstream and reviews its workers against the parent
+Repeat the coordinator and worker branches for each needed workstream. Each Sol
+owns an autonomous workstream and reviews its workers against the parent
 contract and its derived criteria. Sol implementation workers remain leaves;
 research and summaries use Luna, with the skill's bounded trivial-lookup exception. Separate Sol tasks and a top-level goal each
-require the author's explicit request. Worker counts follow runtime capacity;
-excess work queues. xHigh is an effort setting, not a termination guarantee.
+require the author's explicit request. There is no fixed coordinator count;
+concurrent coordinators and workers follow runtime capacity, with excess work
+queued. xHigh is an effort setting, not a termination guarantee.
 
 ## Decisions and scoped holds
 
@@ -75,14 +77,17 @@ and [goal lifecycle](../skills/orchestrate-work/references/runtime.md#goals).
 
 ## Work and evidence handoff
 
+This sequence shows isolated clone work. Workers may instead share the main
+checkout with assigned nonoverlapping scopes; the author's workspace choice prevails.
+
 ```mermaid
 sequenceDiagram
     participant W as Worker
-    participant S as Sol A
+    participant S as Producing Sol
     participant A as Orchestrator
     participant I as Integration clone
     participant M as Author checkout
-    participant B as Sol B
+    participant B as Dependent Sol
 
     W->>W: Implement and test in agent clone
     W->>S: Commit + results + remaining limits
