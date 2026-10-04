@@ -13,6 +13,8 @@ pstack-principles; the author owns scope and consequential decisions.
 
 Orchestrator runs `define-goal` before implementation: establish scope, requirements,
 acceptance evidence and reserved decisions. Editing this skill creates no goal.
+Establish the coordination root through [protocol.md](references/protocol.md#current-state)
+and record its absolute path during goal definition.
 Describe the expected work and agree with the author on a workspace approach:
 recommend isolated clones/worktrees for complex parallel work that risks
 interference, or the shared main worktree for simpler independent work.
@@ -86,6 +88,8 @@ After two failed corrections, Sol changes the method, refines the brief or
 escalates. Known requirement conflicts need the author's decision immediately.
 Complete only with every requirement evidenced, relevant integrated checks
 passing and no required child work or blocking question outstanding.
+Orchestrator closes the accepted run through [completion](references/protocol.md#completion):
+one handoff, goal completion, then an optional author-requested `/correct` session.
 
 Apply `unslop` to author-facing prose, deliverables and product documentation.
 Routine native messages need concise facts, not a separate prose pass.

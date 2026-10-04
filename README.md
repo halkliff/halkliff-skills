@@ -54,6 +54,28 @@ The installer is the dependency entry point. Copying only the `orchestrate-work`
 folder through a generic single-skill downloader does not install its dependencies.
 `AGENTS.md` directs installation agents to the same procedure.
 
+## Local plugin
+
+Build the local plugin with its selected dependency resources:
+
+```sh
+python scripts/build_plugin.py --dest work/plugin-package/halkliff-orchestration-0.1.2
+```
+
+The plugin exposes `$orchestrate-work-plugin`, a small adapter to the existing
+workflow. Its dependency instructions are bundled as resources and loaded by
+path. Your standalone skills remain available under their existing names.
+
+Explicitly activated runs use pinned runtime snapshots, dispatch checks,
+compact recovery context, observed event counters and checkout retirement
+preflight. The existing skill retains goal definition, coordination, holds and
+acceptance. Retirement preflight reports whether a checkout can be retired;
+cleanup remains its owner's action.
+
+Follow the [plugin setup and verification guide](docs/orchestration-plugin.md)
+for local marketplace installation, session registration and hook trust.
+Installation, hook trust and observed desktop interception are separate checks.
+
 ## Use
 
 Invoke `$orchestrate-work` with the work you want to pursue. It starts through
@@ -103,13 +125,22 @@ runtime adapter before executing this hierarchy.
 retain their own invocation policies; `unslop` remains an always-applied prose
 skill. If the running client has not refreshed its skill inventory, reload it.
 
+## Completion
+
+Accepted runs end with one `<coord-root>/handoff.md`, linked to the existing
+evidence and delivered changes. After completing the goal, the Orchestrator asks
+whether you want an optional `/correct` session. Declining leaves the goal complete;
+accepting authorizes only the correction scope you choose. Skill/plugin improvements
+remain proposals until you request their implementation. Existing runs keep their
+pinned instructions until you explicitly migrate them.
+
 ## Included skills
 
 | Source | Selected skills |
 | --- | --- |
 | This collection | `orchestrate-work`, `define-goal` |
-| pstack, adapted for Codex | `pstack-principles`, `unslop`, `how`, `why`, `blast-radius`, `no-comments` |
-| Matt Pocock, with selected compatibility adaptations | `grilling`, `writing-for-agents`, `domain-modeling`, `codebase-design`, `research` |
+| pstack, adapted for Codex | `pstack-principles`, `unslop`, `how`, `why`, `blast-radius`, `no-comments`, `benchmark-checklist`, `correct` |
+| Matt Pocock, with selected compatibility adaptations | `grilling`, `writing-for-agents`, `domain-modeling`, `codebase-design`, `research`, `handoff` |
 
 The exact file list and pinned revisions live in [dependencies.json](dependencies.json).
 Unchanged files come directly from submodules. Adapted files live under `adapters/`.

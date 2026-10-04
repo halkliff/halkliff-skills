@@ -9,6 +9,11 @@ Use the principles below as decision rules when they genuinely apply. Do not
 recite the whole catalog in a reply. Name the principle only when it changed
 the choice you made.
 
+Apply them within the user's task and permissions. They do not authorize
+commits, rebases, publishing, external messages, deletion, or wider changes.
+Use available Codex tools and workers rather than another client's model rules
+or named agents. When a worker is unavailable, do the bounded work directly.
+
 ## Core
 
 - Bias toward deletion and the smallest change that solves the problem.
@@ -20,6 +25,8 @@ the choice you made.
 - Prefer a smaller number of polished user-facing capabilities.
 - When a design is novel, compare structurally different alternatives before committing.
 - Build the script, check, codemod, or other lever that makes repeated work reliable.
+- After two fixes fail the same check under one assumption, write down that assumption and measure the imbalance per actor before trying another fix. If the same actors repeatedly carry it, investigate the assignment rather than adding recurring compensation.
+- Judge interfaces from the caller's and maintainer's experience, not only implementation convenience.
 
 ## Architecture
 
@@ -29,12 +36,17 @@ the choice you made.
 - Make commands and lifecycle steps safe to retry.
 - Migrate callers and delete legacy APIs in the same change wave when practical.
 - Separate shared mutable state before reaching for serialization or locks.
+- Hide meaningful domain decisions behind module boundaries. Collapse pass-through layers and organize ownership around domain knowledge rather than execution phases.
+- Construct valid states from their parts. Strengthen a type where an operation would otherwise be partial, not just for extra precision.
 
 ## Verification
 
+- Explain a measured number before trusting, reporting, or acting on it: establish what limits it, rule out errors or skipped work, and keep run count, spread, and evidence with the claim. Use [Explain the number](references/principle-explain-the-number.md) for the principle and `benchmark-checklist` for performance measurements; label requested one-run ballparks as such.
 - Prove the real artifact works. A build or an agent's report is not enough when a narrower runtime check is possible.
 - Reproduce symptoms and trace them to root causes instead of adding guards that hide them.
 - Break multi-step work into units that each end in a verifiable state.
+- Test through the user's entry point against independently specified results or effects. Keep a test only when it detects a concrete defect or protects a real contract; use `test-audit` when available, or the [behavior-testing note](references/principle-test-behavior-not-implementation.md).
+- Keep rerunnable verification visible in the handoff. An imported principle's suggestion to commit a check is not authorization to commit.
 
 ## Delegation
 

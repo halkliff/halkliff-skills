@@ -1,0 +1,6 @@
+interface:
+  display_name: "Orchestrate work with local helpers"
+  short_description: "Activate pinned local orchestration helpers"
+  default_prompt: "Use $orchestrate-work-plugin to define the authorized outcome and coordinate work through the bundled orchestrate-work instructions."
+policy:
+  allow_implicit_invocation: false

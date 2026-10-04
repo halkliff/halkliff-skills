@@ -1,0 +1,22 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "halkliff-orchestration",
+  "version": "0.1.2",
+  "description": "Explicit orchestration with pinned instructions, session activation, and bounded local helpers.",
+  "author": {
+    "name": "halkliff"
+  },
+  "extensions": {
+    "com.openai": {
+      "hooks": "./hooks/hooks.json",
+      "interface": {
+        "displayName": "Halkliff orchestration",
+        "shortDescription": "Explicit orchestration",
+        "longDescription": "Run the existing orchestrate-work workflow with bundled instructions and explicitly activated local helpers for dispatch checks, recovery, observed counters, and retirement preflight.",
+        "developerName": "halkliff",
+        "category": "Productivity",
+        "defaultPrompt": "Use $orchestrate-work-plugin to define the outcome and coordinate the authorized work through the bundled orchestrate-work instructions."
+      }
+    }
+  }
+}

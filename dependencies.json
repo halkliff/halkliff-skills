@@ -5,13 +5,13 @@
       "id": "cursor-pstack",
       "path": "upstream/cursor-plugins",
       "url": "https://github.com/cursor/plugins.git",
-      "commit": "86ecc82055e4d3cb567e72c56f390800a4978c9b"
+      "commit": "e43c7ee26e0038c6c1fa8380dd34ce86ff94cb2a"
     },
     {
       "id": "mattpocock",
       "path": "upstream/mattpocock-skills",
       "url": "https://github.com/mattpocock/skills.git",
-      "commit": "c55ee46073ed923f86ce59a5eb3b6d895095d1b7"
+      "commit": "24fe0ef7737efae15c87225755e9f6f5965e4888"
     }
   ],
   "skills": [
@@ -93,7 +93,7 @@
           "target": "references/principle-encode-lessons-in-structure.md"
         },
         {
-          "source": "upstream/cursor-plugins/pstack/skills/principle-exhaust-the-design-space/SKILL.md",
+          "source": "adapters/pstack-principles/references/principle-exhaust-the-design-space.md",
           "target": "references/principle-exhaust-the-design-space.md"
         },
         {
@@ -117,7 +117,7 @@
           "target": "references/principle-laziness-protocol.md"
         },
         {
-          "source": "upstream/cursor-plugins/pstack/skills/principle-make-operations-idempotent/SKILL.md",
+          "source": "adapters/pstack-principles/references/principle-make-operations-idempotent.md",
           "target": "references/principle-make-operations-idempotent.md"
         },
         {
@@ -137,7 +137,7 @@
           "target": "references/principle-never-block-on-the-human.md"
         },
         {
-          "source": "upstream/cursor-plugins/pstack/skills/principle-outcome-oriented-execution/SKILL.md",
+          "source": "adapters/pstack-principles/references/principle-outcome-oriented-execution.md",
           "target": "references/principle-outcome-oriented-execution.md"
         },
         {
@@ -171,6 +171,18 @@
         {
           "source": "upstream/cursor-plugins/pstack/LICENSE",
           "target": "LICENSE.upstream.txt"
+        },
+        {
+          "source": "adapters/pstack-principles/references/principle-attack-the-premise.md",
+          "target": "references/principle-attack-the-premise.md"
+        },
+        {
+          "source": "adapters/pstack-principles/references/principle-explain-the-number.md",
+          "target": "references/principle-explain-the-number.md"
+        },
+        {
+          "source": "adapters/pstack-principles/references/principle-test-behavior-not-implementation.md",
+          "target": "references/principle-test-behavior-not-implementation.md"
         }
       ],
       "origin": {
@@ -188,6 +200,10 @@
         {
           "source": "upstream/cursor-plugins/pstack/LICENSE",
           "target": "LICENSE.upstream.txt"
+        },
+        {
+          "source": "adapters/unslop/references/patterns.md",
+          "target": "references/patterns.md"
         }
       ],
       "origin": {
@@ -244,7 +260,7 @@
           "target": "references/source-playbook.md"
         },
         {
-          "source": "upstream/cursor-plugins/pstack/skills/why/references/sources/code-archaeology.md",
+          "source": "adapters/why/references/sources/code-archaeology.md",
           "target": "references/sources/code-archaeology.md"
         },
         {
@@ -385,16 +401,20 @@
           "target": "agents/openai.yaml"
         },
         {
-          "source": "upstream/mattpocock-skills/skills/engineering/domain-modeling/CONTEXT-FORMAT.md",
+          "source": "adapters/domain-modeling/CONTEXT-FORMAT.md",
           "target": "CONTEXT-FORMAT.md"
         },
         {
-          "source": "upstream/mattpocock-skills/skills/engineering/domain-modeling/SKILL.md",
+          "source": "adapters/domain-modeling/SKILL.md",
           "target": "SKILL.md"
         },
         {
           "source": "upstream/mattpocock-skills/LICENSE",
           "target": "LICENSE.upstream.txt"
+        },
+        {
+          "source": "upstream/mattpocock-skills/skills/engineering/domain-modeling/GLOSSARY-FORMAT.md",
+          "target": "GLOSSARY-FORMAT.md"
         }
       ],
       "origin": {
@@ -414,7 +434,7 @@
           "target": "DEEPENING.md"
         },
         {
-          "source": "upstream/mattpocock-skills/skills/engineering/codebase-design/DESIGN-IT-TWICE.md",
+          "source": "adapters/codebase-design/DESIGN-IT-TWICE.md",
           "target": "DESIGN-IT-TWICE.md"
         },
         {
@@ -451,6 +471,53 @@
         "upstream": "mattpocock",
         "path": "upstream/mattpocock-skills/skills/engineering/research"
       }
+    },
+    {
+      "name": "benchmark-checklist",
+      "files": [
+        {
+          "source": "adapters/benchmark-checklist/SKILL.md",
+          "target": "SKILL.md"
+        },
+        {
+          "source": "upstream/cursor-plugins/pstack/LICENSE",
+          "target": "LICENSE.upstream.txt"
+        }
+      ]
+    },
+    {
+      "name": "handoff",
+      "files": [
+        {
+          "source": "adapters/handoff/agents/openai.yaml",
+          "target": "agents/openai.yaml"
+        },
+        {
+          "source": "adapters/handoff/SKILL.md",
+          "target": "SKILL.md"
+        },
+        {
+          "source": "upstream/mattpocock-skills/LICENSE",
+          "target": "LICENSE.upstream.txt"
+        }
+      ]
+    },
+    {
+      "name": "correct",
+      "files": [
+        {
+          "source": "adapters/correct/agents/openai.yaml",
+          "target": "agents/openai.yaml"
+        },
+        {
+          "source": "adapters/correct/SKILL.md",
+          "target": "SKILL.md"
+        },
+        {
+          "source": "upstream/cursor-plugins/pstack/LICENSE",
+          "target": "LICENSE.upstream.txt"
+        }
+      ]
     }
   ]
 }

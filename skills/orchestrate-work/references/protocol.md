@@ -52,8 +52,13 @@ invalidate affected dependents. Holds and ACKs have one authority:
 
 ## Current state
 
-Use one verified absolute coordination root outside agent clones and excluded
-from code delivery. Each record has one writer. Orchestrator owns `plan.md`; parents own
+During goal definition, record one verified absolute coordination root. For a new
+run, default to `<author-repository-root>/.orchestration/<run-name>/` unless the
+author specifies another location; derive a filesystem-safe run name from the goal.
+Reuse the recorded root when continuing a run; location changes follow rollout.
+Create the root outside agent clones, exclude it from code delivery, and pass its
+exact absolute path to every participant. Each record has one writer.
+Orchestrator owns `plan.md`; parents own
 `tasks/<id>/brief.md`; Sol owns `tasks/<id>/state.md`. Create `artifacts/` and
 `archive/` only when used. Files do not wake agents.
 
@@ -75,6 +80,23 @@ Distinguish receipt, local acceptance by Sol, delivery into the author checkout,
 and root acceptance after relevant integrated checks. Only the accepted checkpoint
 is a dependency for another workstream. An abandoned approach leaves requirements
 open; completion requires the whole assignment, not a finished turn.
+
+## Completion
+
+After all acceptance criteria hold, Orchestrator uses the pinned `handoff` skill
+to write one `<coord-root>/handoff.md`. This completion handoff is authorized by
+the orchestration run; standalone `handoff` remains explicitly invoked. Link the
+existing requirement evidence, accepted decisions, delivered changes and rerunnable
+checks. State checkout/commit status, retained workspaces and unverified limits;
+distinguish optional follow-ups from required work. Reuse evidence without copying
+transcripts or generating per-worker handoffs. Return its absolute path.
+
+Mark the authorized goal complete through the live goal API, if one exists, then
+ask the author once whether they want an optional `/correct` session to prevent
+recurring mistakes. Wait for that request before running `correct`. The offer does
+not block completion or start another goal. Suggest skill/plugin changes only for
+observed issues, with evidence and a concrete remedy; implement them only within
+the author's requested scope. Installation updates follow rollout.
 
 ## Rollout
 

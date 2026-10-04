@@ -14,3 +14,11 @@ Verify installer changes with `python -m unittest discover -s tests -v`, followe
 by a dry-run and real install into a temporary destination. Exercise the installed
 artifacts; checking the source manifest alone is insufficient. Report runtime
 orchestration as untested unless a live hierarchy was actually exercised.
+
+For the local plugin, build the selected dependency blobs at manifest revisions
+with `scripts/build_plugin.py`; preserve the upstream working checkouts. The
+plugin wrapper is explicit-only and packaged dependencies are resources, not
+additional discoverable skills. Keep run JSON mechanical; the existing skill
+owns requirements, holds and acceptance. Verify packaged commands and supported
+hook behavior before installation. Hook trust and live desktop interception need
+separate evidence; installation alone proves neither.

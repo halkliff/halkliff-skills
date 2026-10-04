@@ -18,6 +18,10 @@ because of, plus the risks that survive real inspection.
 5. Prove the central safety fact with a focused test, script, or runtime reproduction that exercises the real code. Mark it unproven if you cannot reach that level.
 6. Separate cleared risks from open risks.
 
+Report the level reached for each decisive fact: a claim, a cited implementation,
+a traced failure path, an executed check of real code, or a running-app
+reproduction. A cited line or convincing trace is not executed proof.
+
 ## Output
 
 - What changed, including non-obvious effects.

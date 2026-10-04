@@ -14,7 +14,10 @@ installed pstack-derived skill. The source notice remains at
 The collection preserves the previously reviewed Codex adaptations of `how`,
 `why`, `blast-radius`, `unslop`, and `no-comments`. `pstack-principles` is a
 consolidated entry point with selected principle notes, not the upstream Cursor
-router. Cursor-specific agents, model settings, setup commands, and automations
+router. It includes `principle-explain-the-number` and its adapted
+`benchmark-checklist` dependency. The explicit `correct` adaptation preserves
+the enforcement-first workflow without granting commits or broad instruction
+edits. Cursor-specific agents, model settings, setup commands, and automations
 are not part of this installation.
 The consolidated principle notes use sibling Markdown links so their references
 resolve in the installed aggregate rather than the upstream directory layout.
@@ -44,6 +47,12 @@ substantial reusable findings and contract-required reports remain Markdown
 artifacts. The writing-for-agents invocation reference describes Codex's
 `agents/openai.yaml` policy. The latter preserves the required skill description
 and does not treat another client's frontmatter as Codex configuration.
+
+The domain-modeling overlay follows upstream `GLOSSARY.md` naming for new
+projects while preserving existing `CONTEXT.md` glossaries. `handoff` uses
+a requested destination, native skill references and scoped evidence pointers;
+the orchestration completion contract selects its recorded coordination root.
+Both `handoff` and `correct` retain explicit-only Codex invocation policies.
 
 ## define-goal
 

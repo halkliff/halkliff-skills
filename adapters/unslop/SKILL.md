@@ -21,9 +21,20 @@ and required structure. Do not flatten a deliberate voice into bland prose.
 6. Use colons only before a real list or example, not as a mid-sentence crutch.
 7. Keep technical jargon when it names a real concept. Replace metaphorical jargon with the concrete mechanism.
 8. Self-audit for sentences that could appear unchanged in any project. Make them specific or cut them.
+9. Write complete sentences with their articles and verbs. Expand compressed fragments, unexplained abbreviations, and arrows when they make prose harder to read.
+10. State the point directly. Cut forced contrasts such as "not just X, but Y" and rhetorical flourishes that add no meaning.
+
+The upstream pattern catalog, with stable rule numbers, is in
+[references/patterns.md](references/patterns.md). Consult it for a detailed
+prose audit. The default application and exceptions in this file take priority
+over its stylistic generalizations.
 
 ## Exceptions
 
 Do not alter code, citations, quoted material, legal text, user-supplied names,
 or an explicitly requested verbatim artifact. If a rewrite would change a
 technical claim, preserve the claim and flag the uncertainty instead.
+
+Keep the user's deliberate humor, irreverence, callbacks, and useful analogies.
+Preserve punctuation that is part of a quotation, code, technical notation, or
+the user's voice. Plain language is not a requirement to sound bland.

@@ -1,0 +1,20 @@
+{
+  "name": "halkliff-local",
+  "interface": {
+    "displayName": "Halkliff local plugins"
+  },
+  "plugins": [
+    {
+      "name": "halkliff-orchestration",
+      "source": {
+        "source": "local",
+        "path": "./work/plugin-package/halkliff-orchestration-0.1.2"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}
