@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "halkliff-orchestration",
-  "version": "0.1.2",
+  "version": "0.1.5",
   "description": "Explicit orchestration with pinned instructions, session activation, and bounded local helpers.",
   "author": {
     "name": "halkliff"

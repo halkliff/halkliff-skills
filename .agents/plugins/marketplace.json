@@ -8,7 +8,7 @@
       "name": "halkliff-orchestration",
       "source": {
         "source": "local",
-        "path": "./work/plugin-package/halkliff-orchestration-0.1.2"
+        "path": "./work/plugin-package/halkliff-orchestration-0.1.5"
       },
       "policy": {
         "installation": "AVAILABLE",

@@ -5,13 +5,13 @@
       "id": "cursor-pstack",
       "path": "upstream/cursor-plugins",
       "url": "https://github.com/cursor/plugins.git",
-      "commit": "e43c7ee26e0038c6c1fa8380dd34ce86ff94cb2a"
+      "commit": "ccb5507cec1546dc88135c1139c811e6c59115ba"
     },
     {
       "id": "mattpocock",
       "path": "upstream/mattpocock-skills",
       "url": "https://github.com/mattpocock/skills.git",
-      "commit": "24fe0ef7737efae15c87225755e9f6f5965e4888"
+      "commit": "49dd158d1076134a641b33efb035946536778336"
     }
   ],
   "skills": [

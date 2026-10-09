@@ -10,7 +10,7 @@ The standalone skill installation remains available separately.
 From the repository root, run:
 
 ```powershell
-python scripts/build_plugin.py --dest work/plugin-package/halkliff-orchestration-0.1.2
+python scripts/build_plugin.py --dest work/plugin-package/halkliff-orchestration-0.1.5
 ```
 
 To validate sources and destination safety without writing the package, add
@@ -25,12 +25,12 @@ to rebuild. A conflicting destination is left untouched; choose a fresh output
 directory when package inputs change.
 
 The repository's local marketplace entry points to
-`work/plugin-package/halkliff-orchestration`. Build first, then install that
+`work/plugin-package/halkliff-orchestration-0.1.5`. Build first, then install that
 local marketplace plugin through Codex. Plugin installation and hook trust are
 separate host actions; building or installing alone does not establish that
 hooks are trusted or that the host has delivered events to them.
 
-After building the default destination, register this repository and install
+After building that destination, register this repository and install
 its available local plugin:
 
 ```powershell
@@ -56,6 +56,20 @@ repository-relative directory before reloading or reinstalling it through
 Codex. Updating the package or marketplace leaves active runtime snapshots pinned.
 
 ## Invoke and activate explicitly
+
+The bundled workflow requires a compact workstream plan before implementation
+dispatch, kept in the existing `<coord-root>/plan.md`. Parents check brief
+completeness through the core [protocol](../skills/orchestrate-work/references/protocol.md#workstream-plan);
+hooks do not assess semantic ownership, dependencies or acceptance. If the author
+chooses Plan mode, the wrapper presents the plan in chat and defers directory
+creation, helper activation and implementation until execution resumes.
+
+The core [review gate](../skills/orchestrate-work/references/protocol.md#review-gate)
+asks about missing score/assessment-limit preferences during setup, defaulting
+to 9/10 and three total assessments. Independent Sol High verification applies
+to substantial acceptance batches; all functional and non-functional requirements
+remain mandatory. The skill owns scores, evidence and scoped holds. Hooks do not
+score artifacts or enforce the review counter.
 
 Invoke `$orchestrate-work-plugin` when you want this workflow. The plugin does
 not infer orchestration intent or start a run by itself. Before helpers can use

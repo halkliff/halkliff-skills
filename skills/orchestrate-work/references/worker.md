@@ -17,7 +17,11 @@ On a hold, stop affected dispatch/operations using available controls and report
 the matching hold's resolution and current brief; older messages cannot clear
 newer holds. Preserve useful work.
 
-Implement and test in the assigned workspace. Commit owned changes in an isolated
+For implementation, implement and test in the assigned workspace. For a review or
+verification assignment, inspect the specified candidate and evidence without
+editing it; report findings through the supplied review gate. Never attest to
+checks you did not observe or evidence you could not inspect.
+Commit owned changes in an isolated
 agent checkout; leave main-checkout changes uncommitted unless the author directs
 otherwise. Respect assigned file ownership and coordinate shared operations with
 your parent. Report remaining work, operations and any further need for an

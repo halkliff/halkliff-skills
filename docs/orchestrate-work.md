@@ -14,23 +14,41 @@ flowchart TB
     sol["Sol 6.1 · High / xHigh<br/>Decompose · delegate · verify"]
     luna["Luna · xHigh<br/>Research · implement · test"]
     complex["Sol 6.1 · High / xHigh<br/>Complex implementation"]
+    verifier["Independent Sol 6.1 · High<br/>Verify evidence · critique"]
     acceptance{"Goal criteria met?"}
     complete([Complete])
 
     author -->|define-goal| orchestrator
     orchestrator -->|Research question| research
     research -.->|Findings / uncertainty| orchestrator
-    orchestrator -->|Workstream contract| sol
+    orchestrator -->|Workstream plan + contract| sol
     sol -->|Worker guide + brief| luna
     sol -->|Worker guide + complex brief| complex
     luna -.->|Results / questions| sol
     complex -.->|Results / questions| sol
+    sol -->|Reviewed candidate| verifier
+    verifier -.->|Score / findings| sol
     sol -.->|Accepted slices / escalation| orchestrator
     orchestrator -->|Integrated checks| acceptance
+    orchestrator -->|Integrated candidate| verifier
+    verifier -.->|Integration assessment| orchestrator
     acceptance -->|Yes| complete
     acceptance -->|Remaining work| orchestrator
     orchestrator -.->|Author decision needed| author
 ```
+
+Before dispatch, the orchestrator records the
+[workstream plan](../skills/orchestrate-work/references/protocol.md#workstream-plan)
+in the existing ledger. `/plan` is optional; when selected, setup and implementation
+wait for the host to transition to execution.
+
+Goal setup asks for missing review settings, suggesting 9/10 and three total
+assessments. The [review gate](../skills/orchestrate-work/references/protocol.md#review-gate)
+requires both the agreed score and all functional/non-functional requirements.
+Each verifier is independent of that candidate's implementer and reviewer.
+Correct concrete deficiencies within the limit, then hold the failed batch and
+its dependents. Routine edits share a batch; passing work proceeds without
+another round for optional polish.
 
 Repeat the coordinator and worker branches for each needed workstream. Each Sol
 owns an autonomous workstream and reviews its workers against the parent

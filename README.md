@@ -59,7 +59,7 @@ folder through a generic single-skill downloader does not install its dependenci
 Build the local plugin with its selected dependency resources:
 
 ```sh
-python scripts/build_plugin.py --dest work/plugin-package/halkliff-orchestration-0.1.2
+python scripts/build_plugin.py --dest work/plugin-package/halkliff-orchestration-0.1.5
 ```
 
 The plugin exposes `$orchestrate-work-plugin`, a small adapter to the existing
@@ -81,6 +81,20 @@ Installation, hook trust and observed desktop interception are separate checks.
 Invoke `$orchestrate-work` with the work you want to pursue. It starts through
 `define-goal`, requires `unslop` for author-facing prose and deliverables, and follows the communication
 and uncertainty rules in the [skill](skills/orchestrate-work/SKILL.md).
+
+Before implementation dispatch, the orchestrator records a compact
+[workstream plan](skills/orchestrate-work/references/protocol.md#workstream-plan)
+in the existing `plan.md`: ownership, dependencies, workspace boundaries,
+acceptance evidence, integration order and useful concurrency. Coordinators
+refine their worker assignments. `/plan` is optional; choosing it defers setup
+and implementation until the host transitions to execution.
+
+Goal setup asks for any review score threshold or assessment limit you have not
+already supplied, offering **9/10 and three total assessments**. Substantial
+deliverables pass coordinator review and independent GPT-6.1 Sol High verification.
+All agreed functional and non-functional requirements still need evidence;
+a high score cannot waive them. Failed batches receive bounded corrections, then
+a scoped hold at the limit. See the [review gate](skills/orchestrate-work/references/protocol.md#review-gate).
 
 Before invoking, select GPT-6 Astra High or GPT-6.1 Sol xHigh for the main
 orchestrator in the model selector. Sol coordinators and complex implementation

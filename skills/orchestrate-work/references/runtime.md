@@ -4,6 +4,16 @@ Read live tool schemas before dispatch. A skill cannot change its running model,
 create unavailable tools, enforce unexposed budgets or guarantee termination.
 Disclose a known model mismatch; use only an author-approved fallback.
 
+## Planning mode
+
+The workstream plan is part of ordinary execution; `/plan` is optional. If the
+author selected Plan mode, use permitted read-only investigation to define the
+goal and propose the workstream plan in chat. Defer run-directory creation,
+ledger writes, helper activation and implementation dispatch until the host
+transitions to execution. Then persist the settled plan and continue; do not
+repeat settled questions. Follow the host's mode restrictions and never claim
+to switch modes through this skill.
+
 ## Dispatch and workspace
 
 Separate Sol tasks require an explicit author request. Use `create_thread` with
@@ -30,7 +40,9 @@ creation before APIs requiring the latter and emit required creation directives.
 
 For worker subagents use `spawn_agent`, `model: "gpt-6-luna"`,
 `reasoning_effort: "xhigh"`, `fork_turns: "none"`. Sol implementation exceptions
-use `gpt-6.1-sol` with high/xhigh. The spawn message supplies the absolute
+use `gpt-6.1-sol` with high/xhigh; independent reviewers/verifiers use
+`gpt-6.1-sol` with `high` and a bounded review brief, per the protocol's review gate.
+The spawn message supplies the absolute
 `references/worker.md` path and task-specific brief, not the whole skill.
 Full-history forks inherit model/effort and cannot take overrides in this runtime.
 Use `send_message` for active agents, `followup_task` for idle ones. Count live
