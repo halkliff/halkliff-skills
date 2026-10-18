@@ -21,6 +21,11 @@ edits. Cursor-specific agents, model settings, setup commands, and automations
 are not part of this installation.
 The consolidated principle notes use sibling Markdown links so their references
 resolve in the installed aggregate rather than the upstream directory layout.
+The `in-your-own-words`, `sharpen` and verification-generator adaptations use
+native Codex tools and preserve author authority, real-path evidence and resource
+ownership. Orchestration uses the generators' procedures without generating a
+new skill unless requested. All selected `why` playbooks are mapped so their
+installed relative links resolve.
 
 ## Matt Pocock skills
 
@@ -53,6 +58,10 @@ projects while preserving existing `CONTEXT.md` glossaries. `handoff` uses
 a requested destination, native skill references and scoped evidence pointers;
 the orchestration completion contract selects its recorded coordination root.
 Both `handoff` and `correct` retain explicit-only Codex invocation policies.
+The `chief-of-staff` source is Matt's `skills/in-progress/chief-of-staff`.
+Its Codex adaptation preserves tactical/strategic coordination while bounding
+environment improvements to the assignment. Existing orchestration routing wins;
+the adaptation grants neither blanket cleanup nor implicit recurring schedules.
 
 ## define-goal
 

@@ -19,7 +19,7 @@ First, read recent commits, reverts, review comments, agent instruction files, a
 
 1. **Eliminate it with architecture.** Give each piece of state one owner and each task one supported way. Hide internals so the wrong import fails. Replace hand-synced lists with one source of truth. Delete old ways and dead code an agent would copy.
 2. **Enforce it with types so the bad state can't be written.** If bad code still compiles, add a lint or CI check whose error names the file, type, or function to use instead. If the pattern is already common, fail only when a change adds more.
-3. **Test the behavior.** Use `test-audit` when available for authoring, changing, or removing tests. Demonstrate the concrete defect a test detects; do not delete tests merely because they lack a particular assertion syntax.
+3. **Test the behavior.** Use `test-audit` when available for authoring, changing, or removing tests. A useful test fails when its promised behavior breaks and survives changes to the internals. Demonstrate the concrete defect it detects; assertion syntax alone does not justify deletion. Preserve meaningful coverage when rewriting or removing a test.
 4. **Write docs or agent rules last, only for judgment calls.** Nothing fails when an agent skips them.
 
 ## Fix and prove

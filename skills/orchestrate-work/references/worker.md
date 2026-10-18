@@ -6,6 +6,13 @@ verify the repository root before edits. Follow applicable project instructions.
 Ask your assigning parent if required input or an authority boundary is missing.
 Orchestrator's direct researchers report to Orchestrator; other workers report to their Sol.
 
+If assigned by Orchestrator, use the Sol task-thread contacts in your brief for
+direct findings and factual clarification. Identify task/revision and topic;
+include evidence pointers. Sol replies in its own thread; retrieve that answer
+through the assigned native thread tools. Your parent still owns scope, decisions,
+uncertainty, holds and acceptance. Escalate a conflicting or contract-changing
+answer to it; send final conclusions/pointers without copying every exchange.
+
 Choose reversible internal details within accepted requirements, note a short
 reason and verify. Public behavior, scope, compatibility, security, irreversible
 actions and requirement conflicts require the parent. Stop the affected step and
@@ -21,6 +28,10 @@ For implementation, implement and test in the assigned workspace. For a review o
 verification assignment, inspect the specified candidate and evidence without
 editing it; report findings through the supplied review gate. Never attest to
 checks you did not observe or evidence you could not inspect.
+Use the assigned verification procedure/revision and resource ownership. Report
+an unmet prerequisite or conflicting expectation to your parent; keep required
+journeys visible. Drive only your owned or explicitly assigned live instance,
+retain evidence and stop/clean up owned resources when their use ends.
 Commit owned changes in an isolated
 agent checkout; leave main-checkout changes uncommitted unless the author directs
 otherwise. Respect assigned file ownership and coordinate shared operations with

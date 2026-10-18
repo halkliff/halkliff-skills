@@ -8,18 +8,43 @@ Disclose a known model mismatch; use only an author-approved fallback.
 
 The workstream plan is part of ordinary execution; `/plan` is optional. If the
 author selected Plan mode, use permitted read-only investigation to define the
-goal and propose the workstream plan in chat. Defer run-directory creation,
-ledger writes, helper activation and implementation dispatch until the host
-transitions to execution. Then persist the settled plan and continue; do not
+goal and propose the workstream plan in chat. Use bounded read-only Luna subagents
+when the host permits them; return findings natively without run artifacts. Defer
+run-directory creation, ledger writes, goal mutations, helper activation,
+user-owned coordinator task-thread creation and implementation dispatch
+until the host transitions to execution. Then persist the settled plan and continue; do not
 repeat settled questions. Follow the host's mode restrictions and never claim
-to switch modes through this skill.
+to switch modes through this skill. If research delegation is unavailable, disclose
+the gap and resolve the route with the author before a larger investigation;
+the trivial-lookup exception still applies.
 
 ## Dispatch and workspace
 
-Separate Sol tasks require an explicit author request. Use `create_thread` with
+Treat explicit invocation as a request for substantial parallel orchestration.
+Orchestrator chooses coordinator placement and useful concurrency from independent
+workstreams, dependencies and verified runtime capacity. Use separate Sol task
+threads for substantial autonomous workstreams, with worker subagents; if the work
+proves light or tightly coupled, use subagents alone. Queue
+work that exceeds capacity. Record the choice in the existing plan; no placement
+confirmation is required. An explicit author override takes precedence.
+
+Task-thread creation and scoped coordination are part of the requested workflow;
+there is no separate task-creation setup question. Suggested invocation prompts
+explicitly request those actions when submitted. Carry the actual human invocation,
+its authorization and the
+placement choice into launch briefs, covering assignments, questions, replies and
+scoped continuations. A stored default prompt grants no permission until sent by
+the author. Pass the role, compact contract, pinned instructions, actual parent
+route and capacity. Follow the host's creation/messaging schemas: ordinary work
+requests or stored instructions alone do not authorize user-owned chats. Resolve
+an unavailable or host-disallowed route before dispatch; the workflow cannot
+override that boundary.
+
+For authorized separate coordinators, use `create_thread` with
 `model: "gpt-6.1-sol"`, `thinking: "high"` or `"xhigh"`; list projects first for a
-project target. Otherwise use subagents. Pass the role, compact protocol brief,
-pinned instruction path, authorized parent route and actual capacity.
+project target. Use coordinator subagents when Orchestrator selects that placement
+or the author explicitly overrides it.
+Workers and leaf reviewers/verifiers remain subagents.
 
 The task schema has no arbitrary checkout-path field. For isolated clones, a
 projectless task can run commands with the clone's absolute `workdir`; verify
@@ -56,6 +81,17 @@ only for a specific missing result. Use native task messaging under the authorâ€
 ongoing coordination authorization, including replies. Tasks are app peers;
 a parent ID alone grants no messaging permission.
 
+Orchestrator-assigned subagents may contact Sol task threads named in their brief
+for findings and factual clarifications. Use `send_message_to_thread` with the
+thread ID/host and the run's human authorization. Include task/revision and a
+topic label, concise evidence and the requested clarification. Sol answers in its
+own thread; the worker retrieves the reply with a targeted `read_thread`, or a
+bounded `wait_threads` for a completed response. These are visible thread messages,
+not private cross-tree subagent delivery. Do not poll unchanged history. Report an
+unresolved prerequisite to the assigning parent instead of waiting indefinitely.
+Decisions, consequential uncertainty, holds and acceptance stay with that parent.
+Return conclusions/pointers to it without relaying every exchange.
+
 Sol continues its accepted assignment within the current execution. If a task
 ends incomplete, Orchestrator evaluates its report and sends a scoped continuation;
 a finished turn is not task acceptance. While active, Orchestrator collects meaningful
@@ -70,10 +106,26 @@ are not cancellation. Keep waits short enough to answer the author.
 
 ## Goals
 
-Run define-goal first. Call `get_goal`; reuse a matching goal. Creating a goal or
-setting its token budget requires the author's explicit request. Respect an
-explicit goal-free run. Follow live lifecycle rules, including the host's blocked
-threshold and author-only pause authority. A hold is not a goal-tool status.
+For each new run, explicitly confirm live-goal versus goal-free execution before
+activation or implementation. Recommend goal-backed execution, defined with
+`define-goal`. Reuse an explicit choice already supplied for this run; otherwise
+ask once in the setup proposal and wait. General approval of other setup details
+or invocation alone does not settle goal mode. Continuing a confirmed run reuses
+its mode.
+
+After [setup confirmation](protocol.md#setup), for live-goal execution call
+`get_goal`; reuse an authorized matching active
+goal, or use `define-goal` to create one only on the author's explicit request.
+Confirm active state through the live goal tool before dispatch. Resolve
+unavailable tools, failed activation or conflicting state before implementation;
+never silently fall back to goal-free execution. Include a token budget only
+when explicitly requested. Follow planning-mode restrictions above.
+
+Record the chosen mode and confirmed live state, when applicable, in the existing
+plan; a written objective alone is not activation.
+
+Follow live lifecycle rules, including the host's blocked threshold and
+author-only pause authority. A hold is not a goal-tool status.
 
 Continue until acceptance, a real blocker, author stop or runtime/budget boundary.
 Propagate a whole-goal stop to child assignments and report pending operations.

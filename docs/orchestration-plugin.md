@@ -10,7 +10,7 @@ The standalone skill installation remains available separately.
 From the repository root, run:
 
 ```powershell
-python scripts/build_plugin.py --dest work/plugin-package/halkliff-orchestration-0.1.5
+python scripts/build_plugin.py --dest work/plugin-package/halkliff-orchestration-0.1.10
 ```
 
 To validate sources and destination safety without writing the package, add
@@ -25,7 +25,7 @@ to rebuild. A conflicting destination is left untouched; choose a fresh output
 directory when package inputs change.
 
 The repository's local marketplace entry points to
-`work/plugin-package/halkliff-orchestration-0.1.5`. Build first, then install that
+`work/plugin-package/halkliff-orchestration-0.1.10`. Build first, then install that
 local marketplace plugin through Codex. Plugin installation and hook trust are
 separate host actions; building or installing alone does not establish that
 hooks are trusted or that the host has delivered events to them.
@@ -56,6 +56,38 @@ repository-relative directory before reloading or reinstalling it through
 Codex. Updating the package or marketplace leaves active runtime snapshots pinned.
 
 ## Invoke and activate explicitly
+
+The core [setup](../skills/orchestrate-work/references/protocol.md#setup) presents
+one understanding, goal and verification proposal for author confirmation before
+helper activation, live-goal creation or implementation. It uses
+`in-your-own-words`, `sharpen` and `define-goal`; a confirmed continuation reuses
+those decisions. The wrapper reads the bundled core before activating helpers.
+
+Coordinators/verifiers follow the agreed
+[verification process](../skills/orchestrate-work/references/verification.md),
+adapting the bundled verification generators into procedures rather than creating
+new skills. Source inspection can fan out; one owner drives each shared live
+instance. The bounded `chief-of-staff` adaptation supports environment readiness
+and recurring-friction improvements within authorized scope. Hooks do not evaluate
+understanding, semantic verification coverage or author confirmation.
+
+The core [goal setup](../skills/orchestrate-work/references/runtime.md#goals)
+explicitly confirms live-goal or goal-free execution for each new run, recommending
+`define-goal` and a live goal. Helper activation
+does not activate a live goal; the orchestrator confirms that through the goal tool.
+
+The core chooses [coordinator placement](../skills/orchestrate-work/references/runtime.md#dispatch-and-workspace)
+and useful concurrency without a placement question. Substantial autonomous work
+normally uses separate Sol task threads. Suggested invocations authorize task
+creation and scoped coordination explicitly; existing runs
+retain their pinned instructions and chosen placement.
+
+Invocation requests the necessary parallel task creation without a separate setup
+question, subject to the host's actual authorization requirements. Main-thread
+subagents can send findings and factual clarifications to the Sol task threads
+listed in their briefs and retrieve replies from those threads. Parent authority
+over decisions, uncertainty, holds and acceptance is preserved. These routes are
+native messages; the plugin adds no private cross-tree agent bus.
 
 The bundled workflow requires a compact workstream plan before implementation
 dispatch, kept in the existing `<coord-root>/plan.md`. Parents check brief

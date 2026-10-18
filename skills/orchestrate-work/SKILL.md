@@ -13,16 +13,14 @@ work. The author owns scope and consequential decisions.
 
 If the host is in Plan mode, follow [planning mode](references/runtime.md#planning-mode)
 before creating run artifacts or activating helpers.
-Before implementation, Orchestrator runs `define-goal` to establish scope,
-requirements, evidence and reserved decisions. Editing this skill creates no goal.
-During setup, settle the [review gate](references/protocol.md#review-gate), including
-its one-time question about missing preferences, and record the absolute
-[coordination root](references/protocol.md#current-state).
-Describe the work and agree on its workspace approach: recommend isolation for
-complex parallel work that risks interference, or the shared main worktree for
-simpler independent work. Establish the compact
-[workstream plan](references/protocol.md#workstream-plan) before implementation
-dispatch. Use [runtime.md](references/runtime.md) for goal and dispatch operations.
+Follow [setup](references/protocol.md#setup): use `in-your-own-words` to confirm
+understanding, `sharpen` with `define-goal` to refine the outcome and approach,
+and obtain author confirmation before goal activation or implementation. Editing
+this skill creates no goal. Explicitly confirm goal-backed or goal-free execution,
+recommending a goal defined with `define-goal`. Establish the compact
+[workstream plan](references/protocol.md#workstream-plan) and agreed
+[verification process](references/verification.md) before dispatch.
+Use [runtime.md](references/runtime.md) for goal and dispatch operations.
 
 Select the Orchestrator's model in the main thread before invocation; the skill
 does not switch it.
@@ -57,6 +55,9 @@ termination guarantee.
 - Workspace owners: [git.md](references/git.md) before workspace assignment,
   integration or retirement; the author's workspace choice prevails.
   [CONTEXT.md](CONTEXT.md) resolves workflow-specific terminology when needed.
+- Coordinators/verifiers: [verification.md](references/verification.md) when
+  defining, executing or reconciling acceptance checks; send leaves only the
+  assigned procedure and required inputs.
 
 ## Keep execution economical
 
@@ -72,6 +73,13 @@ growing an avoidable backlog. Protocol owns contracts, status and rollout.
 Only load supporting skills when they change the current task: interface design,
 domain terminology, regression risk, investigation or agent-document writing.
 `grilling` requires the author's request.
+
+Use `chief-of-staff` at setup or recurring friction for bounded environment
+improvements: better evidence access, one reusable helper, or a structural guard
+that prevents a demonstrated mistake. Do useful in-scope work; propose scope or
+contract changes to the author. Reuse this workflow's delegation, communication
+and completion rules. Broader cleanup and recurring schedules need their own
+authorization.
 
 Use [uncertainty](references/uncertainty.md) for bounded discretion, escalation,
 hold acknowledgments, resumption and abandoning an approach.

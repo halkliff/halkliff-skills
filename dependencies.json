@@ -5,7 +5,7 @@
       "id": "cursor-pstack",
       "path": "upstream/cursor-plugins",
       "url": "https://github.com/cursor/plugins.git",
-      "commit": "ccb5507cec1546dc88135c1139c811e6c59115ba"
+      "commit": "d1715e03a8b1a2f03fdbe336d40c4a56b81f3c8f"
     },
     {
       "id": "mattpocock",
@@ -57,6 +57,10 @@
         {
           "source": "skills/orchestrate-work/scripts/git_workflow.py",
           "target": "scripts/git_workflow.py"
+        },
+        {
+          "source": "skills/orchestrate-work/references/verification.md",
+          "target": "references/verification.md"
         }
       ]
     },
@@ -518,6 +522,123 @@
           "target": "LICENSE.upstream.txt"
         }
       ]
+    },
+    {
+      "name": "in-your-own-words",
+      "files": [
+        {
+          "source": "adapters/in-your-own-words/agents/openai.yaml",
+          "target": "agents/openai.yaml"
+        },
+        {
+          "source": "adapters/in-your-own-words/SKILL.md",
+          "target": "SKILL.md"
+        },
+        {
+          "source": "upstream/cursor-plugins/pstack/LICENSE",
+          "target": "LICENSE.upstream.txt"
+        }
+      ],
+      "origin": {
+        "upstream": "cursor-pstack",
+        "path": "upstream/cursor-plugins/pstack/skills/in-your-own-words"
+      }
+    },
+    {
+      "name": "sharpen",
+      "files": [
+        {
+          "source": "adapters/sharpen/agents/openai.yaml",
+          "target": "agents/openai.yaml"
+        },
+        {
+          "source": "adapters/sharpen/SKILL.md",
+          "target": "SKILL.md"
+        },
+        {
+          "source": "upstream/cursor-plugins/pstack/LICENSE",
+          "target": "LICENSE.upstream.txt"
+        }
+      ],
+      "origin": {
+        "upstream": "cursor-pstack",
+        "path": "upstream/cursor-plugins/pstack/skills/sharpen"
+      }
+    },
+    {
+      "name": "chief-of-staff",
+      "files": [
+        {
+          "source": "adapters/chief-of-staff/agents/openai.yaml",
+          "target": "agents/openai.yaml"
+        },
+        {
+          "source": "adapters/chief-of-staff/SKILL.md",
+          "target": "SKILL.md"
+        },
+        {
+          "source": "upstream/mattpocock-skills/LICENSE",
+          "target": "LICENSE.upstream.txt"
+        }
+      ],
+      "origin": {
+        "upstream": "mattpocock",
+        "path": "upstream/mattpocock-skills/skills/in-progress/chief-of-staff"
+      }
+    },
+    {
+      "name": "create-verification-skill",
+      "files": [
+        {
+          "source": "adapters/create-verification-skill/agents/openai.yaml",
+          "target": "agents/openai.yaml"
+        },
+        {
+          "source": "adapters/create-verification-skill/references/feature-map-example/create-note.md",
+          "target": "references/feature-map-example/create-note.md"
+        },
+        {
+          "source": "adapters/create-verification-skill/references/feature-map-example/README.md",
+          "target": "references/feature-map-example/README.md"
+        },
+        {
+          "source": "adapters/create-verification-skill/references/feature-map-example/search.md",
+          "target": "references/feature-map-example/search.md"
+        },
+        {
+          "source": "adapters/create-verification-skill/SKILL.md",
+          "target": "SKILL.md"
+        },
+        {
+          "source": "upstream/cursor-plugins/pstack/LICENSE",
+          "target": "LICENSE.upstream.txt"
+        }
+      ],
+      "origin": {
+        "upstream": "cursor-pstack",
+        "path": "upstream/cursor-plugins/pstack/skills/create-verification-skill"
+      }
+    },
+    {
+      "name": "maintain-verification-skill",
+      "files": [
+        {
+          "source": "adapters/maintain-verification-skill/agents/openai.yaml",
+          "target": "agents/openai.yaml"
+        },
+        {
+          "source": "adapters/maintain-verification-skill/SKILL.md",
+          "target": "SKILL.md"
+        },
+        {
+          "source": "upstream/cursor-plugins/pstack/LICENSE",
+          "target": "LICENSE.upstream.txt"
+        }
+      ],
+      "origin": {
+        "upstream": "cursor-pstack",
+        "path": "upstream/cursor-plugins/pstack/skills/maintain-verification-skill"
+      }
     }
   ]
 }

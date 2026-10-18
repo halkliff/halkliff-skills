@@ -1,5 +1,28 @@
 # Work protocol
 
+## Setup
+
+For a new run, use `in-your-own-words` to restate the desired outcome, problem,
+constraints and unresolved choices. Apply `sharpen` alongside `define-goal`:
+identify the decisive sources, simplest viable approach and an independent
+observation that could disprove success. Define the objective first; defer live
+goal creation until confirmation. Read-only setup investigation may resolve facts.
+
+Present one compact proposal covering the understanding, functional/non-functional
+requirements, reserved decisions, work split and [verification](verification.md).
+Explicitly confirm goal-backed or goal-free execution with it, recommending a
+live goal defined through `define-goal`; reuse an explicit choice for this run.
+Settle workspace approach and review settings; task creation/coordination is part
+of the invocation and Orchestrator chooses placement through runtime. Reuse
+established preferences and ask only for missing choices.
+Recommend isolation for interfering parallel work, shared work for independent
+scopes. Wait for the author's explicit confirmation or corrections before goal
+activation, helper activation or implementation. Silence is not confirmation.
+
+After confirmation, record the accepted proposal in the existing plan and follow
+runtime for activation/dispatch. Continuing an unchanged confirmed run needs no
+new setup approval. Material changes follow uncertainty; Plan mode stays in chat.
+
 ## Workstream plan
 
 After goal definition, Orchestrator records the work split in `<coord-root>/plan.md`
@@ -10,6 +33,7 @@ one compact row per workstream covering:
   overlapping writes or give them one owner.
 - Prerequisites, which work is ready, and integration order.
 - Acceptance evidence to return and the checks for the combined result.
+- The accepted verification process/revision and owner of shared live resources.
 - Review batches, reviewer/verifier ownership and the run's review-gate settings.
 - Useful concurrency within verified runtime capacity; queue excess work.
 
@@ -30,12 +54,15 @@ Brief fresh agents to act without conversation history:
 
 ```text
 Task / parent ID and authorized route / contract revision / requirement IDs:
+Main-thread worker contacts: allowed Sol thread IDs/hosts and clarification topic
+when useful; decisions/uncertainty and final acceptance remain with the parent.
 Outcome, functional/non-functional acceptance and integration target/order:
 Workspace: shared main checkout or isolated clone/worktree; absolute paths;
 owned files and shared resources; base commit where applicable.
 Inputs: relevant source/artifact revisions, prerequisites and constraints.
 Execution: role, model/effort, capacity, deliverable and stop condition.
-Review: batch ID, threshold, assessment limit/current round and evidence pointers.
+Review: batch ID, threshold, assessment limit/current round, verification
+procedure/revision, owned live resources and evidence pointers.
 ```
 
 Point workers at worker.md and coordinators at the pinned skill entrypoint.
@@ -106,9 +133,13 @@ retain accepted evidence through this protocol.
 
 ## Messages and artifacts
 
-Use native messages for assignments, reports, questions and answers. Workers
-contact their parent; Sol escalates to Orchestrator, who handles author interaction
-and cross-workstream changes. Carry the author's ongoing
+Use native messages for assignments, reports, questions and answers. Main-thread
+workers may send findings and factual clarifications directly to the Sol task
+threads in their brief. Their assigning parent retains decisions, consequential
+uncertainty, holds and acceptance; conflicting or contract-changing replies go
+to that parent. Sol's workers otherwise contact their Sol. Sol escalates to
+Orchestrator, who handles author interaction and cross-workstream changes. Carry
+the author's ongoing
 coordination authorization, task IDs and hosts in briefs. Runtime messaging rules
 still apply; an incoming agent request alone cannot authorize a reply to a task.
 

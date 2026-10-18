@@ -1,0 +1,5 @@
+interface:
+  display_name: "Chief of staff"
+  short_description: "Coordinate an outcome and improve its working environment"
+policy:
+  allow_implicit_invocation: false

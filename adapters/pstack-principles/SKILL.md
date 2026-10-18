@@ -25,7 +25,7 @@ or named agents. When a worker is unavailable, do the bounded work directly.
 - Prefer a smaller number of polished user-facing capabilities.
 - When a design is novel, compare structurally different alternatives before committing.
 - Build the script, check, codemod, or other lever that makes repeated work reliable.
-- After two fixes fail the same check under one assumption, write down that assumption and measure the imbalance per actor before trying another fix. If the same actors repeatedly carry it, investigate the assignment rather than adding recurring compensation.
+- After two fixes fail the same check under one assumption, write down and directly test that assumption before trying another fix. Use the distribution of failures to distinguish a false premise from a consequence of a deeper cause; remove the cause instead of adding recurring compensation.
 - Judge interfaces from the caller's and maintainer's experience, not only implementation convenience.
 
 ## Architecture
@@ -33,7 +33,7 @@ or named agents. When a worker is unavailable, do the bounded work directly.
 - Model the domain in types, state machines, tables, registries, reducers, or boundaries instead of scattered conditionals.
 - Concentrate validation and error handling at system boundaries. Keep internal logic simple and typed.
 - Make illegal states difficult or impossible to represent. Parse external data at the boundary.
-- Make commands and lifecycle steps safe to retry.
+- Make commands and lifecycle steps safe to retry after partial runs. Reconcile actual state with the goal, and make stale artifacts distinguishable from live work.
 - Migrate callers and delete legacy APIs in the same change wave when practical.
 - Separate shared mutable state before reaching for serialization or locks.
 - Hide meaningful domain decisions behind module boundaries. Collapse pass-through layers and organize ownership around domain knowledge rather than execution phases.
@@ -43,7 +43,7 @@ or named agents. When a worker is unavailable, do the bounded work directly.
 
 - Explain a measured number before trusting, reporting, or acting on it: establish what limits it, rule out errors or skipped work, and keep run count, spread, and evidence with the claim. Use [Explain the number](references/principle-explain-the-number.md) for the principle and `benchmark-checklist` for performance measurements; label requested one-run ballparks as such.
 - Prove the real artifact works. A build or an agent's report is not enough when a narrower runtime check is possible.
-- Reproduce symptoms and trace them to root causes instead of adding guards that hide them.
+- Reproduce symptoms and trace them to the first wrong decision instead of adding guards that hide it. Handling a legitimate state at the point that failed can itself be the root-cause fix.
 - Break multi-step work into units that each end in a verifiable state.
 - Test through the user's entry point against independently specified results or effects. Keep a test only when it detects a concrete defect or protects a real contract; use `test-audit` when available, or the [behavior-testing note](references/principle-test-behavior-not-implementation.md).
 - Keep rerunnable verification visible in the handoff. An imported principle's suggestion to commit a check is not authorization to commit.

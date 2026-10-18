@@ -59,7 +59,7 @@ folder through a generic single-skill downloader does not install its dependenci
 Build the local plugin with its selected dependency resources:
 
 ```sh
-python scripts/build_plugin.py --dest work/plugin-package/halkliff-orchestration-0.1.5
+python scripts/build_plugin.py --dest work/plugin-package/halkliff-orchestration-0.1.10
 ```
 
 The plugin exposes `$orchestrate-work-plugin`, a small adapter to the existing
@@ -78,9 +78,45 @@ Installation, hook trust and observed desktop interception are separate checks.
 
 ## Use
 
-Invoke `$orchestrate-work` with the work you want to pursue. It starts through
-`define-goal`, requires `unslop` for author-facing prose and deliverables, and follows the communication
+Invoke `$orchestrate-work` with the work you want to pursue. Setup uses
+`in-your-own-words`, `sharpen` and `define-goal`, requires `unslop` for author-facing prose and deliverables, and follows the communication
 and uncertainty rules in the [skill](skills/orchestrate-work/SKILL.md).
+
+Confirm the understood outcome and proposed verification process before goal
+activation or implementation. One setup proposal covers requirements, reserved
+decisions, workspace, workstreams and verification; continuing a confirmed run
+does not repeat that approval. Coordinators reuse the agreed process and refine
+methods within its criteria and resource boundaries. See
+[setup](skills/orchestrate-work/references/protocol.md#setup) and
+[verification](skills/orchestrate-work/references/verification.md).
+
+The verification generators contribute launch, readiness, real user journeys,
+evidence and cleanup procedures. Orchestration records a process in its existing
+plan or one linked `verification.md`, rather than creating a skill for every run.
+`chief-of-staff` adds bounded environment improvements during setup or recurring
+friction; it preserves the agreed scope and existing delegation rules.
+
+Setup settles [live-goal or goal-free execution](skills/orchestrate-work/references/runtime.md#goals).
+Each new run explicitly chooses its mode, recommending a live goal defined with
+`define-goal`. Reuse an explicit choice supplied for that run; otherwise ask with
+the setup proposal. Live-goal execution requires confirmed activation before
+implementation; token budgets require an explicit request.
+
+The orchestrator chooses [coordinator placement](skills/orchestrate-work/references/runtime.md#dispatch-and-workspace)
+and concurrency from workstream independence, dependencies, task size and runtime
+capacity. Substantial autonomous workstreams normally use separate Sol task
+threads with worker subagents; smaller tasks may use coordinator subagents.
+An explicit author choice takes precedence. Suggested invocation prompts authorize
+the needed task creation and coordination messages when sent by the author.
+Task creation has no separate setup confirmation: invoking orchestration requests
+substantial parallel work, with subagent-only execution when the task proves light.
+Host creation and messaging rules still apply to the actual human request.
+
+Main-thread workers can deliver findings and factual clarifications directly to
+Sol task threads listed in their briefs. Sol answers in its own thread and the
+worker retrieves the reply there. Decisions, consequential uncertainty, holds
+and acceptance remain with the assigning parent; the main context receives
+conclusions and evidence pointers instead of every exchange.
 
 Before implementation dispatch, the orchestrator records a compact
 [workstream plan](skills/orchestrate-work/references/protocol.md#workstream-plan)
@@ -153,8 +189,8 @@ pinned instructions until you explicitly migrate them.
 | Source | Selected skills |
 | --- | --- |
 | This collection | `orchestrate-work`, `define-goal` |
-| pstack, adapted for Codex | `pstack-principles`, `unslop`, `how`, `why`, `blast-radius`, `no-comments`, `benchmark-checklist`, `correct` |
-| Matt Pocock, with selected compatibility adaptations | `grilling`, `writing-for-agents`, `domain-modeling`, `codebase-design`, `research`, `handoff` |
+| pstack, adapted for Codex | `pstack-principles`, `unslop`, `how`, `why`, `blast-radius`, `no-comments`, `benchmark-checklist`, `correct`, `in-your-own-words`, `sharpen`, `create-verification-skill`, `maintain-verification-skill` |
+| Matt Pocock, with selected compatibility adaptations | `grilling`, `writing-for-agents`, `domain-modeling`, `codebase-design`, `research`, `handoff`, `chief-of-staff` |
 
 The exact file list and pinned revisions live in [dependencies.json](dependencies.json).
 Unchanged files come directly from submodules. Adapted files live under `adapters/`.

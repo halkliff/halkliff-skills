@@ -15,13 +15,19 @@ flowchart TB
     luna["Luna · xHigh<br/>Research · implement · test"]
     complex["Sol 6.1 · High / xHigh<br/>Complex implementation"]
     verifier["Independent Sol 6.1 · High<br/>Verify evidence · critique"]
+    confirmation{"Author confirms outcome<br/>and verification?"}
+    activation["Activate agreed goal / helpers"]
     acceptance{"Goal criteria met?"}
     complete([Complete])
 
-    author -->|define-goal| orchestrator
+    author -->|Outcome / constraints| orchestrator
+    orchestrator -->|Understanding + sharpened goal + verification| confirmation
+    confirmation -->|Corrections| orchestrator
+    confirmation -->|Yes| activation
     orchestrator -->|Research question| research
     research -.->|Findings / uncertainty| orchestrator
-    orchestrator -->|Workstream plan + contract| sol
+    research -.->|Direct findings / clarifications| sol
+    activation -->|Workstream plan + contract| sol
     sol -->|Worker guide + brief| luna
     sol -->|Worker guide + complex brief| complex
     luna -.->|Results / questions| sol
@@ -41,6 +47,17 @@ Before dispatch, the orchestrator records the
 [workstream plan](../skills/orchestrate-work/references/protocol.md#workstream-plan)
 in the existing ledger. `/plan` is optional; when selected, setup and implementation
 wait for the host to transition to execution.
+
+New runs obtain one [setup confirmation](../skills/orchestrate-work/references/protocol.md#setup)
+before activation or implementation. Coordinators and verifiers share the agreed
+[verification process](../skills/orchestrate-work/references/verification.md):
+real entry points, independently specified results, owned live resources and
+retained evidence. Methods can improve within the confirmed criteria.
+Goal-backed versus goal-free execution is explicitly confirmed, recommending a
+live goal defined with `define-goal`. Coordinator placement is autonomous; there
+is no separate task-creation setup question. Main-thread workers can clarify facts
+directly with authorized Sol task threads while escalating decisions and uncertainty
+to their assigning parent.
 
 Goal setup asks for missing review settings, suggesting 9/10 and three total
 assessments. The [review gate](../skills/orchestrate-work/references/protocol.md#review-gate)

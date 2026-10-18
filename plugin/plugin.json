@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "halkliff-orchestration",
-  "version": "0.1.5",
+  "version": "0.1.10",
   "description": "Explicit orchestration with pinned instructions, session activation, and bounded local helpers.",
   "author": {
     "name": "halkliff"
@@ -15,7 +15,7 @@
         "longDescription": "Run the existing orchestrate-work workflow with bundled instructions and explicitly activated local helpers for dispatch checks, recovery, observed counters, and retirement preflight.",
         "developerName": "halkliff",
         "category": "Productivity",
-        "defaultPrompt": "Use $orchestrate-work-plugin to define the outcome and coordinate the authorized work through the bundled orchestrate-work instructions."
+        "defaultPrompt": "Use $orchestrate-work-plugin for this outcome with my selected orchestrator. Create and coordinate GPT-6.1 Sol task threads as needed for substantial parallel work; use subagents alone for light work. Allow main-thread workers and Sol task threads to exchange findings and clarifications directly, keeping decisions and uncertainty with their parents. Confirm goal-backed execution (recommended, using $define-goal) or goal-free execution, and my understood outcome and verification process before activation or implementation. Follow the workflow setup and acceptance rules."
       }
     }
   }
