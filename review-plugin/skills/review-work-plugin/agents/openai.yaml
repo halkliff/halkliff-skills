@@ -1,0 +1,6 @@
+interface:
+  display_name: "Review work"
+  short_description: "Review evidence and render a local report"
+  default_prompt: "Use $review-work-plugin once to assess this implementation and its relevant effects against the approved requirements. Follow the bundled review-work profile. Use Astra High coordination, Sol 6.1 for bulk review and independent verification, and Luna for summarization at any stage. Create useful Astra High coordinator chats and coordinate scoped messages among them under this request. Preserve my checkout and data, put all reviewer code writes in reviewer-owned clones or worktrees, and return the offline report and work-chat handoff without repairs. Recover existing context and confirm any missing material setup. Create a goal only if I explicitly request one."
+policy:
+  allow_implicit_invocation: false

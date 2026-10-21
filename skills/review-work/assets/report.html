@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="{{CSP}}">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>{{TITLE}}</title>
+<style>
+:root { color-scheme: light dark; --bg:#f5f6f8; --paper:#fff; --ink:#192430; --muted:#526171; --line:#d5dde5; --accent:#2156a5; --ready:#176341; --changes:#a22d2d; --incomplete:#855400; --soft:#eef2f7; font:16px/1.55 system-ui,sans-serif; }
+* { box-sizing:border-box; }
+body { margin:0; background:var(--bg); color:var(--ink); }
+a { color:var(--accent); }
+a:focus-visible, input:focus-visible, select:focus-visible, button:focus-visible, summary:focus-visible { outline:3px solid var(--accent); outline-offset:3px; }
+.skip { position:absolute; left:1rem; top:-5rem; padding:.6rem; background:var(--paper); z-index:2; }
+.skip:focus { top:1rem; }
+.shell { max-width:1200px; margin:auto; padding:2.5rem 2rem 4rem; }
+header { padding:1.5rem 0 2rem; }
+.eyebrow { margin:0 0 .4rem; color:var(--muted); font-size:.8rem; font-weight:700; letter-spacing:.12em; text-transform:uppercase; }
+h1 { font-size:clamp(2rem,5vw,3.4rem); line-height:1.12; margin:.4rem 0 1.5rem; overflow-wrap:anywhere; }
+h2 { font-size:1.45rem; line-height:1.3; margin:0 0 1rem; }
+h3 { font-size:1.05rem; margin:0 0 .65rem; }
+h4 { font-size:.9rem; margin:1rem 0 .3rem; }
+p { margin:.45rem 0 .9rem; white-space:pre-wrap; overflow-wrap:anywhere; }
+nav { display:flex; gap:1rem; flex-wrap:wrap; margin:1.2rem 0 0; }
+nav a { text-underline-offset:4px; }
+.metadata { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+.metadata dt, dt { font-size:.8rem; color:var(--muted); font-weight:700; }
+dd { margin:0 0 .8rem; overflow-wrap:anywhere; }
+.summary { display:grid; grid-template-columns:2fr 1fr; gap:1rem; margin:0 0 1.5rem; }
+.verdict,.overall { padding:1.5rem; background:var(--paper); border:1px solid var(--line); border-radius:12px; }
+.verdict { border-left:6px solid; }
+.verdict.ready { border-left-color:var(--ready); }
+.verdict.changes { border-left-color:var(--changes); }
+.verdict.incomplete { border-left-color:var(--incomplete); }
+.verdict strong { display:block; font-size:1.8rem; line-height:1.2; }
+.ready strong { color:var(--ready); } .changes strong { color:var(--changes); } .incomplete strong { color:var(--incomplete); }
+.score { font-size:2.4rem; line-height:1.2; font-weight:700; margin:.5rem 0; }
+.score span { font-size:1rem; color:var(--muted); font-weight:400; }
+.note { color:var(--muted); font-size:.9rem; }
+.calibration { border-left:6px solid var(--accent); }
+section { background:var(--paper); border:1px solid var(--line); border-radius:12px; padding:1.5rem; margin:1.5rem 0; scroll-margin-top:1rem; }
+.grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:1rem; }
+.dimension { padding:1rem; border:1px solid var(--line); border-radius:8px; }
+.table-scroll { overflow-x:auto; }
+table { width:100%; border-collapse:collapse; font-size:.9rem; text-align:left; }
+th,td { padding:.8rem; vertical-align:top; border-bottom:1px solid var(--line); min-width:100px; }
+thead th { color:var(--muted); font-size:.8rem; }
+tbody th { min-width:120px; }
+.tag { display:inline-block; border:1px solid var(--line); background:var(--soft); padding:.1rem .5rem; border-radius:5px; font-size:.75rem; margin:0 .3rem .3rem 0; white-space:normal; }
+.finding { border-top:1px solid var(--line); padding:1.4rem 0 .4rem; }
+.finding h3 { font-size:1.15rem; }
+.finding dl { margin:1rem 0; }
+pre { font: .85rem/1.5 ui-monospace,Consolas,monospace; white-space:pre-wrap; overflow-wrap:anywhere; margin:.25rem 0; }
+.evidence { padding-left:1.2rem; margin:.5rem 0; }
+.evidence li { padding:.1rem 0; }
+.muted { color:var(--muted); font-size:.9rem; }
+.filters { display:grid; grid-template-columns:2fr repeat(3,1fr); gap:.8rem; background:var(--soft); padding:1rem; border-radius:8px; }
+label { display:block; font-size:.8rem; font-weight:700; }
+input,select,button { font:inherit; color:var(--ink); background:var(--paper); border:1px solid var(--line); border-radius:5px; padding:.5rem; width:100%; margin-top:.3rem; }
+button { width:auto; cursor:pointer; padding:.4rem .9rem; }
+summary { cursor:pointer; color:var(--accent); }
+[hidden] { display:none !important; }
+footer { color:var(--muted); font-size:.85rem; }
+@media (prefers-color-scheme:dark) { :root { --bg:#121820; --paper:#1b242f; --ink:#e9edf2; --muted:#acb9c8; --line:#3d4d5f; --accent:#9bc3ff; --ready:#8adeb4; --changes:#ffaaa6; --incomplete:#f1ca83; --soft:#243141; } }
+@media (max-width:700px) { .shell { padding:1rem; } .summary,.metadata { grid-template-columns:1fr; } .filters { grid-template-columns:1fr 1fr; } section { padding:1rem; } th,td { padding:.6rem; } }
+@media print { :root { color-scheme:light; --bg:#fff; --paper:#fff; --ink:#000; --muted:#333; --line:#aaa; --accent:#000; --ready:#000; --changes:#000; --incomplete:#000; --soft:#fff; font-size:10pt; } .shell { max-width:none; padding:0; } nav,.skip,.filters,button,#filter-status { display:none !important; } section,.verdict,.overall { border-radius:0; } .finding,.dimension { break-inside:avoid; } .finding[hidden] { display:block !important; } .table-scroll { overflow:visible; } details { display:block; } h2,h3 { break-after:avoid; } footer { border-top:1px solid #aaa; padding-top:1rem; } }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to review</a>
+<div class="shell">
+<header>
+<p class="eyebrow">Recorded work review</p>
+<h1>{{TITLE}}</h1>
+<dl class="metadata"><div><dt>Candidate</dt><dd><pre>{{CANDIDATE}}</pre></dd></div><div><dt>Baseline</dt><dd><pre>{{BASELINE}}</pre></dd></div></dl>
+<nav aria-label="Report sections"><a href="#requirements">Requirements</a><a href="#quality">Quality</a><a href="#findings">Findings</a><a href="#checks">Checks</a><a href="#verification">Verification</a><a href="#limits">Limits and decisions</a></nav>
+</header>
+<main id="main">
+<div class="summary"><div class="verdict {{VERDICT_CLASS}}"><p class="eyebrow">Recorded verdict</p><strong>{{VERDICT}}</strong><p class="note">Ready: recorded gates pass. Changes required: revision is requested. Incomplete: evidence or review remains unfinished. The reviewer chooses the verdict.</p></div><div class="overall"><p class="eyebrow">Overall quality</p><p class="score">{{OVERALL}}</p><p>Required threshold: {{THRESHOLD}}</p></div></div>
+<p class="note">This report checks consistency within the supplied records. It does not prove evidence, completeness, ownership, or score calibration. Complete HTTP(S) and local file:/// references in evidence and source fields become validated navigation links. Other pointers remain copyable text. Links load only when followed.</p>
+<section class="calibration" aria-labelledby="calibration-heading"><h2 id="calibration-heading">Recorded calibration: {{CALIBRATION_STATUS}}</h2>{{CALIBRATION_LIMIT}}<p class="note">Calibration is a recorded assessment separate from the work verdict. The validator checks its structure and required evidence pointers; it does not validate the assessment.</p>{{CALIBRATION_EVIDENCE}}</section>
+<section aria-labelledby="changes-heading"><h2 id="changes-heading">Introduced changes</h2>{{CHANGE_SUMMARY}}</section>
+<section aria-labelledby="gates-heading"><h2 id="gates-heading">Recorded gating gaps</h2>{{GAPS}}</section>
+<section id="requirements"><h2>Requirements and evidence</h2><div class="table-scroll"><table><caption class="muted">Each met requirement needs recorded evidence.</caption><thead><tr><th scope="col">ID</th><th scope="col">Requirement</th><th scope="col">Status</th><th scope="col">Evidence</th></tr></thead><tbody>{{REQUIREMENTS}}</tbody></table></div></section>
+<section id="quality"><h2>Quality dimensions</h2><p class="note">Scores and rationales are the reviewer’s recorded assessments. Critical dimensions gate readiness individually.</p><div class="grid">{{DIMENSIONS}}</div></section>
+<section id="findings"><h2>Findings</h2><div class="filters" hidden><div><label for="search">Search findings</label><input id="search" type="search" placeholder="Text, source, evidence…"></div><div><label for="kind">Kind</label><select id="kind"><option value="">All kinds</option value="defect">Defect</option><option value="plan_gap">Plan gap</option><option value="risk">Risk</option><option value="missing_verification">Missing verification</option><option value="quality">Quality</option><option value="advisory">Advisory</option></select></div><div><label for="confidence">Confidence</label><select id="confidence"><option value="">All confidence</option><option value="confirmed">Confirmed</option><option value="supported">Supported</option><option value="provisional">Provisional</option><option value="unknown">Unknown</option></select></div><div><label for="scope">Scope</label><select id="scope"><option value="">All scope</option><option value="in">In scope</option><option value="out">Unrelated</option></select></div><button id="reset" type="button">Clear filters</button></div><p id="filter-status" role="status" aria-live="polite"></p><h3>In scope</h3>{{IN_SCOPE}}<h3>Unrelated findings · non-gating</h3><p class="note">These records do not affect acceptance of the reviewed work.</p>{{OUT_SCOPE}}</section>
+<section id="checks"><h2>Checks</h2><div class="table-scroll"><table><thead><tr><th scope="col">Check</th><th scope="col">Status</th><th scope="col">Gate</th><th scope="col">Evidence</th></tr></thead><tbody>{{CHECKS}}</tbody></table></div></section>
+<section id="verification"><h2>Verification evidence</h2>{{VERIFICATION}}<h3>Environment</h3>{{ENVIRONMENT}}<h3>Unresolved material objections</h3>{{OBJECTIONS}}</section>
+<section id="limits"><h2>Limitations and decisions</h2><h3>Limitations</h3>{{LIMITATIONS}}<h3>Decisions</h3>{{DECISIONS}}</section>
+</main>
+<footer>Offline report · schema version 1 · no remote resources. The command validates the supplied Git checkout and output containment; the caller must establish that the checkout is theirs to modify.</footer>
+</div>
+<script>
+"use strict";
+const cards = Array.from(document.querySelectorAll(".finding"));
+const controls = ["search", "kind", "confidence", "scope"].map(id => document.getElementById(id));
+const status = document.getElementById("filter-status");
+function filter() {
+  const [search, kind, confidence, scope] = controls.map(control => control.value.toLocaleLowerCase());
+  let shown = 0;
+  for (const card of cards) {
+    const matches = (!search || card.textContent.toLocaleLowerCase().includes(search)) && (!kind || card.dataset.kind === kind) && (!confidence || card.dataset.confidence === confidence) && (!scope || card.dataset.scope === scope);
+    card.hidden = !matches;
+    shown += Number(matches);
+  }
+  status.textContent = `${shown} of ${cards.length} findings shown. Printing includes all findings.`;
+}
+document.querySelector(".filters").hidden = false;
+controls.forEach(control => control.addEventListener("input", filter));
+document.getElementById("reset").addEventListener("click", () => { controls.forEach(control => { control.value = ""; }); filter(); controls[0].focus(); });
+let previouslyOpen;
+window.addEventListener("beforeprint", () => { previouslyOpen = Array.from(document.querySelectorAll("details"), detail => [detail, detail.open]); previouslyOpen.forEach(([detail]) => { detail.open = true; }); });
+window.addEventListener("afterprint", () => { if (previouslyOpen) previouslyOpen.forEach(([detail, open]) => { detail.open = open; }); });
+filter();
+</script>
+</body>
+</html>

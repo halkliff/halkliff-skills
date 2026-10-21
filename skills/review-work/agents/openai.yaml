@@ -1,0 +1,6 @@
+interface:
+  display_name: "Review work"
+  short_description: "Review requirements, verify findings, report readiness"
+  default_prompt: "Use $review-work once to assess this implementation and its relevant effects against the approved requirements. Use Astra High coordination, Sol 6.1 review and independent verification, and Luna for summarization at any stage. Create Astra High coordinator chats as useful and coordinate scoped messages among them under this request. Preserve my checkout and data, put all reviewer code writes in reviewer-owned clones or worktrees, and return the offline report and work-chat handoff without repairs. Recover existing context and confirm any missing material setup, including goal-backed or goal-free execution."
+policy:
+  allow_implicit_invocation: false

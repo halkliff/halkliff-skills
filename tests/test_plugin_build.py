@@ -113,6 +113,9 @@ class PluginBuildTests(unittest.TestCase):
             (plugin / ".codex-plugin").mkdir()
             (plugin / ".codex-plugin" / "plugin.json").write_text(json.dumps(compatible), encoding="utf-8")
 
+        shutil.copytree(SOURCE_ROOT / "review-plugin", self.repo / "review-plugin")
+        (self.repo / "skills" / "review-work").mkdir(parents=True)
+        (self.repo / "skills" / "review-work" / "SKILL.md").write_bytes(b"review core fixture\n")
         (self.repo / "adapters" / "demo").mkdir(parents=True)
         (self.repo / "adapters" / "demo" / "asset.bin").write_bytes(b"local asset\x00\xfe")
         (self.repo / "LICENSE").write_text("Top-level license\n", encoding="utf-8")
@@ -134,6 +137,9 @@ class PluginBuildTests(unittest.TestCase):
                     {"source": "upstream/demo/LICENSE", "target": "LICENSE.txt"},
                     {"source": "adapters/demo/asset.bin", "target": "assets/local.bin"},
                 ],
+            }, {
+                "name": "review-work",
+                "files": [{"source": "skills/review-work/SKILL.md", "target": "SKILL.md"}],
             }],
         }
         (self.repo / "dependencies.json").write_text(json.dumps(manifest_data), encoding="utf-8")
@@ -222,14 +228,49 @@ class PluginBuildTests(unittest.TestCase):
         self.assertIn(b"left untouched", result.stderr)
         self.assertEqual(self._tree(self.destination), conflicted)
 
+    def test_review_profile_builds_separate_plugin_with_bundled_pinned_resources(self) -> None:
+        source_manifest = json.loads((self.repo / "review-plugin" / "plugin.json").read_text(encoding="utf-8"))
+        result = self._run("--plugin", "review", "--dest", str(self.destination))
+        self.assertEqual(json.loads(result.stdout)["action"], "built")
+        portable = json.loads((self.destination / "plugin.json").read_text(encoding="utf-8"))
+        overlay = json.loads((self.destination / ".codex-plugin/plugin.json").read_text(encoding="utf-8"))
+        self.assertEqual(portable["name"], "halkliff-review")
+        self.assertEqual(portable["version"], source_manifest["version"])
+        self.assertEqual(overlay["name"], portable["name"])
+        self.assertEqual(overlay["skills"], "./skills/")
+        self.assertNotIn("hooks", portable["extensions"]["com.openai"])
+        self.assertNotIn("hooks", overlay)
+        self.assertEqual(sorted(path.name for path in (self.destination / "skills").iterdir()), ["review-work-plugin"])
+        self.assertFalse((self.destination / "hooks").exists())
+        self.assertFalse((self.destination / "scripts/orchestration.py").exists())
+        self.assertEqual((self.destination / "support/skills/review-work/SKILL.md").read_bytes(), b"review core fixture\n")
+        self.assertEqual((self.destination / "support/skills/demo/SKILL.md").read_bytes(), self.pinned_skill)
+        self.assertEqual((self.destination / "support/skills/demo/LICENSE.txt").read_bytes(), self.pinned_license)
+        repeated = json.loads(self._run("--plugin", "review", "--dest", str(self.destination)).stdout)
+        self.assertEqual(repeated["action"], "already-current")
+        before = self._tree(self.destination)
+        self._run("--dest", str(self.destination), success=False)
+        self.assertEqual(self._tree(self.destination), before)
+
+    def test_review_profile_refuses_missing_core_before_writing(self) -> None:
+        manifest_path = self.repo / "dependencies.json"
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        manifest["skills"] = [skill for skill in manifest["skills"] if skill["name"] != "review-work"]
+        manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
+        result = self._run("--plugin", "review", "--dest", str(self.destination), success=False)
+        self.assertIn(b"requires manifest skills: review-work", result.stderr)
+        self.assertFalse(self.destination.exists())
+
     def test_dry_run_and_source_overlap_refusal_do_not_write(self) -> None:
         dry = json.loads(self._run("--dest", str(self.destination), "--dry-run").stdout)
         self.assertEqual(dry["action"], "would-build")
         self.assertFalse(self.destination.exists())
-        before_plugin = self._tree(self.repo / "plugin")
-        result = self._run("--dest", str(self.repo / "plugin"), success=False)
-        self.assertIn(b"overlap", result.stderr)
-        self.assertEqual(self._tree(self.repo / "plugin"), before_plugin)
+        for source in ("plugin", "review-plugin"):
+            with self.subTest(source=source):
+                before_plugin = self._tree(self.repo / source)
+                result = self._run("--dest", str(self.repo / source), success=False)
+                self.assertIn(b"overlap", result.stderr)
+                self.assertEqual(self._tree(self.repo / source), before_plugin)
 
     def test_unsafe_manifest_path_is_rejected_before_output(self) -> None:
         manifest_path = self.repo / "dependencies.json"
@@ -281,13 +322,15 @@ class PluginBuildTests(unittest.TestCase):
         self.assertFalse(self.destination.exists())
 
     def test_mismatched_optional_compatibility_manifest_is_rejected(self) -> None:
-        overlay_path = self.repo / "plugin" / ".codex-plugin" / "plugin.json"
-        overlay = json.loads(overlay_path.read_text(encoding="utf-8"))
-        overlay["interface"]["displayName"] = "Drifted"
-        overlay_path.write_text(json.dumps(overlay), encoding="utf-8")
-        result = self._run("--dest", str(self.destination), success=False)
-        self.assertIn(b"not synchronized", result.stderr)
-        self.assertFalse(self.destination.exists())
+        for profile, source in (("orchestration", "plugin"), ("review", "review-plugin")):
+            with self.subTest(profile=profile):
+                overlay_path = self.repo / source / ".codex-plugin" / "plugin.json"
+                overlay = json.loads(overlay_path.read_text(encoding="utf-8"))
+                overlay["interface"]["displayName"] = "Drifted"
+                overlay_path.write_text(json.dumps(overlay), encoding="utf-8")
+                result = self._run("--plugin", profile, "--dest", str(self.destination), success=False)
+                self.assertIn(b"not synchronized", result.stderr)
+                self.assertFalse(self.destination.exists())
 
 
 if __name__ == "__main__":

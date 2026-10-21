@@ -26,8 +26,24 @@ PLUGIN_PAYLOAD = (
     "plugin/skills/orchestrate-work-plugin/SKILL.md",
     "plugin/skills/orchestrate-work-plugin/agents/openai.yaml",
 )
-OPTIONAL_PLUGIN_PAYLOAD = "plugin/.codex-plugin/plugin.json"
 DEFAULT_DEST = "work/plugin-package/halkliff-orchestration"
+
+
+@dataclass(frozen=True)
+class PluginProfile:
+    source: str
+    files: tuple[str, ...]
+    required_skills: tuple[str, ...] = ()
+
+
+PLUGIN_PROFILES = {
+    "orchestration": PluginProfile("plugin", tuple(path.removeprefix("plugin/") for path in PLUGIN_PAYLOAD)),
+    "review": PluginProfile("review-plugin", (
+        "plugin.json",
+        "skills/review-work-plugin/SKILL.md",
+        "skills/review-work-plugin/agents/openai.yaml",
+    ), ("review-work",)),
+}
 
 
 class BuildError(Exception):
@@ -246,7 +262,11 @@ def _plugin_manifests_match(portable_bytes: bytes, overlay_bytes: bytes) -> bool
     return True
 
 
-def _load_payload(repo: Path) -> tuple[dict[str, bytes], dict[str, str], str]:
+def _load_payload(repo: Path, plugin: str = "orchestration") -> tuple[dict[str, bytes], dict[str, str], str]:
+    try:
+        profile = PLUGIN_PROFILES[plugin]
+    except KeyError as exc:
+        raise BuildError(f"unknown plugin profile: {plugin}") from exc
     manifest_path = _path(repo, "dependencies.json", "dependency manifest")
     if not manifest_path.is_file():
         raise BuildError("dependencies.json is not a regular file")
@@ -254,21 +274,26 @@ def _load_payload(repo: Path) -> tuple[dict[str, bytes], dict[str, str], str]:
         manifest = install.load_manifest(manifest_path)
     except install.InstallError as exc:
         raise BuildError(str(exc)) from exc
+    missing = set(profile.required_skills) - {skill.name for skill in manifest.skills}
+    if missing:
+        raise BuildError(f"{plugin} plugin requires manifest skills: {', '.join(sorted(missing))}")
 
     checkout_by_id = {item.id: _verify_submodule(repo, item) for item in manifest.upstreams}
     payload: dict[str, bytes] = {}
     local_plugin_files: dict[str, bytes] = {}
-    for relative in PLUGIN_PAYLOAD:
-        source = PurePosixPath(relative)
+    for relative in profile.files:
+        source = PurePosixPath(profile.source, relative)
         local_plugin_files[source.as_posix()] = _source_bytes(repo, source, (), {})
-    overlay_path = _path(repo, OPTIONAL_PLUGIN_PAYLOAD, "optional plugin compatibility manifest")
+    overlay_source = f"{profile.source}/.codex-plugin/plugin.json"
+    portable_source = f"{profile.source}/plugin.json"
+    overlay_path = _path(repo, overlay_source, "optional plugin compatibility manifest")
     if overlay_path.exists():
-        overlay = _source_bytes(repo, PurePosixPath(OPTIONAL_PLUGIN_PAYLOAD), (), {})
-        if not _plugin_manifests_match(local_plugin_files["plugin/plugin.json"], overlay):
-            raise BuildError("plugin/.codex-plugin/plugin.json is not synchronized with plugin/plugin.json")
-        local_plugin_files[OPTIONAL_PLUGIN_PAYLOAD] = overlay
+        overlay = _source_bytes(repo, PurePosixPath(overlay_source), (), {})
+        if not _plugin_manifests_match(local_plugin_files[portable_source], overlay):
+            raise BuildError(f"{overlay_source} is not synchronized with {portable_source}")
+        local_plugin_files[overlay_source] = overlay
     for source, contents in local_plugin_files.items():
-        target = source.removeprefix("plugin/")
+        target = source.removeprefix(f"{profile.source}/")
         _add_payload(payload, target, contents)
 
     license_path = _path(repo, "LICENSE", "top-level license")
@@ -389,14 +414,15 @@ def _validate_destination(repo: Path, destination: Path, payload_sources: list[P
     return target
 
 
-def make_plan(destination: Path) -> BuildPlan:
+def make_plan(destination: Path, plugin: str = "orchestration") -> BuildPlan:
     repo = _repo_root()
-    payload, pins, source_revision = _load_payload(repo)
+    payload, pins, source_revision = _load_payload(repo, plugin)
     package, fingerprint = _package_payload(payload, source_revision, pins)
     source_paths = [
         repo / "dependencies.json",
         repo / "LICENSE",
         repo / "plugin",
+        repo / "review-plugin",
         repo / "skills",
         repo / "adapters",
         repo / "upstream",
@@ -439,6 +465,7 @@ def _write_plan(plan: BuildPlan) -> None:
 
 def parser() -> argparse.ArgumentParser:
     result = argparse.ArgumentParser(description="Build an offline pinned Codex plugin package")
+    result.add_argument("--plugin", choices=tuple(PLUGIN_PROFILES), default="orchestration", help="plugin profile (default: orchestration)")
     result.add_argument("--dest", required=True, help=f"new or identical output directory (for example: {DEFAULT_DEST})")
     result.add_argument("--dry-run", action="store_true", help="validate and report without writing output")
     return result
@@ -447,7 +474,7 @@ def parser() -> argparse.ArgumentParser:
 def main(argv: list[str] | None = None) -> int:
     args = parser().parse_args(argv)
     try:
-        plan = make_plan(Path(args.dest))
+        plan = make_plan(Path(args.dest), args.plugin)
         if args.dry_run or plan.identical:
             action = "already-current" if plan.identical else "would-build"
         else:

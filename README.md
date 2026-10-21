@@ -1,9 +1,9 @@
 # halkliff-skills
 
-Personal Codex skills, including `orchestrate-work` and the dependencies it uses.
-The workflow defines a goal, coordinates an orchestrator, Sol workstreams and Luna workers, uses native task messages and versioned work products, and escalates consequential
-uncertainty to the author. It runs only
-when explicitly invoked.
+Personal Codex skills for implementation orchestration and independent code review.
+`orchestrate-work` uses Sol coordinators and Luna-first workers. `review-work`
+uses Astra coordination and Sol reviewers, producing requirement evidence,
+quality scores, and an offline report. Both workflows require explicit invocation.
 
 Original work is [MIT licensed](LICENSE). Upstream adaptations retain their
 notices, and `define-goal` retains its supplied Apache-2.0 license.
@@ -46,15 +46,28 @@ compare or back up an existing customization before choosing to replace it.
 
 To ask an agent to do the installation, give it this repository and say:
 
-> Install orchestrate-work and its dependencies from this repository. Follow its
+> Install orchestrate-work, review-work, and their selected dependencies from this repository. Follow its
 > README and use the bundled installer. Preserve existing customized skills and
 > report any conflicts.
 
-The installer is the dependency entry point. Copying only the `orchestrate-work`
+The installer is the dependency entry point. Copying only a workflow's skill
 folder through a generic single-skill downloader does not install its dependencies.
 `AGENTS.md` directs installation agents to the same procedure.
 
 ## Local plugin
+
+The separate [review plugin](docs/review-work.md) assesses delivered code against
+the approved plan, reports requirement evidence and quality scores, and produces
+an offline HTML breakdown and work-thread handoff. Use `$review-work` or
+`$review-work-plugin` explicitly. Each invocation performs one review; request a
+re-review in the same chat after the work thread implements fixes. A new
+installation needs fresh calibration before regular reliance on its Ready verdict.
+
+Build the review package with:
+
+```sh
+python scripts/build_plugin.py --plugin review --dest work/plugin-package/halkliff-review-0.1.2
+```
 
 Build the local plugin with its selected dependency resources:
 
@@ -188,7 +201,7 @@ pinned instructions until you explicitly migrate them.
 
 | Source | Selected skills |
 | --- | --- |
-| This collection | `orchestrate-work`, `define-goal` |
+| This collection | `orchestrate-work`, `review-work`, `define-goal` |
 | pstack, adapted for Codex | `pstack-principles`, `unslop`, `how`, `why`, `blast-radius`, `no-comments`, `benchmark-checklist`, `correct`, `in-your-own-words`, `sharpen`, `create-verification-skill`, `maintain-verification-skill` |
 | Matt Pocock, with selected compatibility adaptations | `grilling`, `writing-for-agents`, `domain-modeling`, `codebase-design`, `research`, `handoff`, `chief-of-staff` |
 

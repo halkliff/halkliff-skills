@@ -1,0 +1,22 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "halkliff-review",
+  "version": "0.1.2",
+  "description": "Explicit reviews with independent evidence, quality assessments, and a local HTML report.",
+  "author": {
+    "name": "halkliff"
+  },
+  "extensions": {
+    "com.openai": {
+      "requires_local_executor": true,
+      "interface": {
+        "displayName": "Halkliff review",
+        "shortDescription": "Review work with evidence",
+        "longDescription": "Run the bundled review-work workflow, record independent review evidence, and render a local HTML report with the included Python helper.",
+        "developerName": "halkliff",
+        "category": "Productivity",
+        "defaultPrompt": "Use $review-work-plugin once to assess this implementation and its relevant effects against the approved requirements. Follow the bundled review-work profile. Use Astra High coordination, Sol 6.1 for bulk review and independent verification, and Luna for summarization at any stage. Create useful Astra High coordinator chats and coordinate scoped messages among them under this request. Preserve my checkout and data, put all reviewer code writes in reviewer-owned clones or worktrees, and return the offline report and work-chat handoff without repairs. Recover existing context and confirm any missing material setup. Create a goal only if I explicitly request one."
+      }
+    }
+  }
+}

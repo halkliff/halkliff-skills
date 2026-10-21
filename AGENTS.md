@@ -22,3 +22,8 @@ additional discoverable skills. Keep run JSON mechanical; the existing skill
 owns requirements, holds and acceptance. Verify packaged commands and supported
 hook behavior before installation. Hook trust and live desktop interception need
 separate evidence; installation alone proves neither.
+
+Build the separate review plugin with `scripts/build_plugin.py --plugin review`.
+Its wrapper loads `review-work` and bundled resources directly; it has no session
+activation or hooks. Follow `docs/review-work.md` for this package's installation
+and calibration limits. Keep the builder's default orchestration profile intact.
