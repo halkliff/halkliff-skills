@@ -17,6 +17,9 @@ from contextlib import contextmanager
 from pathlib import Path, PurePosixPath
 from typing import Any
 
+sys.dont_write_bytecode = True
+import operation_policy
+
 
 STATE_NAME = "orchestration-state.json"
 BUILD_INFO = "build-info.json"
@@ -475,6 +478,8 @@ def command_activate(args: argparse.Namespace) -> dict[str, Any]:
                 if (not registered or registered.get("package_fingerprint") != fingerprint):
                     raise RuntimeErrorMessage("pinned source is not registered to the requested active run")
             if run is not None:
+                if args.policy:
+                    raise RuntimeErrorMessage("an existing run reuses its policy; use policy-select from its selecting Root")
                 if run.get("coord_root") != coord or run.get("author_repo") != author:
                     raise RuntimeErrorMessage("existing run roots differ; refusing to rebind or migrate it")
                 pin = run.get("package_fingerprint")
@@ -493,6 +498,9 @@ def command_activate(args: argparse.Namespace) -> dict[str, Any]:
             else:
                 if len(state["runs"]) >= MAX_RUNS:
                     raise RuntimeErrorMessage("run registry is full; deactivate an old run before starting another")
+                selected = None
+                if args.policy:
+                    _, selected = operation_policy.load_policy(sys.modules[__name__], args.policy)
                 snapshot = _copy_snapshot(source, data, files, fingerprint)
                 state["runs"][run_id] = {
                     "package_fingerprint": fingerprint,
@@ -501,6 +509,8 @@ def command_activate(args: argparse.Namespace) -> dict[str, Any]:
                     "created_at": int(time.time()),
                     "observations": {"events": {}, "recent_ids": [], "incomplete": False, "guard_denials": 0},
                     "workspaces": {},
+                    "root_session": session,
+                    "policy": selected,
                 }
             if existing_session_run and existing_session_run != run_id:
                 raise RuntimeErrorMessage("session is already bound to another active run")
@@ -520,6 +530,63 @@ def command_activate(args: argparse.Namespace) -> dict[str, Any]:
     result = {"session_id": session, "run_id": run_id,
               **_paths_for(snapshot, fingerprint if not run else run["package_fingerprint"])}
     result["plugin_data"] = str(data)
+    return result
+
+
+def _require_pinned_source(data: Path, run: dict[str, Any]) -> None:
+    _, fingerprint, _ = validate_package(_plugin_root())
+    if fingerprint != run.get("package_fingerprint"):
+        raise RuntimeErrorMessage("this command must use the run's pinned CLI; source updates cannot migrate an active run")
+    _verify_runtime(data / "runtimes" / fingerprint, fingerprint)
+
+
+def command_policy_select(args: argparse.Namespace) -> dict[str, Any]:
+    session = _identifier(args.session, "session")
+    data = _plugin_data(args.plugin_data)
+    policy, pointer = operation_policy.load_policy(sys.modules[__name__], args.policy)
+    with _state_lock(data):
+        state, run_id, run = _active_run(data, session)
+        _require_pinned_source(data, run)
+        if run.get("root_session") != session:
+            raise RuntimeErrorMessage("only this run's selecting Root can select policy; legacy runs cannot gain a Root implicitly")
+        current = run.get("policy")
+        revision = current.get("revision") if isinstance(current, dict) else 0
+        if revision != args.expected_revision or pointer["revision"] != revision + 1:
+            raise RuntimeErrorMessage("policy selection requires the expected current revision and the next revision")
+        if isinstance(current, dict) and current.get("path") == pointer["path"]:
+            raise RuntimeErrorMessage("prospective policy selection requires a new versioned file; preserve the prior policy")
+        lock_prefix = _sha256(run_id.encode())[:16]
+        if any(data.glob(f".operation-{lock_prefix}-*.lock")):
+            raise RuntimeErrorMessage("policy selection is blocked by an in-flight selected operation; preserve its evidence first")
+        integration = policy.get("integration")
+        if not integration and any(record.get("kind") == "integration" for record in run["workspaces"].values()):
+            raise RuntimeErrorMessage("the registered integration workspace/owner is fixed for this run")
+        if integration:
+            selected_path = str(_absolute_directory(integration["workspace"], "integration workspace"))
+            for path, record in run["workspaces"].items():
+                if record.get("kind") == "integration" and (path != selected_path or record.get("owner") != integration["owner"]):
+                    raise RuntimeErrorMessage("policy integration selection conflicts with the registered integration workspace/owner")
+        run["policy"] = pointer
+        _write_state(data, state)
+    return {"selected": True, "run_id": run_id, "root_session": session, "policy": pointer}
+
+
+def command_operation(args: argparse.Namespace) -> dict[str, Any]:
+    data = _plugin_data(args.plugin_data)
+    return operation_policy.operation(sys.modules[__name__], args, data)
+
+
+def _policy_status(run: dict[str, Any]) -> dict[str, Any]:
+    result: dict[str, Any] = {"root_session": run.get("root_session"), "policy": run.get("policy"),
+                              "policy_selected": bool(run.get("policy")), "policy_valid": None,
+                              "grant_usage": run.get("grant_usage", {})}
+    if run.get("policy"):
+        try:
+            operation_policy.selected_policy(sys.modules[__name__], run)
+            result["policy_valid"] = True
+        except RuntimeErrorMessage as exc:
+            result["policy_valid"] = False
+            result["policy_error"] = str(exc)
     return result
 
 
@@ -553,6 +620,7 @@ def command_status(args: argparse.Namespace) -> dict[str, Any]:
             runtime = data / "runtimes" / pin
             result.update(_verify_runtime(runtime, pin))
             result.update(_observation_status(run))
+            result.update(_policy_status(run))
         return result
     if args.run_id is not None:
         run_id = _identifier(args.run_id, "run id")
@@ -567,6 +635,7 @@ def command_status(args: argparse.Namespace) -> dict[str, Any]:
             pin = run["package_fingerprint"]
             result.update(_verify_runtime(data / "runtimes" / pin, pin))
             result.update(_observation_status(run))
+            result.update(_policy_status(run))
         return result
     return {"active_runs": len(state["runs"]), "active_sessions": len(state["bindings"]),
             "runs": sorted(state["runs"])}
@@ -662,14 +731,8 @@ def _dispatch_check(event: dict[str, Any]) -> dict[str, Any] | None:
     allowed = {"gpt-6-luna": {"xhigh"}, "gpt-6.1-sol": {"high", "xhigh"}}
     if not isinstance(model, str) or not isinstance(effort, str) or model not in allowed or effort not in allowed[model]:
         return _deny("Spawn is blocked: explicitly set an approved model and reasoning_effort (gpt-6-luna/xhigh or gpt-6.1-sol/high|xhigh).")
-    fork_turns = args.get("fork_turns")
-    if fork_turns is None or fork_turns == "all":
-        return _deny("Spawn is blocked: fork_turns all/omitted inherits full history; choose a bounded explicit fork or use a new isolated chat.")
-    string_count = (isinstance(fork_turns, str) and fork_turns.isascii()
-                    and fork_turns.isdecimal() and bool(fork_turns.lstrip("0")))
-    positive_count = (type(fork_turns) is int and fork_turns > 0) or string_count
-    if not (fork_turns == "none" or positive_count):
-        return _deny("Spawn is blocked: fork_turns must be 'none' or an explicit positive count.")
+    if args.get("fork_turns") != "none":
+        return _deny("Spawn is blocked: explicit model routing requires fork_turns 'none'; inherited or unsupported forks do not establish that route.")
     return None
 
 
@@ -861,9 +924,24 @@ def command_workspace_register(args: argparse.Namespace) -> dict[str, Any]:
         base_commit = _commit_object(workspace, args.base_commit)
         workspaces = run["workspaces"]
         path_key = str(workspace)
+        owner = session
+        if run.get("policy"):
+            _require_pinned_source(data, run)
+            policy = operation_policy.selected_policy(sys.modules[__name__], run)
+            observed_head = _git(workspace, "rev-parse", "--verify", "HEAD^{commit}").lower()
+            if not args.expected_head or observed_head != _commit_object(workspace, args.expected_head):
+                raise RuntimeErrorMessage("policy workspace registration requires the expected actual HEAD")
+            if args.kind == "integration":
+                integration = policy.get("integration")
+                if not integration or str(_absolute_directory(integration["workspace"], "integration workspace")) != path_key or integration["owner"] != owner:
+                    raise RuntimeErrorMessage("integration workspace and owner must match Root's selected policy")
+                for other_path, record in workspaces.items():
+                    if record.get("kind") == "integration" and (other_path != path_key or record.get("owner") != owner):
+                        raise RuntimeErrorMessage("one integration workspace and owner are already selected")
         existing = workspaces.get(path_key)
         if existing is not None:
-            if existing.get("kind") != args.kind or existing.get("base_commit") != base_commit:
+            if (existing.get("kind") != args.kind or existing.get("base_commit") != base_commit
+                    or (run.get("policy") and existing.get("owner") != owner)):
                 raise RuntimeErrorMessage("workspace is already registered with different metadata")
             return {"registered": True, "session_id": session, "run_id": run_id,
                     "path": path_key, "kind": args.kind, "base_commit": base_commit}
@@ -880,6 +958,7 @@ def command_workspace_register(args: argparse.Namespace) -> dict[str, Any]:
             "path": path_key,
             "kind": args.kind,
             "base_commit": base_commit,
+            "owner": owner,
             "registered_at": int(time.time()),
         }
         _write_state(data, state)
@@ -897,6 +976,13 @@ def command_workspace_release(args: argparse.Namespace) -> dict[str, Any]:
         record = run["workspaces"].get(str(workspace))
         if record is None:
             raise RuntimeErrorMessage(f"workspace is not registered to this run: {workspace}")
+        if run.get("policy"):
+            _require_pinned_source(data, run)
+            policy = operation_policy.selected_policy(sys.modules[__name__], run)
+            if record.get("owner") != session:
+                raise RuntimeErrorMessage("only the registered workspace owner can replace its release attestation")
+            if record.get("kind") == "integration" and policy.get("integration") != {"workspace": str(workspace), "owner": session}:
+                raise RuntimeErrorMessage("integration release must match the selected workspace and owner")
         _ensure_disjoint(attestation, workspace, "release attestation and workspace")
         try:
             value = json.loads(attestation.read_text(encoding="utf-8"))
@@ -1117,7 +1203,19 @@ def command_hook(args: argparse.Namespace) -> int:
             raise RuntimeErrorMessage("active run has no package fingerprint")
         runtime = active_data / "runtimes" / fingerprint
         _verify_runtime(runtime, fingerprint)
-        decision = _dispatch_check(event) if event_name == "PreToolUse" else None
+        decision = None
+        if event_name == "PreToolUse":
+            with _state_lock(active_data):
+                _, current_run_id, current_run = _active_run(active_data, session)
+                if current_run_id != run_id:
+                    raise RuntimeErrorMessage("session binding changed during dispatch validation")
+                if current_run.get("policy"):
+                    try:
+                        operation_policy.dispatch_check(sys.modules[__name__], event, session, current_run)
+                    except RuntimeErrorMessage as exc:
+                        decision = _deny(f"Spawn blocked by selected policy: {exc}")
+                else:
+                    decision = _dispatch_check(event)
         _record_observation(active_data, session, run_id, event_name, event, decision is not None)
         if event_name == "PreToolUse":
             if decision:
@@ -1152,6 +1250,7 @@ def parser() -> argparse.ArgumentParser:
     activate.add_argument("--coord-root", required=True)
     activate.add_argument("--author-repo", required=True)
     activate.add_argument("--run-id")
+    activate.add_argument("--policy", help="select a canonical policy for a new run")
     activate.add_argument("--plugin-data")
     status = commands.add_parser("status", help="inspect a session, run, or all active bindings")
     group = status.add_mutually_exclusive_group()
@@ -1163,6 +1262,16 @@ def parser() -> argparse.ArgumentParser:
     group.add_argument("--session")
     group.add_argument("--run-id")
     deactivate.add_argument("--plugin-data")
+    select = commands.add_parser("policy-select", help="Root selects a prospective policy using the expected revision")
+    select.add_argument("--session", required=True)
+    select.add_argument("--expected-revision", type=int, required=True)
+    select.add_argument("--policy", required=True)
+    select.add_argument("--plugin-data")
+    operation = commands.add_parser("operation", help="validate and invoke one selected approved adapter")
+    operation.add_argument("--session", required=True)
+    operation.add_argument("--request", required=True)
+    operation.add_argument("--reuse", help="compare retained evidence without invoking an adapter")
+    operation.add_argument("--plugin-data")
     for name, help_text in (
         ("workspace-register", "register an isolated workspace for a pinned run"),
         ("workspace-release", "record an external release statement for a workspace"),
@@ -1175,6 +1284,7 @@ def parser() -> argparse.ArgumentParser:
         if name == "workspace-register":
             workspace.add_argument("--kind", required=True, choices=("worker", "integration"))
             workspace.add_argument("--base-commit", required=True)
+            workspace.add_argument("--expected-head")
         elif name == "workspace-release":
             workspace.add_argument("--attestation", required=True)
     hook = commands.add_parser("hook", help=argparse.SUPPRESS)
@@ -1199,9 +1309,15 @@ def main(argv: list[str] | None = None) -> int:
             result = command_workspace_release(args)
         elif args.command == "workspace-preflight":
             result = command_workspace_preflight(args)
+        elif args.command == "policy-select":
+            result = command_policy_select(args)
+        elif args.command == "operation":
+            result = command_operation(args)
         else:
             raise RuntimeErrorMessage("unknown command")
         print(json.dumps(result, ensure_ascii=False, sort_keys=True))
+        if args.command == "operation" and (result.get("outcome") in ("fail", "preflight_failed") or result.get("reusable") is False):
+            return 1
         return 0
     except RuntimeErrorMessage as exc:
         print(f"orchestration: {exc}", file=sys.stderr)

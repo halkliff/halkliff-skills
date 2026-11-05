@@ -24,13 +24,17 @@ Propose the plan in chat; defer setup until the host transitions to execution.
    the author checkout and coordination root through that protocol's **Current
    state**. Create and verify the root before activation; record it during goal
    definition.
+   For new packages exposing policy selection, read `references/controls.md` and
+   prepare the Root policy from those confirmed inputs. Use the selected-controls
+   activation below; disclose a legacy or unsupported route instead of claiming
+   its guards. This adds no separate approval question.
 2. For helpers, use the host event's canonical `session_id` when available.
    `CODEX_THREAD_ID` can supply an explicit candidate; its hook coverage remains
    unobserved until a matching real event arrives. If neither is available,
    report the capability gap. Run:
 
    ```text
-   python <plugin-root>/scripts/orchestration.py activate --session <explicit-id> --coord-root <absolute-root> --author-repo <absolute-checkout> --plugin-data <absolute-data-root>
+   python <plugin-root>/scripts/orchestration.py activate --session <explicit-id> --coord-root <absolute-root> --author-repo <absolute-checkout> --plugin-data <absolute-data-root> --policy <versioned-Root-policy>
    ```
 
    The host's `PLUGIN_DATA` may supply the data root. Use the returned absolute
@@ -39,10 +43,16 @@ Propose the plan in chat; defer setup until the host transitions to execution.
    the core's goal-mode and coordinator-placement setup, workstream plan, dispatch
    checks and review gate, including its one-time setup question for missing
    preferences and mandatory requirements.
+   That example starts a new selected-controls run. Recovery uses the recorded
+   CLI and `--run-id <existing-id>` without `--policy`; it preserves that run's
+   actual pin and capabilities.
 3. Load supporting skills beneath `support` by absolute path when core calls for
    them, including the completion handoff and optional author-requested `correct`.
    Give leaves only `worker` and a sufficient brief. Explicitly enroll delegated
    coordinator sessions against the existing run when needed.
+   For a policy-controlled run, follow the pinned core's `references/controls.md`;
+   use its selected policy and guarded adapter command. Recovery enrollment reuses
+   the existing pin; it does not add capabilities absent from that pin.
 4. Use the returned CLI's `--help` for mechanical commands. `status --session
    <id>` diagnoses membership. `deactivate --session <id>` revokes that binding;
    `deactivate --run-id <id>` revokes the run's bindings. Continue task holds,

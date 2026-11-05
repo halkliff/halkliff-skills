@@ -8,6 +8,8 @@ description: Explicitly invoked orchestration with selectable Astra/Sol leadersh
 Run only on the author's explicit invocation, including bounded assignments within
 that run. Apply pstack-principles; optimize for accepted outcomes per unit of model
 work. The author owns scope and consequential decisions.
+Orchestrator enforces accepted scope across workstreams; apply the
+[scope boundary](references/uncertainty.md#scope-and-approval) before expanding work.
 
 ## Define and route
 
@@ -25,12 +27,16 @@ Use [runtime.md](references/runtime.md) for goal and dispatch operations.
 Select the Orchestrator's model in the main thread before invocation; the skill
 does not switch it.
 
-| Role | Model / effort | Responsibility |
+| Role | Default model / effort | Responsibility |
 | --- | --- | --- |
 | Orchestrator | GPT-6 Astra / high or GPT-6.1 Sol / xhigh | Architecture, goal, shared contracts, author interaction, integration, final acceptance |
 | Coordinator | GPT-6.1 Sol / high or xhigh | Decompose and complete a workstream; assign workers and verify results |
 | Default worker | Luna / xhigh | Research, claim checks, summaries, implementation, tests, documentation |
 | Complex implementation worker | GPT-6.1 Sol / high or xhigh | Bounded implementation too complex for Luna; remains a leaf |
+
+Apply the latest explicit run-level role overrides without changing other roles
+or these defaults. Resolve actual dispatch parameters through
+[model routing](references/runtime.md#model-routing); names and prompts do not select models.
 
 Route research and summarization, including Orchestrator's fact-finding, to Luna
 xHigh. A parent may make one known file read or targeted read-only command for a

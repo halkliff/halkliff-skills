@@ -35,6 +35,10 @@
           "target": "references/runtime.md"
         },
         {
+          "source": "skills/orchestrate-work/references/controls.md",
+          "target": "references/controls.md"
+        },
+        {
           "source": "skills/orchestrate-work/references/uncertainty.md",
           "target": "references/uncertainty.md"
         },

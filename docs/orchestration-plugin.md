@@ -10,7 +10,7 @@ The standalone skill installation remains available separately.
 From the repository root, run:
 
 ```powershell
-python scripts/build_plugin.py --dest work/plugin-package/halkliff-orchestration-0.1.10
+python scripts/build_plugin.py --dest work/plugin-package/halkliff-orchestration-0.1.11
 ```
 
 To validate sources and destination safety without writing the package, add
@@ -25,7 +25,7 @@ to rebuild. A conflicting destination is left untouched; choose a fresh output
 directory when package inputs change.
 
 The repository's local marketplace entry points to
-`work/plugin-package/halkliff-orchestration-0.1.10`. Build first, then install that
+`work/plugin-package/halkliff-orchestration-0.1.11`. Build first, then install that
 local marketplace plugin through Codex. Plugin installation and hook trust are
 separate host actions; building or installing alone does not establish that
 hooks are trusted or that the host has delivered events to them.
@@ -118,13 +118,60 @@ this convention. Task records and evidence live there; plugin runtime data stays
 in its separate data root.
 
 ```text
-python "<plugin-root>/scripts/orchestration.py" activate --session "<session_id>" --coord-root "<absolute-path>" --author-repo "<absolute-path>" --plugin-data "<absolute-path>"
+python "<plugin-root>/scripts/orchestration.py" activate --session "<session_id>" --coord-root "<absolute-path>" --author-repo "<absolute-path>" --plugin-data "<absolute-path>" --policy "<versioned-Root-policy>"
 ```
 
 Use a dedicated data root outside the author checkout and coordination root.
 The recommended location is `<user-home>/.codex/orchestration-plugin/data`,
 resolved to an absolute path and supplied through `--plugin-data`. It keeps
 session bindings and retained runtime snapshots together across shell commands.
+The example starts a new run with selected controls in a supporting package.
+Prepare its policy from the confirmed inputs through the controls reference below.
+Existing runs use their recorded CLI and `--run-id` without a replacement policy;
+older packages keep their actual capabilities and enforcement limits.
+
+## Selected policy and operations
+
+New packages with the selected-controls commands can bind a Root-owned policy
+during new-run activation with `--policy <absolute-file>`. The bundled
+[controls reference](../skills/orchestrate-work/references/controls.md) defines
+the policy, dispatch marker, operation request and limits. Existing plan/briefs
+continue to own requirements, the ordered integration backlog, review counters
+and acceptance; the backend stores mechanical selection and invocation facts.
+
+The active dispatch guard consumes the selected policy. A short marker in the
+existing assignment identifies role, grant and revision; actual tool model,
+effort and fork arguments must match. An ordinary follow-up preserves current
+chat settings. Sol remains the reusable coordinator default; a selected run
+override does not change that default or authorize an Astra fallback.
+
+For selected execution, `operation --session <id> --request <absolute-file>`
+validates the grant and current candidate, acquires only its declared resource
+exclusions, and invokes the approved adapter once with checked, data-derived
+inputs through argv. `--reuse <receipt>` compares named inputs, consumer, claim,
+procedure and adapter; it does not rescan every provider or discover evidence
+automatically. Source/commit/build/installed/integrated/hosted claims stay distinct.
+
+Author resource limits and Root headroom choices retain separate source
+references. The approved adapter owns domain-specific preflight, actual memory
+monitoring, launch and cleanup. In particular, it must validate its own output,
+cancel and profile relationships before writes or product launch; generic hashes
+cannot establish those relationships. A started adapter can reject setup before
+the product starts, and its actual partial side effects still belong in evidence.
+
+Root alone selects prospective policy replacements through compare-and-swap.
+Grant invocation counts, failure and unresolved-attempt state survive revisions.
+Registered integration owner/path remain fixed for that run in this version.
+Shared declared resource IDs exclude across runs in one data root; they do not
+establish physical isolation or coordinate separate data roots. This adds no
+general scheduler, arbitrary-shell interception or per-message artifact protocol.
+
+Recovery enrollment uses the existing `activate --run-id` route and reuses the
+pin and selection. Check binding, policy validity and observed events separately.
+Legacy/unbound sessions have not acquired these new guards, and empty counters
+do not prove no event ever ran. A source patch, copied-package test or build is
+not installation or real desktop interception. Adoption of an active run needs
+its explicit rollout boundary; editing state cannot upgrade its pinned code.
 
 Use the exact `session_id` from a real host hook event when available. A
 `CODEX_THREAD_ID` value is only a candidate; do not treat it as observed hook
@@ -217,8 +264,12 @@ The helper does not repack, copy, or repair Git objects.
 The installed hook bootstrap is read-only until an exact active session binding
 is found. It then verifies the pinned package before routing to the pinned CLI.
 For supported local `spawn_agent` and `Agent` events it requires explicit
-Luna/xHigh or GPT-6.1 Sol/High or xHigh, and denies omitted or full-history forks.
-Separate-chat dispatches remain a core workflow responsibility. Resume and
+model/effort and `fork_turns: "none"`. A policy-free run uses the default
+Luna/xHigh or GPT-6.1 Sol/High or xHigh guard; a selected-policy run checks its
+actual role/grant/revision instead. The core resolves author run overrides and
+checks exposed execution settings. Prompt text alone does not select a model,
+and this hook does not validate separate-chat dispatch or later UI changes.
+An unsupported route requires resolution, not a silent fallback. Resume and
 compact session starts can receive a recovery pointer whose complete hook
 output stays within 1 KiB. Inactive or unrelated sessions receive no injected
 context and cause no state writes.

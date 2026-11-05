@@ -97,6 +97,7 @@ class PluginBuildTests(unittest.TestCase):
         (plugin / "hooks" / "hooks.json").write_text('{"hooks":{}}\n', encoding="utf-8")
         (plugin / "hooks" / "bootstrap.py").write_text("bootstrap fixture\n", encoding="utf-8")
         (plugin / "scripts" / "orchestration.py").write_text("cli fixture\n", encoding="utf-8")
+        (plugin / "scripts" / "operation_policy.py").write_text("policy helper fixture\n", encoding="utf-8")
         (plugin / "skills" / "orchestrate-work-plugin" / "SKILL.md").write_text("wrapper fixture\n", encoding="utf-8")
         (plugin / "skills" / "orchestrate-work-plugin" / "agents" / "openai.yaml").write_text("display_name: Fixture\n", encoding="utf-8")
         (plugin / "unlisted-secret.txt").write_text("must not enter package\n", encoding="utf-8")

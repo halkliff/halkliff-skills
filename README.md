@@ -72,7 +72,7 @@ python scripts/build_plugin.py --plugin review --dest work/plugin-package/halkli
 Build the local plugin with its selected dependency resources:
 
 ```sh
-python scripts/build_plugin.py --dest work/plugin-package/halkliff-orchestration-0.1.10
+python scripts/build_plugin.py --dest work/plugin-package/halkliff-orchestration-0.1.11
 ```
 
 The plugin exposes `$orchestrate-work-plugin`, a small adapter to the existing

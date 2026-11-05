@@ -22,6 +22,9 @@ Methods may be refined within the confirmed criteria and resource authority.
 Changing required journeys, expected behavior, pass thresholds, environments or
 resource permissions requires Orchestrator reconciliation and author confirmation
 when reserved. Hold only affected work. Preserve frozen expectations.
+Change a selected run method prospectively through its owner; its current
+conditions remain binding until reconciled. A lighter future method cannot
+upgrade an earlier partial observation or erase failed evidence.
 
 ## Define each procedure
 
@@ -54,6 +57,11 @@ independent verifiers inspect the candidate and evidence, then address a specifi
 gap or contradictory claim. Orchestrator checks combined behavior. Reuse valid
 results for unchanged inputs; required integration checks still exercise the
 integrated candidate. A review score never substitutes for missing proof.
+Bind reuse to the actual consumer, claim, procedure and relevant input identities.
+Before a broad rescan, name its changed input, contradiction, first admission or
+new claim and the threatened invariant. Invalidate affected claims only. Explicitly
+mark post-execution provider/profile state unverified when it was not observed;
+metadata or a continuing internal hold is not retrospective byte-identity proof.
 
 One named owner drives each shared live instance; source inspection can fan out.
 Parallel drives require demonstrated isolation of mutable data, ports and profiles.
@@ -74,3 +82,6 @@ check path containment before cleanup, and confirm evidence survives. Preserve t
 author's instances/data. Freeze accepted procedure/evidence at existing review
 boundaries; changed inputs invalidate only affected claims. Use the existing
 handoff rather than an additional verification completion report.
+Keep source review, private commits, build, installed public callers, integrated
+acceptance and hosted CI/Golden/publication distinct. Exercise the real caller
+required by the claim; a private helper or manifest cannot substitute for it.

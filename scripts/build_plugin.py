@@ -23,6 +23,7 @@ PLUGIN_PAYLOAD = (
     "plugin/hooks/hooks.json",
     "plugin/hooks/bootstrap.py",
     "plugin/scripts/orchestration.py",
+    "plugin/scripts/operation_policy.py",
     "plugin/skills/orchestrate-work-plugin/SKILL.md",
     "plugin/skills/orchestrate-work-plugin/agents/openai.yaml",
 )

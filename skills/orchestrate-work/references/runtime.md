@@ -4,6 +4,39 @@ Read live tool schemas before dispatch. A skill cannot change its running model,
 create unavailable tools, enforce unexposed budgets or guarantee termination.
 Disclose a known model mismatch; use only an author-approved fallback.
 
+## Model routing
+
+Resolve each role's model and effort from the latest explicit author override for
+the run, otherwise its defaults. Keep the choice and decision pointer in the
+existing plan/brief. The primary Orchestrator's selected model is a separate choice,
+not a child-role fallback. Set actual tool parameters; role names and prompt text
+are not configuration.
+
+Full-history subagent forks inherit model/effort; explicit role routing requires
+`fork_turns: "none"`. Use `create_thread` with explicit model/effort for new
+coordinator chats; omitted values can select the user's configured default.
+`fork_thread` exposes neither setting and is not a role-routing substitute.
+
+Compare requested and effective execution model/effort where exposed before
+releasing child implementation. Source-chat settings and inherited instruction
+provenance do not establish a fork's execution model. Record unavailable readback as unverified;
+a dispatch request does not attest the provider backend. On mismatch, unsupported
+identifier or dispatch failure, hold affected work and resolve an authorized route;
+never silently substitute Astra, reset to defaults or promote a worker.
+An author override does not bypass an active hook's supported-model restriction.
+
+Ordinary `send_message_to_thread` continuations omit `model` and `thinking` to
+preserve current author-selected chat settings. Explicit setting changes need
+author authority. Recover in the same chat with its original source/worker
+ownership; do not restart live writers merely to change model labels.
+
+## Guarded operations
+
+When selecting a policy-controlled plugin run, use [controls.md](controls.md) for
+the canonical inputs, dispatch marker and checked adapter command. Use the pinned
+CLI's actual capabilities; an older pin or an unbound chat has not acquired new
+guards. Keep unsupported execution paths and unobserved hook delivery explicit.
+
 ## Planning mode
 
 The workstream plan is part of ordinary execution; `/plan` is optional. If the
@@ -40,8 +73,8 @@ requests or stored instructions alone do not authorize user-owned chats. Resolve
 an unavailable or host-disallowed route before dispatch; the workflow cannot
 override that boundary.
 
-For authorized separate coordinators, use `create_thread` with
-`model: "gpt-6.1-sol"`, `thinking: "high"` or `"xhigh"`; list projects first for a
+For authorized separate coordinators, use `create_thread` with the resolved
+`model` and `thinking` (defaults: `"gpt-6.1-sol"`, `"high"` or `"xhigh"`); list projects first for a
 project target. Use coordinator subagents when Orchestrator selects that placement
 or the author explicitly overrides it.
 Workers and leaf reviewers/verifiers remain subagents.
@@ -63,13 +96,12 @@ its own access check; repository-wide clones follow [git.md](git.md).
 Store returned task IDs/hosts. Pending `clientThreadId` is not `threadId`; resolve
 creation before APIs requiring the latter and emit required creation directives.
 
-For worker subagents use `spawn_agent`, `model: "gpt-6-luna"`,
-`reasoning_effort: "xhigh"`, `fork_turns: "none"`. Sol implementation exceptions
-use `gpt-6.1-sol` with high/xhigh; independent reviewers/verifiers use
+For all role subagents use `spawn_agent` with the resolved `model`,
+`reasoning_effort` and `fork_turns: "none"`. Worker defaults are `gpt-6-luna`/xhigh;
+Sol implementation exceptions default to `gpt-6.1-sol` with high/xhigh; independent reviewers/verifiers default to
 `gpt-6.1-sol` with `high` and a bounded review brief, per the protocol's review gate.
 The spawn message supplies the absolute
 `references/worker.md` path and task-specific brief, not the whole skill.
-Full-history forks inherit model/effort and cannot take overrides in this runtime.
 Use `send_message` for active agents, `followup_task` for idle ones. Count live
 capacity; interrupts do not prove a slot was released. Queue excess work.
 

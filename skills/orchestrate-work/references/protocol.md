@@ -22,6 +22,8 @@ activation, helper activation or implementation. Silence is not confirmation.
 After confirmation, record the accepted proposal in the existing plan and follow
 runtime for activation/dispatch. Continuing an unchanged confirmed run needs no
 new setup approval. Material changes follow uncertainty; Plan mode stays in chat.
+Keep author constraints with their decision source, separate from Root's operating
+choices and measured observations. A task-headroom estimate is not an author limit.
 
 ## Workstream plan
 
@@ -37,12 +39,19 @@ one compact row per workstream covering:
 - Review batches, reviewer/verifier ownership and the run's review-gate settings.
 - Useful concurrency within verified runtime capacity; queue excess work.
 
+Choose concurrency from current headroom and actual mutable resources. Shared
+indexes, caches, outputs and aliases retain one owner/exclusion; disjoint work may
+use existing monitored lanes under Root's current allocation. Coordinators cannot
+self-release a lane. Record one integration candidate/owner and an ordered backlog
+of actual base/result/dependency commits and unresolved behavior in this plan.
+
 Reference existing requirements and briefs. Coordinators refine their worker
 breakdown within these boundaries; update affected rows when dependencies or
 ownership change.
 
-Before each implementation dispatch, check the brief's ownership, ready inputs,
-acceptance evidence and integration path. Resolve gaps within delegated discretion;
+Before each implementation dispatch, check the brief's requirement basis,
+responsibility boundary, ownership, ready inputs, acceptance evidence and integration
+path. Resolve gaps within delegated discretion;
 escalate reserved decisions or material gaps through uncertainty. A sufficient plan
 proceeds within authorized scope without separate approval or preflight ACK.
 Host Plan mode follows
@@ -60,7 +69,8 @@ Outcome, functional/non-functional acceptance and integration target/order:
 Workspace: shared main checkout or isolated clone/worktree; absolute paths;
 owned files and shared resources; base commit where applicable.
 Inputs: relevant source/artifact revisions, prerequisites and constraints.
-Execution: role, model/effort, capacity, deliverable and stop condition.
+Execution: role, resolved model/effort and override decision if any;
+bounded outcome/grant, capacity, assigned adapter and stop condition.
 Review: batch ID, threshold, assessment limit/current round, verification
 procedure/revision, owned live resources and evidence pointers.
 ```
@@ -69,6 +79,9 @@ Point workers at worker.md and coordinators at the pinned skill entrypoint.
 Sol derives worker criteria within Orchestrator's scope. Revise contracts when
 outcome, scope, interfaces, constraints or acceptance changes; routine status and
 internal choices need none.
+Use standing grants for coherent outcomes. Routine metadata completion and proved
+pre-invocation corrections within them need no new ACK. Actual I/O/job failure or
+uncertain side effects stop the affected sequence with partial evidence preserved.
 
 Results identify task/revision/state, work, criterion-to-evidence mapping, limits
 and next action. Code results name workspace and owned files; isolated work also
@@ -92,11 +105,15 @@ before completion. Keep batches small and coherent; cover relevant architecture,
 public behavior, security and component boundaries. Include routine edits in their
 enclosing batch. Independent work may continue during review; integrate passing
 slices promptly and check combined behavior before releasing them as prerequisites.
+For large designs, reconcile key interfaces and exercise a narrow representative
+path before expanding the frozen design; preserve every accepted requirement and
+assessment limit.
 
 Each assessment round evaluates one identified candidate revision:
 
 1. The responsible Sol reviews the artifact against the brief with concrete
-   findings. Use another GPT-6.1 Sol High reviewer if it substantially implemented
+   findings, checking requirement provenance and boundary ownership as well as
+   correctness. Use another GPT-6.1 Sol High reviewer if it substantially implemented
    the candidate. Orchestrator owns review of the integrated result.
 2. A distinct GPT-6.1 Sol High verifier, who did not implement or review that
    candidate, inspects requirements, artifact and evidence before consulting the

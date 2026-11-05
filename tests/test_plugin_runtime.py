@@ -14,12 +14,12 @@ from pathlib import Path
 SOURCE = Path(__file__).resolve().parents[1] / "plugin"
 
 
-class PluginRuntimeTests(unittest.TestCase):
+class RuntimeFixture:
     def setUp(self) -> None:
         self.temp = tempfile.TemporaryDirectory(prefix="orchestration-runtime-")
         self.root = Path(self.temp.name)
         self.package = self.root / "package"
-        for rel in ("scripts/orchestration.py", "hooks/bootstrap.py", "hooks/hooks.json"):
+        for rel in ("scripts/orchestration.py", "scripts/operation_policy.py", "hooks/bootstrap.py", "hooks/hooks.json"):
             target = self.package / rel
             target.parent.mkdir(parents=True, exist_ok=True)
             shutil.copyfile(SOURCE / rel, target)
@@ -63,11 +63,14 @@ class PluginRuntimeTests(unittest.TestCase):
             encoding="utf-8",
         )
 
-    def cli(self, *args: str, script: str | None = None, ok: bool = True) -> dict:
+    def cli(self, *args: str, script: str | None = None, ok: bool = True, exit_code: int | None = None) -> dict:
         result = subprocess.run(
             [sys.executable, script or str(self.package / "scripts/orchestration.py"), *args],
             env=self.env, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False,
         )
+        if exit_code is not None:
+            self.assertEqual(result.returncode, exit_code, result.stderr.decode("utf-8", "replace"))
+            return json.loads(result.stdout)
         if ok:
             self.assertEqual(result.returncode, 0, result.stderr.decode("utf-8", "replace"))
             return json.loads(result.stdout)
@@ -123,6 +126,20 @@ class PluginRuntimeTests(unittest.TestCase):
         return {"hook_event_name": "PreToolUse", "session_id": session,
                 "tool_name": "spawn_agent", "tool_use_id": "spawn-1", "tool_input": args}
 
+class PluginRuntimeTests(RuntimeFixture, unittest.TestCase):
+    def test_ordinary_cli_launch_does_not_write_into_the_packaged_payload(self) -> None:
+        before = {path.relative_to(self.package): path.read_bytes()
+                  for path in self.package.rglob("*") if path.is_file()}
+        env = self.env.copy()
+        env.pop("PYTHONDONTWRITEBYTECODE", None)
+        env.pop("PYTHONPYCACHEPREFIX", None)
+        result = subprocess.run([sys.executable, str(self.package / "scripts/orchestration.py"), "--help"],
+                                env=env, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False)
+        self.assertEqual(result.returncode, 0, result.stderr.decode("utf-8", "replace"))
+        after = {path.relative_to(self.package): path.read_bytes()
+                 for path in self.package.rglob("*") if path.is_file()}
+        self.assertEqual(after, before)
+
     def test_inactive_and_unrelated_sessions_are_silent_without_writes(self) -> None:
         event = self.spawn("unrelated", model="expensive", reasoning_effort="high")
         result = self.hook(event, injected_data=self.data)
@@ -142,9 +159,13 @@ class PluginRuntimeTests(unittest.TestCase):
         self.assertEqual(initial["observed_events"], {})
         cases = [
             ({"model": "gpt-6-luna", "reasoning_effort": "xhigh", "fork_turns": "none"}, True),
-            ({"model": "gpt-6.1-sol", "reasoning_effort": "high", "fork_turns": "2"}, True),
-            ({"model": "gpt-6.1-sol", "reasoning_effort": "high", "fork_turns": "101"}, True),
+            ({"model": "gpt-6.1-sol", "reasoning_effort": "high", "fork_turns": "none"}, True),
+            ({"model": "gpt-6.1-sol", "reasoning_effort": "high", "fork_turns": "2"}, False),
+            ({"model": "gpt-6.1-sol", "reasoning_effort": "high", "fork_turns": "101"}, False),
+            ({"model": "gpt-6.1-sol", "reasoning_effort": "high", "fork_turns": 2}, False),
             ({"model": "gpt-6.1-sol", "reasoning_effort": "xhigh", "fork_turns": "none"}, True),
+            ({"model": "gpt-6-astra", "reasoning_effort": "high", "fork_turns": "none"}, False),
+            ({"model": "gpt-6.1-terra", "reasoning_effort": "high", "fork_turns": "none"}, False),
             ({"model": "gpt-6-luna", "reasoning_effort": "high", "fork_turns": "none"}, False),
             ({"model": "gpt-6-luna", "reasoning_effort": "xhigh"}, False),
             ({"model": "gpt-6-luna", "reasoning_effort": "xhigh", "fork_turns": "all"}, False),
@@ -157,6 +178,7 @@ class PluginRuntimeTests(unittest.TestCase):
                 if allowed:
                     self.assertEqual(result.stdout, b"")
                 else:
+                    self.assertTrue(result.stdout, "Invalid dispatch was allowed without a deny decision")
                     decision = json.loads(result.stdout)["hookSpecificOutput"]
                     self.assertEqual(decision["permissionDecision"], "deny")
                     self.assertTrue(decision["permissionDecisionReason"])

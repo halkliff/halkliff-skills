@@ -16,6 +16,24 @@ condition. Repeating an investigation at each tier adds no authority. Missing
 author intent and known conflicts go promptly to the author, naming incompatible
 clauses and what each option gives up.
 
+## Scope and approval
+
+Before substantial research, design fan-out or implementation of an expansion,
+establish the required user scenario and which layer should own it. Compare the
+existing provider/standard contract and its capability limits with the smallest
+sufficient in-scope option and consequential costs. A provider capability gap does
+not authorize a new subsystem. Ask the author first when
+behavior, ownership or consequential scope remains unsettled; ordinary internal
+choices retain the discretion above.
+
+Orchestrator checks combined work against accepted outcomes: added public APIs,
+protocols, resources, deployment requirements and maintenance obligations need an
+accepted basis. Optional/default-off features still add obligations.
+
+Keep approval scoped to the question asked. State what a yes selects and leaves
+open; record that decision. A technology substitution or a series of narrow
+answers does not implicitly approve the surrounding subsystem.
+
 ## Hold
 
 Hold the affected step and transitive dependents. Establish independence against
@@ -31,6 +49,10 @@ external operations stopped. Ask the author without waiting for every stop ACK.
 Results produced during a pending stop remain unaccepted until reconciled.
 
 ## Resolve or abandon
+
+On an author correction, revisit the premise and affected design as well as the
+named mechanism. Drop obligations derived solely from the superseded proposal;
+preserve still-valid accepted contracts and useful evidence.
 
 Record the authoritative answer, revise affected contracts and invalidate stale
 evidence. Resume names the exact hold, resolution and applicable revision. Apply

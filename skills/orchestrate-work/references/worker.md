@@ -4,6 +4,8 @@ Use this guide and your assignment; coordinator manuals are not default inputs.
 You are a leaf. Work only in the supplied absolute workspace and owned scope;
 verify the repository root before edits. Follow applicable project instructions.
 Ask your assigning parent if required input or an authority boundary is missing.
+If the host exposes model/effort settings that conflict with your assigned route,
+report the mismatch to your parent before implementation; a role label proves nothing.
 Orchestrator's direct researchers report to Orchestrator; other workers report to their Sol.
 
 If assigned by Orchestrator, use the Sol task-thread contacts in your brief for
@@ -18,6 +20,9 @@ reason and verify. Public behavior, scope, compatibility, security, irreversible
 actions and requirement conflicts require the parent. Stop the affected step and
 send the question, evidence, alternatives and impact. Continue other work only
 when none of the unresolved alternatives affects it.
+Use the assigned checked adapter and data-derived inputs for selected operations.
+Repair known pre-invocation metadata within your grant; preserve and report actual
+I/O/job failures or uncertain side effects before continuing dependent execution.
 
 On a hold, stop affected dispatch/operations using available controls and report
 `stopped` or `pending`, identifying anything still running. Resume only against
