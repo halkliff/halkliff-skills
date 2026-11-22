@@ -81,13 +81,25 @@ def records(value, path, key):
     return value
 
 
+def identity(value, path):
+    fields(value, path, ("candidate",), ("tree", "package"))
+    for key, fact in value.items():
+        string(fact, path + "." + key)
+
+
+def unique_strings(value, path):
+    strings(value, path)
+    if len(value) != len(set(value)):
+        fail(path, "duplicate values")
+
+
 def validate(data):
     fields(data, "review", (
         "schema_version", "title", "candidate", "baseline", "verdict", "overall_score",
         "change_summary", "calibration", "requirements", "dimensions", "findings", "checks", "verification", "limitations", "decisions",
     ), ("threshold",))
-    if type(data["schema_version"]) is not int or data["schema_version"] != 1:
-        fail("schema_version", "expected integer 1")
+    if type(data["schema_version"]) is not int or data["schema_version"] != 2:
+        fail("schema_version", "expected integer 2; use the historical pinned renderer for frozen schema 1 reports")
     for key in ("title", "candidate", "baseline"):
         string(data[key], key)
     strings(data["change_summary"], "change_summary")
@@ -117,10 +129,19 @@ def validate(data):
     requirement_ids = {item["id"] for item in requirements}
     for index, item in enumerate(requirements):
         path = f"requirements[{index}]"
-        fields(item, path, ("id", "description", "status", "evidence"))
+        fields(item, path, ("id", "description", "status", "evidence", "scope", "entry_point", "required_cases", "identity"))
         string(item["description"], path + ".description")
         choice(item["status"], path + ".status", ("met", "unmet", "unverified"))
         strings(item["evidence"], path + ".evidence")
+        for key in ("scope", "entry_point"):
+            if item["status"] != "unverified" or item[key] is not None:
+                string(item[key], path + "." + key)
+        unique_strings(item["required_cases"], path + ".required_cases")
+        if item["status"] != "unverified" and not item["required_cases"]:
+            fail(path, "a known requirement needs required cases")
+        identity(item["identity"], path + ".identity")
+        if item["identity"]["candidate"] != data["candidate"]:
+            fail(path + ".identity.candidate", "must match the report candidate")
         if item["status"] == "met" and not item["evidence"]:
             fail(path, "a met requirement needs recorded evidence")
         if item["status"] != "met":
@@ -167,16 +188,68 @@ def validate(data):
             fail(path, "advisory and out-of-scope findings cannot be blocking")
         if item["blocking"]:
             gaps.append(f"Blocking finding {item['id']}: {item['title']}")
+    covered = {item["id"]: set() for item in requirements}
+    requirements_by_id = {item["id"]: item for item in requirements}
+    coverage_gaps = {item["id"]: [] for item in requirements}
     for index, item in enumerate(records(data["checks"], "checks", "name")):
         path = f"checks[{index}]"
-        fields(item, path, ("name", "status", "required", "evidence"))
-        choice(item["status"], path + ".status", ("passed", "failed", "not_run"))
+        fields(item, path, ("name", "status", "required", "evidence", "kind", "coverage"))
+        choice(item["kind"], path + ".kind", ("assertion", "source_proof", "measurement"))
+        choice(item["status"], path + ".status", ("passed", "failed", "not_run", "recorded"))
+        if item["kind"] == "measurement" and item["status"] not in ("recorded", "not_run"):
+            fail(path, "a measurement records observations; it cannot claim assertions passed or failed")
+        if item["kind"] != "measurement" and item["status"] == "recorded":
+            fail(path, "recorded status is only for measurements")
         boolean(item["required"], path + ".required")
         strings(item["evidence"], path + ".evidence")
-        if item["status"] in ("passed", "failed") and not item["evidence"]:
+        if item["status"] != "not_run" and not item["evidence"]:
             fail(path, "a completed check needs recorded evidence")
-        if item["required"] and item["status"] != "passed":
+        complete_status = "recorded" if item["kind"] == "measurement" else "passed"
+        if item["required"] and item["status"] != complete_status:
             gaps.append(f"Required check {item['name']} is {item['status']}.")
+        for row_index, row in enumerate(records(item["coverage"], path + ".coverage", "requirement_id")):
+            row_path = f"{path}.coverage[{row_index}]"
+            fields(row, row_path, ("requirement_id", "scope", "entry_point", "cases", "identity"), ("reuse",))
+            if row["requirement_id"] not in requirement_ids:
+                fail(row_path, "unknown requirement reference")
+            for key in ("scope", "entry_point"):
+                string(row[key], row_path + "." + key)
+            unique_strings(row["cases"], row_path + ".cases")
+            identity(row["identity"], row_path + ".identity")
+            requirement = requirements_by_id[row["requirement_id"]]
+            target = requirement["identity"]
+            matches = lambda actual: all(actual.get(key) == value for key, value in target.items())
+            identity_matches = matches(row["identity"])
+            if "reuse" in row:
+                reuse = row["reuse"]
+                fields(reuse, row_path + ".reuse", ("verified", "target_identity", "evidence"))
+                boolean(reuse["verified"], row_path + ".reuse.verified")
+                identity(reuse["target_identity"], row_path + ".reuse.target_identity")
+                strings(reuse["evidence"], row_path + ".reuse.evidence")
+                if reuse["verified"] and not reuse["evidence"]:
+                    fail(row_path + ".reuse", "verified reuse needs recorded evidence")
+                identity_matches |= reuse["verified"] and bool(reuse["evidence"]) and matches(reuse["target_identity"])
+            reasons = []
+            if row["scope"] != requirement["scope"]:
+                reasons.append("scope mismatch")
+            if row["entry_point"] != requirement["entry_point"]:
+                reasons.append("entry point mismatch")
+            if not identity_matches:
+                reasons.append("identity mismatch without verified reuse to the required target")
+            if item["kind"] == "measurement":
+                reasons.append("measurement supplies observations, not assertion coverage")
+            elif item["status"] != "passed":
+                reasons.append("check is " + item["status"])
+            if reasons:
+                coverage_gaps[requirement["id"]].append(f"Check {item['name']} for {requirement['id']}: " + "; ".join(reasons) + ".")
+            else:
+                covered[requirement["id"]].update(row["cases"])
+    for item in requirements:
+        if item["status"] == "met":
+            missing = set(item["required_cases"]) - covered[item["id"]]
+            if missing:
+                gaps.append(f"Requirement {item['id']} lacks matching passed coverage for required cases: " + ", ".join(sorted(missing)) + ".")
+                gaps.extend(coverage_gaps[item["id"]])
     verification = data["verification"]
     fields(verification, "verification", ("complete", "summary", "evidence", "unresolved_material_objections"), ("environment",))
     boolean(verification["complete"], "verification.complete")
@@ -249,11 +322,31 @@ def score_label(value):
     return "Not assessed" if value is None else esc(f"{value:g}") + '<span> / 10</span>'
 
 
+def boundary_details(item, cases_key):
+    return (paragraph("Scope: " + (item["scope"] or "Unknown"))
+            + paragraph("Entry point: " + (item["entry_point"] or "Unknown"))
+            + paragraph("Identity: " + "; ".join(key + "=" + value for key, value in item["identity"].items()))
+            + paragraph("Required cases" if cases_key == "required_cases" else "Covered cases")
+            + evidence(item[cases_key], links=False))
+
+
+def check_details(item):
+    output = paragraph("Evidence kind: " + item["kind"]) + evidence(item["evidence"])
+    for row in item["coverage"]:
+        output += paragraph("Requirement: " + row["requirement_id"]) + boundary_details(row, "cases")
+        if "reuse" in row:
+            reuse = row["reuse"]
+            output += paragraph("Reuse verified: " + str(reuse["verified"]).lower())
+            output += paragraph("Reuse target: " + "; ".join(key + "=" + value for key, value in reuse["target_identity"].items()))
+            output += evidence(reuse["evidence"])
+    return output
+
+
 def render(data, gaps):
     template = (Path(__file__).resolve().parent.parent / "assets" / "report.html").read_text(encoding="utf-8")
     threshold = data.get("threshold", 9)
     requirement_rows = "".join(
-        '<tr><th scope="row">' + esc(item["id"]) + '</th><td>' + esc(item["description"]) + '</td><td>' + tag(item["status"]) + '</td><td>' + evidence(item["evidence"]) + '</td></tr>'
+        '<tr><th scope="row">' + esc(item["id"]) + '</th><td>' + esc(item["description"]) + boundary_details(item, "required_cases") + '</td><td>' + tag(item["status"]) + '</td><td>' + evidence(item["evidence"]) + '</td></tr>'
         for item in data["requirements"]
     )
     dimension_cards = "".join(
@@ -274,7 +367,7 @@ def render(data, gaps):
         card += '</dl><details open><summary>Evidence and counterevidence</summary><h4>Evidence</h4>' + evidence(item["evidence"]) + '<h4>Counterevidence</h4>' + evidence(item["counterevidence"]) + '</details>'
         card += '<h4>Possible fix</h4>' + paragraph(item["fix"]) + '<h4>Validation</h4>' + paragraph(item["validation"]) + '</article>'
         finding_groups[item["in_scope"]].append(card)
-    check_rows = ''.join('<tr><th scope="row">' + esc(item["name"]) + '</th><td>' + tag(item["status"]) + '</td><td>' + ("Required" if item["required"] else "Optional") + '</td><td>' + evidence(item["evidence"]) + '</td></tr>' for item in data["checks"])
+    check_rows = ''.join('<tr><th scope="row">' + esc(item["name"]) + '</th><td>' + tag(item["status"]) + '</td><td>' + ("Required" if item["required"] else "Optional") + '</td><td>' + check_details(item) + '</td></tr>' for item in data["checks"])
     verification = data["verification"]
     slots = {
         "TITLE": esc(data["title"]), "CANDIDATE": esc(data["candidate"]), "BASELINE": esc(data["baseline"]),

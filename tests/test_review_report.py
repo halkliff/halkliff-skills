@@ -16,14 +16,20 @@ SCRIPT = Path(__file__).resolve().parents[1] / "skills" / "review-work" / "scrip
 
 def review():
     return {
-        "schema_version": 1, "title": "Review", "candidate": "candidate SHA", "baseline": "baseline SHA",
+        "schema_version": 2, "title": "Review", "candidate": "candidate SHA", "baseline": "baseline SHA",
         "verdict": "Ready", "overall_score": 9,
         "change_summary": ["Persist submitted records and reload them after navigation."],
         "calibration": {"status": "uncalibrated", "evidence": []},
-        "requirements": [{"id": "R1", "description": "Persist a submitted record", "status": "met", "evidence": ["HTTP and storage receipt"]}],
+        "requirements": [{"id": "R1", "description": "Persist a submitted record", "status": "met", "evidence": ["HTTP and storage receipt"],
+                          "scope": "Persistent submission", "entry_point": "POST /records then GET /records",
+                          "required_cases": ["submit then reload preserves one record"],
+                          "identity": {"candidate": "candidate SHA", "tree": "tree SHA", "package": "package digest"}}],
         "dimensions": [{"name": "Correctness", "critical": True, "score": 9, "rationale": "Observed the required persisted result.", "evidence": ["storage receipt"]}],
         "findings": [],
-        "checks": [{"name": "Submit and reload", "status": "passed", "required": True, "evidence": ["receipt.txt:1"]}],
+        "checks": [{"name": "Submit and reload", "status": "passed", "required": True, "evidence": ["receipt.txt:1"], "kind": "assertion",
+                    "coverage": [{"requirement_id": "R1", "scope": "Persistent submission", "entry_point": "POST /records then GET /records",
+                                  "cases": ["submit then reload preserves one record"],
+                                  "identity": {"candidate": "candidate SHA", "tree": "tree SHA", "package": "package digest"}}]}],
         "verification": {"complete": True, "summary": "Submitted and reloaded the record.", "environment": "Temporary test checkout", "evidence": ["receipt.txt:1"], "unresolved_material_objections": []},
         "limitations": [], "decisions": [],
     }
@@ -95,13 +101,67 @@ class ReviewReportTests(unittest.TestCase):
             "infinite score": lambda d: d.update(overall_score=float("inf")),
             "duplicate requirement": lambda d: d["requirements"].append(deepcopy(d["requirements"][0])),
         }
-        for label, mutate in mutations.items():
+        coverage_mutations = {
+            "unrun required transition": (lambda d: d["checks"].append({
+                "name": "Reentrant replacement", "status": "not_run", "required": False, "evidence": [], "kind": "assertion",
+                "coverage": [dict(deepcopy(d["checks"][0]["coverage"][0]), cases=["replacement leaves next cohort intact"])]
+            }) or d["requirements"][0]["required_cases"].append("replacement leaves next cohort intact"), "check is not_run"),
+            "broad row narrow control": (lambda d: d["requirements"][0]["required_cases"].extend(["retirement unregisters live graph", "V2 adopts and interrupts"]), "lacks matching passed coverage"),
+            "tree mismatch": (lambda d: d["checks"][0]["coverage"][0]["identity"].update(tree="old tree"), "identity mismatch"),
+            "package mismatch": (lambda d: d["checks"][0]["coverage"][0]["identity"].update(package="old package"), "identity mismatch"),
+            "missing actual package": (lambda d: d["checks"][0]["coverage"][0]["identity"].pop("package"), "identity mismatch"),
+            "stale report pairing": (lambda d: d.update(candidate="new candidate SHA"), "must match the report candidate"),
+            "measurement claims pass": (lambda d: d["checks"][0].update(kind="measurement"), "a measurement records observations"),
+            "measurement cannot cover": (lambda d: d["checks"][0].update(kind="measurement", status="recorded", required=False), "measurement supplies observations"),
+            "scope mismatch": (lambda d: d["checks"][0]["coverage"][0].update(scope="U1 getter interval only"), "scope mismatch"),
+            "entry point mismatch": (lambda d: d["checks"][0]["coverage"][0].update(entry_point="private helper"), "entry point mismatch"),
+            "missing declaration": (lambda d: d["requirements"][0].pop("required_cases"), "missing fields: required_cases"),
+            "empty declaration": (lambda d: d["requirements"][0].update(required_cases=[]), "needs required cases"),
+            "missing check coverage": (lambda d: d["checks"][0].pop("coverage"), "missing fields: coverage"),
+            "frozen schema": (lambda d: d.update(schema_version=1), "historical pinned renderer"),
+        }
+        for reuse_label, reuse_change in {
+            "unverified reuse": {"verified": False},
+            "reuse wrong target": {"target_identity": {"candidate": "different candidate"}},
+            "reuse missing target package": {"target_identity": {"candidate": "candidate SHA", "tree": "tree SHA"}},
+            "reuse lacks evidence": {"evidence": []},
+        }.items():
+            def mutate_reuse(data, change=reuse_change):
+                row = data["checks"][0]["coverage"][0]
+                row["reuse"] = {"verified": True, "target_identity": deepcopy(row["identity"]), "evidence": ["independent-reuse.txt:4"]}
+                row["identity"].update(tree="old tree", package="old package")
+                row["reuse"].update(change)
+            coverage_mutations[reuse_label] = (mutate_reuse, "verified reuse needs recorded evidence" if not reuse_change.get("evidence", [True]) else "identity mismatch")
+        cases = {label: (mutate, "error:") for label, mutate in mutations.items()}
+        cases.update(coverage_mutations)
+        for label, (mutate, expected_error) in cases.items():
             with self.subTest(label=label):
                 data = review()
                 mutate(data)
                 result = self.run_cli(data, "--check")
                 self.assertNotEqual(result.returncode, 0, result.stdout)
-                self.assertIn("error:", result.stderr)
+                self.assertIn(expected_error, result.stderr)
+        for label in ("narrow pass", "source proof", "verified reuse", "candidate-only identity", "required measurement", "unknown boundary"):
+            with self.subTest(label=label):
+                data = review()
+                row = data["checks"][0]["coverage"][0]
+                if label == "source proof":
+                    data["requirements"][0].update(description="Shipped docs select package CI while retaining full-suite exemption", scope="Package CI selector", entry_point="CI selector input docs/guide.md", required_cases=["shipped docs select package job and retain full-suite exemption"])
+                    row.update(scope="Package CI selector", entry_point="CI selector input docs/guide.md", cases=["shipped docs select package job and retain full-suite exemption"])
+                    data["checks"][0].update(kind="source_proof", evidence=["workflow.yml:12-30 static branch proof"])
+                elif label == "verified reuse":
+                    row["reuse"] = {"verified": True, "target_identity": deepcopy(row["identity"]), "evidence": ["independent-reuse.txt:4"]}
+                    row["identity"].update(candidate="older candidate", tree="old tree", package="old package")
+                elif label == "candidate-only identity":
+                    data["requirements"][0]["identity"] = {"candidate": data["candidate"]}
+                elif label == "required measurement":
+                    data["checks"].append(dict(deepcopy(data["checks"][0]), name="Reachability measurement", kind="measurement", status="recorded", required=True))
+                elif label == "unknown boundary":
+                    data.update(verdict="Incomplete")
+                    data["requirements"][0].update(status="unverified", scope=None, entry_point=None, required_cases=[], evidence=[])
+                    data["checks"] = []
+                result = self.run_cli(data, "--check")
+                self.assertEqual(result.returncode, 0, result.stderr)
         data = review()
         data["findings"] = [dict(finding(), in_scope=False)]
         self.assertEqual(self.run_cli(data, "--check").returncode, 0)
@@ -117,6 +177,12 @@ class ReviewReportTests(unittest.TestCase):
         data = review()
         data["title"] = payload
         data["requirements"][0]["evidence"] = [payload]
+        data["requirements"][0].update(scope=payload, entry_point=payload, required_cases=[payload])
+        data["requirements"][0]["identity"]["package"] = payload
+        row = data["checks"][0]["coverage"][0]
+        row.update(scope=payload, entry_point=payload, cases=[payload])
+        row["identity"]["package"] = payload
+        row["reuse"] = {"verified": True, "target_identity": deepcopy(row["identity"]), "evidence": [payload]}
         data["findings"] = [dict(finding(), title=payload, source="javascript:alert(1)", observed=payload)]
         args = ("--workspace", str(self.workspace), "--output", "reports/review.html")
         result = self.run_cli(data, *args)

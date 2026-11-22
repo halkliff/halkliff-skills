@@ -32,6 +32,12 @@ Use one compact row or recipe per distinct requirement/journey:
 
 - **Entry and expectation:** real user/API/CLI/library path, accepted behavior,
   independently specified result and the defect the check could detect.
+- **Consequential boundary cases:** owning registration/retirement or publication
+  path, callout/replacement boundary, authority before and after it, required
+  variants, positive outcome and forbidden effects. Exercise meaningful alternate
+  exits through the public path while the containing owner remains live; check
+  that cleanup failures reach the original completion. Reuse representative cases
+  only where they establish the same owning transition.
 - **Launch and doctor:** observed host-native command, supported initialization,
   auth/seed prerequisites and a readiness check for the correct build/instance.
 - **Drive and observe:** concrete actions, visible output and persisted effects;
@@ -50,6 +56,13 @@ Use existing fixtures and commands; a test-only production seam or source-mirror
 assertion does not prove the user's result. Installing dependencies, migrations on
 user data or external writes require their own authority.
 
+Where package CI selects changed paths, reconcile them with the package manifest
+or verified archive inventory. Prefer that inventory as the selector's source;
+otherwise extend the existing selector test for an omitted shipped path, such as
+docs, with an unshipped guidance control. Preserve any existing full-suite
+exemption. Causal source proof can establish a static selector claim without
+implying a hosted docs-only run.
+
 ## Execute and reconcile
 
 Workers execute assigned meaningful checks once. Sol reconciles their evidence;
@@ -58,6 +71,13 @@ gap or contradictory claim. Orchestrator checks combined behavior. Reuse valid
 results for unchanged inputs; required integration checks still exercise the
 integrated candidate. A review score never substitutes for missing proof.
 Bind reuse to the actual consumer, claim, procedure and relevant input identities.
+Join each accepted criterion to its declared scope, public entry point, covered
+cases, actual candidate/tree/package facts where relevant, observed outcome and
+limits. A matching identity cannot expand a narrow control into integrated proof.
+Measurements and process exit codes are observations; assertion success needs the
+actual expected/observed comparison. Keep uncovered required cases unverified and
+address them at the existing integration checkpoint, preserving unrelated ready
+children and all other accepted work.
 Before a broad rescan, name its changed input, contradiction, first admission or
 new claim and the threatened invariant. Invalidate affected claims only. Explicitly
 mark post-execution provider/profile state unverified when it was not observed;

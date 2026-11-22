@@ -79,12 +79,19 @@ Point workers at worker.md and coordinators at the pinned skill entrypoint.
 Sol derives worker criteria within Orchestrator's scope. Revise contracts when
 outcome, scope, interfaces, constraints or acceptance changes; routine status and
 internal choices need none.
+For consequential cross-owner behavior, extend the existing acceptance row with
+the owning public path, transition/callout or alternate exit, authority that can
+change, required variants, expected result and forbidden effects. Registration,
+replacement and retirement belong to their existing owner. Routine edits stay
+in the enclosing batch; this adds no checkpoint or per-edit record.
 Use standing grants for coherent outcomes. Routine metadata completion and proved
 pre-invocation corrections within them need no new ACK. Actual I/O/job failure or
 uncertain side effects stop the affected sequence with partial evidence preserved.
 
 Results identify task/revision/state, work, criterion-to-evidence mapping, limits
-and next action. Code results name workspace and owned files; isolated work also
+and next action. Sol marks the declared boundary cases actually covered and any
+remaining gaps before returning a batch for acceptance. Code results name
+workspace and owned files; isolated work also
 names base and result commits. Isolated delivery reports name the integration
 clone and exact delivered range with
 `git -C <clone> log -p <from>..<to>` for author review. A summary alone is not code
@@ -117,7 +124,9 @@ Each assessment round evaluates one identified candidate revision:
    the candidate. Orchestrator owns review of the integrated result.
 2. A distinct GPT-6.1 Sol High verifier, who did not implement or review that
    candidate, inspects requirements, artifact and evidence before consulting the
-   reviewer's conclusions. It returns a 1-10 score, criterion-linked reasons, blocking findings,
+   reviewer's conclusions. From the changed owner paths, it independently selects
+   a material alternate exit or transition to challenge against the expected
+   result and forbidden effects. It returns a 1-10 score, criterion-linked reasons, blocking findings,
    optional refinements and evidence limits. Give reviewers/verifiers the worker
    guide, this gate and a bounded brief; they remain leaves.
 3. Accept only when the score meets the agreed threshold, every agreed functional

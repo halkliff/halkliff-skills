@@ -40,14 +40,18 @@ belong in the contract and decisions, not as unverified in-scope requirements.
 Account for changed artifacts and relevant ownership/runtime paths in the change
 summary and coverage evidence. Keep unrelated findings marked out of scope.
 
-The dataset uses schema version 1. Every field below is required unless marked
+New assessments use schema version 2. Keep frozen schema 1 records and their
+historical pinned renderer unchanged. The current renderer rejects schema 1;
+changing a version number does not supply the missing scope and coverage facts.
+This is a prospective report contract, not an installation or migration step.
+Every field below is required unless marked
 optional. Strings are nonblank. Lists may be empty except `change_summary`,
 `requirements`, and `dimensions`. Unknown keys, duplicate keys/IDs/names, dangling
 requirement references, nonfinite scores, and boolean scores are rejected.
 
 | Top-level field | Value |
 | --- | --- |
-| `schema_version` | Integer `1` |
+| `schema_version` | Integer `2` |
 | `title`, `candidate`, `baseline` | Strings. Candidate identifies the actual reviewed inputs, including dirty edits. |
 | `change_summary` | List of strings describing introduced changes, affected owners, relevant runtime paths, and scope. Explain unavailable information. |
 | `calibration` | Object with `status`: `uncalibrated`, `passed`, or `failed`; and `evidence`: list of record pointers. Passed/failed status needs evidence. |
@@ -59,7 +63,21 @@ requirement references, nonfinite scores, and boolean scores are rejected.
 | `limitations`, `decisions` | Lists of strings. Include partial coverage, authority decisions, exceptions, and resource/reliance limits. |
 
 Each requirement has `id`, `description`, `status` (`met`, `unmet`, or `unverified`),
-and `evidence` (list of strings). A met requirement needs recorded evidence.
+`evidence` (list of strings), `scope`, `entry_point`, `required_cases`, and
+`identity`. Declare the scope and owning public entry point in the brief. Use
+unique case strings to name each consequential required transition or variant,
+including its expected result and forbidden effects. Keep ordinary edits in
+their existing batch. A met requirement needs evidence and matching passed check
+coverage for every declared case. Multiple checks can cover those cases together.
+
+An identity has `candidate` and optional `tree` and `package` strings. The
+requirement's candidate must equal the report's top-level candidate. Declare the
+tree or package facts relevant to that boundary when supplied; record unavailable
+facts in limitations. Check identities must contain and match every declared
+requirement identity fact. Extra actual facts are allowed. A genuinely unknown
+boundary can remain `unverified` with explicit `null` scope/entry point and empty
+cases. These keys still exist, and the unverified requirement prevents Ready.
+Known met/unmet requirements need nonblank scope/entry point and nonempty cases.
 
 Each quality dimension has `name`, `critical` (boolean), `score` (0 to 10 or
 `null`), `rationale`, and `evidence`. Optional `threshold` overrides the review
@@ -89,10 +107,60 @@ defect. An unverified material concern prevents Ready while required evidence is
 missing. Record rejected claims and resolved disagreements in verification
 evidence or decisions; do not relabel them as confirmed findings.
 
-Each check has `name`, `status` (`passed`, `failed`, or `not_run`), `required`
-(boolean), and `evidence`. Completed checks need evidence identifying their target,
-environment, result, and covered behavior. Keep local, browser, hosted, and release
-claims separate.
+Each check has `name`, `status`, `required` (boolean), `evidence`, `kind`, and
+`coverage`. `kind` is `assertion`, `source_proof`, or `measurement`. Assertions and
+source proofs use `passed`, `failed`, or `not_run`. Measurements use `recorded` or
+`not_run`; a successful measurement process exit supplies observations, not an
+assertion verdict. Completed checks need evidence identifying their target,
+environment, observed result, and limits. Keep local, browser, hosted, and release
+claims separate. A required measurement completes with `recorded`, while required
+assertions/source proofs must pass. Use source proofs where actual source decides
+a static claim.
+
+Each coverage row has `requirement_id`, `scope`, `entry_point`, `cases` (unique
+strings), and `identity`. Use at most one row per requirement within a check.
+The scope and entry point must match the requirement; cases identify the declared
+behavior actually covered. Only passed assertions/source proofs contribute
+coverage. Keep findings, measured observations, and asserted passing outcomes
+distinct. A nonqualifying receipt does not prevent Ready when other matching
+passed receipts cover every case and all required checks complete successfully.
+
+An optional coverage-row `reuse` object records `verified` (boolean),
+`target_identity`, and `evidence`. Reuse qualifies a different actual identity
+only when independent verification is recorded as true, evidence is nonempty,
+and the target contains every required identity fact with matching values.
+Preserve the actual identity and the verified reuse basis. A bare approval flag
+or an unverified equivalence claim supplies no coverage.
+
+For example, one legitimate narrow criterion and its check can use these rows
+inside the otherwise complete schema 2 dataset. The enclosing report candidate
+is `candidate SHA`:
+
+```json
+{
+  "requirements": [{
+    "id": "U1", "description": "Recheck authority after the authored key getter",
+    "status": "met", "evidence": ["u1-controls.txt:1-30"],
+    "scope": "Authored getter interval", "entry_point": "Public binding transfer",
+    "required_cases": ["getter revokes authority; returned function is not called"],
+    "identity": {"candidate": "candidate SHA", "tree": "tree SHA", "package": "archive SHA-256"}
+  }],
+  "checks": [{
+    "name": "Getter revocation control", "kind": "assertion", "status": "passed",
+    "required": true, "evidence": ["u1-controls.txt:1-30"],
+    "coverage": [{
+      "requirement_id": "U1", "scope": "Authored getter interval",
+      "entry_point": "Public binding transfer",
+      "cases": ["getter revokes authority; returned function is not called"],
+      "identity": {"candidate": "candidate SHA", "tree": "tree SHA", "package": "archive SHA-256"}
+    }]
+  }]
+}
+```
+
+This receipt establishes only its declared getter case. A broader SDK criterion
+must declare and cover its other required cases. Leave absent proof unverified
+and resolve it at the already authorized integration checkpoint.
 
 Execution receipts follow the [isolation gate](workflow.md#execution-isolation),
 including effective-path evidence and limits. Keep review-process noncompliance
@@ -126,10 +194,14 @@ recognizing a Git checkout does not grant permission to modify it. The helper
 rejects path escapes, `.git` output, symlinks/junctions, and conflicting files.
 Identical bytes are safe to render again.
 
-The helper refuses Ready when recorded requirements, scores, required checks,
-verification, objections, or blocking findings contradict it. It preserves either
-negative verdict and displays all recorded gaps. It cannot detect an omitted
-requirement or false evidence. Main and the independent verifiers own that check.
+The helper refuses Ready when recorded requirements, scope/case/identity coverage,
+scores, required checks, verification, objections, or blocking findings contradict
+it. It preserves either negative verdict and displays recorded gaps. The join
+matches recorded fields; it does not infer semantics from case labels, execute
+checks, authenticate receipts or reuse, detect omitted requirements, or establish
+evidence truth. Main and independent verifiers establish those facts and check
+the actual entry points. A typed handle or a coverage table cannot establish an
+unexercised lifetime or ordering outcome.
 
 Sol renders the accepted dataset and checks fidelity in a browser: overview and
 candidate identity, three verdict labels, calibration limit, requirement evidence,

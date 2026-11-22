@@ -159,6 +159,12 @@ results and necessary questions; no per-message files, copied ledgers, ACK chain
 or narrative progress traffic. Use compact cursor-based waits. Facts may use an
 authorized direct route; decisions, holds and acceptance follow the parent chain.
 
+Declare consequential boundary cases from the accepted requirements and changed
+owners before dispatch: public entry point, scope, transition/alternate exit,
+expected result, forbidden effects and relevant candidate identity. Reuse these
+rows in reporting.md's requirement-to-check contract. Missing facts stay explicit;
+reviewer conclusions do not define the expected coverage.
+
 Route supporting skills by the task, not as a universal reading list:
 
 | Role or question | Supporting skill and bounded use |
@@ -224,6 +230,11 @@ Also assign an independent Sol challenge of requirement coverage, critical quali
 scores and missed blockers. This step applies to clean reviews. Target high-risk
 paths and interactions; reuse sound evidence instead of repeating the entire
 review at every level. Record which scopes each challenge covered and its limits.
+Select a material alternate exit or transition independently from the changed
+owner paths. Challenge the declared positive result and forbidden effects through
+the public boundary, including lifetime behavior while its containing owner is
+live. Inspect raw outcomes: measurements are not assertion verdicts. Use complete
+causal source proof for facts the source decides, such as a static CI selector.
 
 Astra reconciles disagreements through the approved criteria and evidence, with
 focused Sol investigation where useful. Document rejection reasons and preserve
