@@ -56,10 +56,24 @@ Put one marker in the existing assignment message; create no message artifact:
 ORCHESTRATION role=worker grant=<grant-id> revision=<selected-revision>
 ```
 
-The active selected-policy hook checks the grant, current revision and actual
-model/effort/fork arguments. A role name does not select a model. Keep Sol as the
-default coordinator and Luna/xHigh as the default worker; an explicit run override
-does not change other runs or permit an Astra fallback.
+The active selected-policy hook checks the grant and its owner, the current
+revision, and the explicit `model`, `reasoning_effort` and `fork_turns` arguments.
+The built-in dispatch routes are `gpt-6.2-sol`/`high` for `coordinator`,
+`gpt-6.2-sol`/`xhigh` for `orchestrator`, and `gpt-6-luna`/`xhigh` for `worker`.
+
+To apply an author-selected route to one workstream, give its roles distinct
+IDs in `roles` and list those IDs in the applicable `grants.<id>.roles`. For
+example, `storage.coordinator` can use `gpt-6.2-sol`/`xhigh`, `storage.worker`
+can use `gpt-6.1-terra`/`high`, and `storage.summary` and `storage.bulk` can
+use `gpt-6-luna` at `xhigh` and `low`, respectively. The Root-owned grant
+can name `storage.coordinator`, and the enrolled storage coordinator's grant
+can name the other three. Put the relevant role and grant IDs in each marker.
+Grants that still name `coordinator` or `worker` use their usual routes.
+
+Use a selected policy for explicit alternatives such as `gpt-6.1-sol`,
+`gpt-6-sol`, `gpt-6-astra`, or `gpt-6.2-astra`. Without a selected policy, the hook accepts
+only `gpt-6.2-sol` at `high` or `xhigh`, or `gpt-6-luna` at `xhigh`. Hold the
+affected dispatch if its selected model or effort is unavailable on the host.
 
 Enroll a recovery/coordinator chat with the existing `activate --run-id` route and
 the same recorded roots/data directory. It reuses the run's pin and selection;

@@ -20,7 +20,7 @@ not update upstream pins. Use `--dry-run` first when checking an existing setup.
 For the separate local plugin, build its self-contained package:
 
 ```sh
-python scripts/build_plugin.py --plugin review --dest work/plugin-package/halkliff-review-0.1.2
+python scripts/build_plugin.py --plugin review --dest work/plugin-package/halkliff-review-0.2.0
 ```
 
 Register the repository marketplace if it is not already registered, then install:
@@ -30,8 +30,8 @@ codex plugin marketplace add "<absolute-repository-root>" --json
 codex plugin add halkliff-review@halkliff-local --json
 ```
 
-Select GPT-6 Astra High for the main chat before invoking the reviewer. The skill
-cannot change the chat's model. Invoke `$review-work` for the standalone skill or
+Select the main chat's model and effort in Codex. The review default is GPT-6.2
+Astra High. Invoke `$review-work` for the standalone skill or
 `$review-work-plugin` for the plugin wrapper. Both entrypoints are explicit-only.
 The plugin bundles the core and dependencies as resources under `support/skills`.
 It adds no background daemon, MCP server, or automatically activated hooks.
@@ -67,10 +67,11 @@ documentation evidence. Valid existing evidence is reused. The available
 `test-audit` skill contributes its test-value assessment; the bundled workflow
 contains the required observable-behavior gate for hosts without that extra skill.
 
-Independent Sol verifiers challenge blockers, coverage, quality scores, and missed
-problems, including clean initial reviews. Astra resolves disagreements against
-the rubric and evidence. Material unresolved objections prevent Ready. A concise
-verification summary permits author input; the reviewer proceeds by default.
+Independent verifiers challenge blockers, coverage, quality scores, and missed
+problems, including clean initial reviews. The main reviewer and coordinators
+resolve disagreements against the rubric and evidence. Material unresolved
+objections prevent Ready. The verification summary gives you a chance to weigh in.
+The reviewer proceeds by default.
 Request a pause after verification when you want an explicit checkpoint.
 
 ## Protect the implementation
@@ -99,13 +100,16 @@ The agents perform those judgments. A valid JSON report is not proof of Ready.
 
 ## Use the agreed model hierarchy
 
-Astra High owns the main chat and substantial coordinator work. GPT-6.1 Sol
-High or xHigh performs the bulk of source reading and investigation. Distinct
-Sol High agents verify the assessment. Sol produces the HTML report. Luna handles
-summarization at any stage, including context recovery, interim reports and the
-final summary, while preserving evidence links and unresolved questions. This
-overrides the implementation orchestrator's usual Luna-first routing and its
-correction-loop policy.
+The review defaults use GPT-6.2 Astra High for main and coordinators, GPT-6.2 Sol
+High or xHigh for investigation, and distinct GPT-6.2 Sol High agents for independent
+verification. GPT-6.2 Sol authors the HTML report. Luna handles summarization at
+any stage, preserving evidence links and unresolved questions.
+
+Review setup groups the open model and effort choices. You can accept the
+defaults or name a different model or effort for a role, chat, workstream or
+purpose. The review records what was requested and what the host exposes about
+the settings in use. A routing change preserves each role's responsibilities,
+including independent verification. [Review roles and routing](../skills/review-work/references/workflow.md#assign-focused-roles)
 
 The review goal, when explicitly requested, concerns the completed assessment
 and deliverables. A Changes required verdict does not authorize repairs or an
@@ -115,7 +119,7 @@ automatic second review. Re-review needs a new request in the same review chat.
 
 A new installation is uncalibrated. Installation, package checks, renderer checks,
 and instruction review establish their own limited facts. They do not establish
-the full reviewer's accuracy or the actual Astra-to-Sol runtime hierarchy.
+the full reviewer's accuracy or the effective model settings in live reviews.
 
 Before regular reliance, agree fresh representative cases and independent hidden
 outcomes. The real review process must find every known acceptance blocker,

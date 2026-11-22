@@ -728,9 +728,9 @@ def _dispatch_check(event: dict[str, Any]) -> dict[str, Any] | None:
         return _deny("Spawn is blocked: supply explicit model and reasoning_effort parameters.")
     model = args.get("model")
     effort = args.get("reasoning_effort")
-    allowed = {"gpt-6-luna": {"xhigh"}, "gpt-6.1-sol": {"high", "xhigh"}}
+    allowed = {"gpt-6-luna": {"xhigh"}, "gpt-6.2-sol": {"high", "xhigh"}}
     if not isinstance(model, str) or not isinstance(effort, str) or model not in allowed or effort not in allowed[model]:
-        return _deny("Spawn is blocked: explicitly set an approved model and reasoning_effort (gpt-6-luna/xhigh or gpt-6.1-sol/high|xhigh).")
+        return _deny("Spawn is blocked: explicitly set an approved model and reasoning_effort (gpt-6-luna/xhigh or gpt-6.2-sol/high|xhigh).")
     if args.get("fork_turns") != "none":
         return _deny("Spawn is blocked: explicit model routing requires fork_turns 'none'; inherited or unsupported forks do not establish that route.")
     return None

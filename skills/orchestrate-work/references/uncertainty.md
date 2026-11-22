@@ -8,9 +8,9 @@ reason and continue. Existing code may establish an internal baseline; it cannot
 override author intent. Escalate consequential uncertainty, conflicting requirements,
 or an unclear boundary between internal choice and reserved decision.
 
-Workers ask their Sol; Sol resolves from contract/evidence or escalates to Orchestrator;
-Orchestrator resolves shared architecture or asks the author. Direct Orchestrator workers report
-to Orchestrator. Research routing is defined in [SKILL.md](../SKILL.md#define-and-route).
+Workers ask their assigning parent. Coordinators resolve from contract and evidence
+or escalate to Orchestrator, who resolves shared architecture or asks the author.
+Research routing is defined in [SKILL.md](../SKILL.md#define-and-route).
 Research must target a missing fact with a discriminating question and stop
 condition. Repeating an investigation at each tier adds no authority. Missing
 author intent and known conflicts go promptly to the author, naming incompatible

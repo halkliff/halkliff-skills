@@ -1,9 +1,10 @@
 # halkliff-skills
 
 Personal Codex skills for implementation orchestration and independent code review.
-`orchestrate-work` uses Sol coordinators and Luna-first workers. `review-work`
-uses Astra coordination and Sol reviewers, producing requirement evidence,
-quality scores, and an offline report. Both workflows require explicit invocation.
+`orchestrate-work` defaults to Sol coordinators and Luna workers. `review-work`
+defaults to Astra coordination and Sol reviewers, producing requirement evidence,
+quality scores, and an offline report. Each workflow asks for role and workstream
+model preferences during setup. Both require explicit invocation.
 
 Original work is [MIT licensed](LICENSE). Upstream adaptations retain their
 notices, and `define-goal` retains its supplied Apache-2.0 license.
@@ -66,13 +67,13 @@ installation needs fresh calibration before regular reliance on its Ready verdic
 Build the review package with:
 
 ```sh
-python scripts/build_plugin.py --plugin review --dest work/plugin-package/halkliff-review-0.1.2
+python scripts/build_plugin.py --plugin review --dest work/plugin-package/halkliff-review-0.2.0
 ```
 
 Build the local plugin with its selected dependency resources:
 
 ```sh
-python scripts/build_plugin.py --dest work/plugin-package/halkliff-orchestration-0.1.11
+python scripts/build_plugin.py --dest work/plugin-package/halkliff-orchestration-0.2.0
 ```
 
 The plugin exposes `$orchestrate-work-plugin`, a small adapter to the existing
@@ -117,7 +118,7 @@ implementation; token budgets require an explicit request.
 
 The orchestrator chooses [coordinator placement](skills/orchestrate-work/references/runtime.md#dispatch-and-workspace)
 and concurrency from workstream independence, dependencies, task size and runtime
-capacity. Substantial autonomous workstreams normally use separate Sol task
+capacity. Substantial autonomous workstreams normally use separate coordinator task
 threads with worker subagents; smaller tasks may use coordinator subagents.
 An explicit author choice takes precedence. Suggested invocation prompts authorize
 the needed task creation and coordination messages when sent by the author.
@@ -126,37 +127,36 @@ substantial parallel work, with subagent-only execution when the task proves lig
 Host creation and messaging rules still apply to the actual human request.
 
 Main-thread workers can deliver findings and factual clarifications directly to
-Sol task threads listed in their briefs. Sol answers in its own thread and the
+coordinator task threads listed in their briefs. Each coordinator answers in its own thread and the
 worker retrieves the reply there. Decisions, consequential uncertainty, holds
 and acceptance remain with the assigning parent; the main context receives
 conclusions and evidence pointers instead of every exchange.
 
 Before implementation dispatch, the orchestrator records a compact
 [workstream plan](skills/orchestrate-work/references/protocol.md#workstream-plan)
-in the existing `plan.md`: ownership, dependencies, workspace boundaries,
-acceptance evidence, integration order and useful concurrency. Coordinators
+in the existing `plan.md`, covering ownership, dependencies, workspace boundaries,
+acceptance, integration order and concurrency. It includes the agreed model and
+effort for each role and any workstream exceptions. Its rows track each spawned chat's
+parent, host, ID, status and requested model/effort alongside the settings
+observed by the host. Unavailable observations stay marked unverified. Coordinators
 refine their worker assignments. `/plan` is optional; choosing it defers setup
 and implementation until the host transitions to execution.
 
 Goal setup asks for any review score threshold or assessment limit you have not
 already supplied, offering **9/10 and three total assessments**. Substantial
-deliverables pass coordinator review and independent GPT-6.1 Sol High verification.
+deliverables pass coordinator review and independent verification (GPT-6.2 Sol High by default).
 All agreed functional and non-functional requirements still need evidence;
 a high score cannot waive them. Failed batches receive bounded corrections, then
 a scoped hold at the limit. See the [review gate](skills/orchestrate-work/references/protocol.md#review-gate).
 
-Before invoking, select GPT-6 Astra High or GPT-6.1 Sol xHigh for the main
-orchestrator in the model selector. Sol coordinators and complex implementation
-workers use GPT-6.1 Sol High/xHigh.
-
-Execution is Luna-first: research, claim checks and summaries use Luna xHigh,
-including research assigned directly by the orchestrator. Parents may resolve a trivial lookup
-with one known file read or targeted read-only command; larger investigations remain
-delegated. Autonomous GPT-6.1 Sol High/xHigh
-coordinators decompose work, dispatch workers and verify until their assignment
-is complete or held. They normally use Luna xHigh for implementation and may use
-a GPT-6.1 Sol High/xHigh leaf worker when complexity warrants it. Full worker slots mean
-queueing work. Model effort does not guarantee termination.
+During setup, choose the models and reasoning efforts for the main orchestrator,
+coordinators and workers together. The main chat's model selector controls its
+actual model. The orchestration defaults are GPT-6.2 Astra High or GPT-6.2 Sol
+xHigh for the main chat, GPT-6.2 Sol High/xHigh for coordinators and complex
+implementation, and GPT-6 Luna xHigh for most implementation, research and summaries.
+For example, you can assign one workstream a GPT-6.2 Sol High coordinator,
+GPT-6.1 Terra High implementation workers and GPT-6 Luna xHigh for summaries
+and simple bulk work. Other workstreams use their agreed routes.
 
 Reversible internal decisions stay with the responsible agent. Questions about
 public behavior, scope, compatibility, security, irreversible actions or conflicting

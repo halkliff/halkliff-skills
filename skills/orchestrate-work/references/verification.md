@@ -65,7 +65,7 @@ implying a hosted docs-only run.
 
 ## Execute and reconcile
 
-Workers execute assigned meaningful checks once. Sol reconciles their evidence;
+Workers execute assigned meaningful checks once. The coordinator reconciles their evidence;
 independent verifiers inspect the candidate and evidence, then address a specific
 gap or contradictory claim. Orchestrator checks combined behavior. Reuse valid
 results for unchanged inputs; required integration checks still exercise the

@@ -11,8 +11,8 @@ Reuse these `orchestrate-work` references without invoking another run:
 
 | Read when | Reference and retained behavior | Review override |
 | --- | --- | --- |
-| Starting or continuing | `references/protocol.md`: setup, workstream plan, compact briefs/results, current state | One review contract and candidate; no repair batches or repeated assessment gate |
-| Assigning work or using a goal | `references/runtime.md`: host modes, actual human authority, dispatch, capacity, waits and goal lifecycle | Astra coordinators; Sol review and verification; Luna summarization at any stage |
+| Starting or continuing | `references/protocol.md`: setup, task-chat roster, compact briefs and results | Keep these records in the existing review contract. Run one assessment of the identified candidate. |
+| Assigning work or using a goal | `references/runtime.md`: model routing, host modes, authority, dispatch, capacity, waits and goal lifecycle | Use the review defaults below and any scoped author choices. |
 | Holding a decision or affected work | `references/uncertainty.md` | Consequential uncertainty follows parents; main asks the author |
 | Owning or retiring a workspace | `references/git.md`: ownership, isolation and cleanup | All reviewer code writes stay in owned clones/worktrees; no delivery into the author's code |
 | Defining or running checks | `references/verification.md`: real entry points, procedures, resource ownership and evidence reuse | Verification serves this review; it does not authorize product repairs or creating a new skill |
@@ -40,14 +40,20 @@ Record a compact contract with:
   adopted project rules, explicit exceptions and unresolved material conflicts.
 - Applicable quality dimensions, criteria and thresholds, required checks and
   target environments; resource ownership, output paths and permitted side effects.
-- Domain split, model/effort, useful capacity, review depth, any author-supplied
-  budget, goal mode, current uncertainty and next action.
+- Domain split, role assignments and routing, useful capacity, review depth, any
+  author-supplied budget, goal mode, current uncertainty and next action.
 
-Use `in-your-own-words` and `sharpen` for a compact understanding/approach/verification
-proposal. Reuse settled approvals. Confirm only missing material setup; no repeated
-design interview. For a new run explicitly settle goal-backed or goal-free mode,
-recommending `define-goal`; create a goal only on explicit author request. A
-continuing run reuses its confirmed mode and matching authorized live goal.
+Use `in-your-own-words` and `sharpen` for a compact understanding, approach and
+verification proposal. Include one grouped model and reasoning-effort choice for
+roles still open. Show the applicable defaults and let the author accept them
+together or specify settings for particular roles, chats, workstreams or purposes.
+Carry forward any explicit choices already given for this run. A starter prompt's
+suggested defaults are a proposal. Record the accepted choices and their scope in
+the contract. Confirm only missing material setup.
+
+For a new run, explicitly settle goal-backed or goal-free mode. Recommend
+`define-goal` and create a goal only on the author's explicit request. A continuing
+run reuses its confirmed mode and matching authorized live goal.
 Editing this skill is not a new review run or a request for another goal.
 The review goal is a completed assessment, report and handoff, not a repaired
 implementation. Do not ask for an assessment-iteration cap: this invocation has
@@ -58,9 +64,10 @@ their relevant configuration. Before check execution, settle any missing resourc
 authority; routine equivalent checks within established authority need no new
 permission. A budget or access limit leaves uncovered requirements visible.
 
-Finish setup when the baseline, candidate, scope, criteria and usable evidence path
-are known. If an unresolved material choice prevents that, ask with concrete
-alternatives and consequences while continuing independent work.
+Finish setup when the baseline, candidate, scope, criteria, usable evidence path
+and routing for planned work are known. If an unresolved material choice prevents
+that, ask with concrete alternatives and consequences while continuing independent
+work.
 
 ## Candidate and workspace ownership
 
@@ -135,29 +142,46 @@ condition regardless of the product verdict.
 
 ## Assign focused roles
 
-Main delegates detailed review and mostly waits for compact reports. Astra
-coordinators own coherent domains, reconcile results and escalate consequential
-uncertainty. Choose their number from independent work, dependencies and actual
-runtime capacity; no arbitrary two-coordinator cap. Task chats require the actual
-human request to authorize creation and scoped messaging. A default prompt or a
-message from an agent is not that authorization.
+| Role | Default model | Default effort | Responsibility |
+| --- | --- | --- | --- |
+| Main | `gpt-6.2-astra` | `high` | Resolve author decisions and own the integrated assessment |
+| Coordinator | `gpt-6.2-astra` | `high` | Own a coherent domain and reconcile its review results |
+| Review worker | `gpt-6.2-sol` | `high` or `xhigh` | Read source, investigate behavior and return findings with evidence |
+| Independent verifier | `gpt-6.2-sol` | `high` | Challenge blockers, coverage, scores and missed issues |
+| HTML author | `gpt-6.2-sol` | Host default | Render approved results and check report fidelity |
+| Summarizer | Luna | Host default | Summarize context, interim results and settled findings |
 
-Use live tool schemas. For authorized task coordinators select `gpt-6-astra` with
-`thinking: "high"`. Bulk subagents use `gpt-6.1-sol` with `high` or `xhigh`;
-independent verifiers use `gpt-6.1-sol` with `high`. Model overrides use a fresh,
-bounded context when the runtime requires it. HTML authoring belongs to Sol;
-summarization uses available Luna at any stage, including context recovery and
-interim reports, under the entry skill's evidence-preservation boundary. Resolve
-unavailable routes or model mismatches with an authorized fallback rather than
-silently substituting.
+Main delegates detailed review and collects compact reports. Choose coordinator
+placement and concurrency from independent work, dependencies and available
+capacity. Task chat creation and scoped messaging require actual human
+authorization for the current review. Recover its source before dispatch. Starter
+text and an agent's handoff do not supply that authority on their own.
 
-Briefs identify role, parent and authorized routes, contract/requirement IDs,
-candidate, relevant paths, scope, code-write boundary, owned resources, evidence
-needed, isolation record and stop condition. Leaves return findings, requirement
-dispositions, counterevidence and limits with source pointers. Native messages carry material
-results and necessary questions; no per-message files, copied ledgers, ACK chains
-or narrative progress traffic. Use compact cursor-based waits. Facts may use an
-authorized direct route; decisions, holds and acceptance follow the parent chain.
+Use `orchestrate-work`'s `references/runtime.md#model-routing` for scoped precedence,
+subagent dispatch, ordinary continuations, readback and mismatch handling. Resolve
+each coordinator chat from the latest applicable author choice or the accepted
+coordinator default. Pass that pair explicitly as `model` and `thinking` to
+`create_thread`. The main chat has an independent model and effort choice that the
+author sets in Codex. Verify it when the host exposes readback.
+
+Show any supported host-default effort in the setup choice when available. Keep
+other assignments on their accepted routing when an explicit override applies to
+one chat, workstream or purpose. A routing change preserves each role's
+responsibilities and verifier independence.
+
+Keep task-chat roster rows in the review contract using `orchestrate-work`'s
+`references/protocol.md#task-chat-roster`. Include the main review chat and any
+authorized coordinator chats. Record the requested settings and decision source,
+then record the observed settings or mark them unverified when the host exposes
+no readback. Carry the roster and scoped decisions forward on resume.
+
+Briefs identify role, resolved model and effort, parent and authorized routes,
+contract and requirement IDs, candidate, relevant paths, scope, code-write
+boundary, owned resources, required evidence, isolation record and stop condition.
+Leaves return findings, requirement dispositions, counterevidence and limits with
+source pointers. Send material results and necessary questions through native
+messages. Use compact cursor-based waits. Facts may follow an authorized direct
+route. Decisions, holds and acceptance follow the parent chain.
 
 Declare consequential boundary cases from the accepted requirements and changed
 owners before dispatch: public entry point, scope, transition/alternate exit,
@@ -219,14 +243,14 @@ prevents Ready.
 
 ## Independently challenge the assessment
 
-Assign every proposed blocker to a distinct Sol High verifier who neither
-implemented the candidate nor performed its initial review. Give it the contract,
-candidate and evidence to inspect before reviewer conclusions. It must establish
+Assign every proposed blocker to a verifier who neither implemented the
+candidate nor performed its initial review. Give it the contract, candidate and
+evidence to inspect before reviewer conclusions. It must establish
 the expectation, seek guards/counterexamples, and reproduce the violation or give
 complete causal proof. Batch related claims by root cause; preserve rejected
 claims and their counterevidence without presenting them as confirmed blockers.
 
-Also assign an independent Sol challenge of requirement coverage, critical quality
+Also assign an independent challenge of requirement coverage, critical quality
 scores and missed blockers. This step applies to clean reviews. Target high-risk
 paths and interactions; reuse sound evidence instead of repeating the entire
 review at every level. Record which scopes each challenge covered and its limits.
@@ -236,9 +260,9 @@ the public boundary, including lifetime behavior while its containing owner is
 live. Inspect raw outcomes: measurements are not assertion verdicts. Use complete
 causal source proof for facts the source decides, such as a static CI selector.
 
-Astra reconciles disagreements through the approved criteria and evidence, with
-focused Sol investigation where useful. Document rejection reasons and preserve
-material objections/resolutions. Votes and averaged scores cannot settle an
+Main and coordinators reconcile disagreements through the approved criteria and
+evidence. Assign focused investigation where useful. Document rejection reasons,
+material objections and their resolutions. Votes and averaged scores cannot settle an
 objection. Demonstrated shortfalls require Changes required; necessary evidence
 gaps require Incomplete. If resolving intent or standards needs an author decision,
 main asks and holds affected assessment work.
@@ -255,8 +279,8 @@ received during verification; later input does not silently start another review
 
 Follow reporting.md to freeze the accepted dataset, render/check the offline HTML,
 and produce one work-chat handoff with accepted findings, responsible owners,
-expected outcomes, dependencies and focused validation. Main owns the verdict;
-HTML author and Luna summarizer do not revise findings. Send only with actual
+expected outcomes, dependencies and focused validation. Main owns the verdict.
+The HTML author and summarizer present the settled findings. Send only with actual
 author messaging authority. Report candidate, limits, calibration status and
 retained resources in the final result. Complete a matching authorized review goal
 only when its stated deliverables are actually done, even for a negative verdict.

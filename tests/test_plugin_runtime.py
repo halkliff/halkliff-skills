@@ -159,11 +159,13 @@ class PluginRuntimeTests(RuntimeFixture, unittest.TestCase):
         self.assertEqual(initial["observed_events"], {})
         cases = [
             ({"model": "gpt-6-luna", "reasoning_effort": "xhigh", "fork_turns": "none"}, True),
-            ({"model": "gpt-6.1-sol", "reasoning_effort": "high", "fork_turns": "none"}, True),
-            ({"model": "gpt-6.1-sol", "reasoning_effort": "high", "fork_turns": "2"}, False),
-            ({"model": "gpt-6.1-sol", "reasoning_effort": "high", "fork_turns": "101"}, False),
-            ({"model": "gpt-6.1-sol", "reasoning_effort": "high", "fork_turns": 2}, False),
-            ({"model": "gpt-6.1-sol", "reasoning_effort": "xhigh", "fork_turns": "none"}, True),
+            ({"model": "gpt-6.2-sol", "reasoning_effort": "high", "fork_turns": "none"}, True),
+            ({"model": "gpt-6.2-sol", "reasoning_effort": "high", "fork_turns": "2"}, False),
+            ({"model": "gpt-6.2-sol", "reasoning_effort": "high", "fork_turns": "101"}, False),
+            ({"model": "gpt-6.2-sol", "reasoning_effort": "high", "fork_turns": 2}, False),
+            ({"model": "gpt-6.2-sol", "reasoning_effort": "xhigh", "fork_turns": "none"}, True),
+            ({"model": "gpt-6.1-sol", "reasoning_effort": "high", "fork_turns": "none"}, False),
+            ({"model": "gpt-6.2-astra", "reasoning_effort": "high", "fork_turns": "none"}, False),
             ({"model": "gpt-6-astra", "reasoning_effort": "high", "fork_turns": "none"}, False),
             ({"model": "gpt-6.1-terra", "reasoning_effort": "high", "fork_turns": "none"}, False),
             ({"model": "gpt-6-luna", "reasoning_effort": "high", "fork_turns": "none"}, False),

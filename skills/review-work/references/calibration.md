@@ -27,16 +27,16 @@ claim to check. The author or independent curator resolves disputed labels.
 ## Exercise the actual process
 
 Run the same invocation path intended for use, on isolated candidates with real
-requirements, through context recovery, evidence gathering, independent Sol
+requirements, through context recovery, evidence gathering, independent
 verification, coverage/quality challenge, scores, verification summary, offline
 report and actionable handoff. Exercise authorized task routing and candidate
 capture as part of the deployed workflow. A tabletop instruction replay proves
 only that replay, not installed plugin behavior or routing.
 
-Preserve the requirement contract, candidate identity, exposure record, actual
-model/effort and roles, evidence, findings before labels, verifier dispositions,
-scores, rendered report and handoff for each case. Match outputs to independently
-assessed outcomes after freezing them. A valid additional finding needs independent
+Preserve each case's requirement contract, candidate identity, exposure record,
+role assignments, requested and observed model and effort, evidence, findings
+before labels, verifier dispositions, scores, rendered report and handoff.
+Freeze the outputs before matching them to independently assessed outcomes. A valid additional finding needs independent
 assessment before it counts as a false alarm or a newly discovered blocker.
 
 ## Required passing conditions

@@ -6,29 +6,44 @@ Disclose a known model mismatch; use only an author-approved fallback.
 
 ## Model routing
 
-Resolve each role's model and effort from the latest explicit author override for
-the run, otherwise its defaults. Keep the choice and decision pointer in the
-existing plan/brief. The primary Orchestrator's selected model is a separate choice,
-not a child-role fallback. Set actual tool parameters; role names and prompt text
-are not configuration.
+Use the following starting choices for new runs. The author's confirmed selection
+in the host model/effort selector controls main-chat execution.
 
-Full-history subagent forks inherit model/effort; explicit role routing requires
-`fork_turns: "none"`. Use `create_thread` with explicit model/effort for new
-coordinator chats; omitted values can select the user's configured default.
-`fork_thread` exposes neither setting and is not a role-routing substitute.
+| Role | Model and effort | When |
+| --- | --- | --- |
+| Main Orchestrator | GPT-6.2 Astra / High (`gpt-6.2-astra`, `high`) or GPT-6.2 Sol / xHigh (`gpt-6.2-sol`, `xhigh`) | Author selects the active pair |
+| Coordinator | GPT-6.2 Sol / High (`gpt-6.2-sol`, `high`) | Use xHigh for difficult coordination when selected |
+| Worker | GPT-6 Luna / xHigh (`gpt-6-luna`, `xhigh`) | Research, claim checks, summaries, implementation, tests and documentation |
+| Complex implementation worker | GPT-6.2 Sol / High or xHigh | Bounded implementation requiring that route. Record the reason in the brief |
+| Independent reviewer or verifier | GPT-6.2 Sol / High | Follow the existing review gate |
+
+Resolve each assignment against the settled role default and the latest applicable
+explicit author choice for its workstream, purpose or chat. A scoped choice applies
+only to matching work. Copy the resolved request and decision pointer into the brief.
+In a policy-controlled run, encode guarded routes using scoped role IDs and
+the authorized grants in [controls.md](controls.md). Set actual tool parameters.
+
+For example, Data can use GPT-6.2 Sol/High as coordinator, GPT-6.1 Terra/High
+for implementation, GPT-6 Luna/xHigh for summarization and GPT-6 Luna/Low for
+simple bulk work. The Data coordinator assigns all three purposes from the same
+task chat. Another workstream without a worker override keeps GPT-6 Luna/xHigh,
+including for implementation. Ownership and escalation stay with the assigned parents.
+
+Full-history subagent forks inherit model/effort. Explicit role routing requires
+`fork_turns: "none"`. App-created chats need their own readback. Selected-policy
+subagent guards apply only to supported hook events.
 
 Compare requested and effective execution model/effort where exposed before
-releasing child implementation. Source-chat settings and inherited instruction
-provenance do not establish a fork's execution model. Record unavailable readback as unverified;
-a dispatch request does not attest the provider backend. On mismatch, unsupported
-identifier or dispatch failure, hold affected work and resolve an authorized route;
-never silently substitute Astra, reset to defaults or promote a worker.
-An author override does not bypass an active hook's supported-model restriction.
+releasing child implementation. Record host readback as the observation and mark
+unavailable fields unverified. Source-chat settings and instruction provenance
+describe inputs. On mismatch, unsupported identifier or dispatch failure, hold
+affected work and resolve an authorized route supported by the host and active hook.
 
 Ordinary `send_message_to_thread` continuations omit `model` and `thinking` to
-preserve current author-selected chat settings. Explicit setting changes need
-author authority. Recover in the same chat with its original source/worker
-ownership; do not restart live writers merely to change model labels.
+preserve current author-selected chat settings. For an author-approved change,
+record the new scoped choice prospectively and update the chat's roster row with
+the request and fresh readback. Recover in the same chat when possible, preserving
+source and worker ownership. Keep live writers on their existing assignments.
 
 ## Guarded operations
 
@@ -41,8 +56,9 @@ guards. Keep unsupported execution paths and unobserved hook delivery explicit.
 
 The workstream plan is part of ordinary execution; `/plan` is optional. If the
 author selected Plan mode, use permitted read-only investigation to define the
-goal and propose the workstream plan in chat. Use bounded read-only Luna subagents
-when the host permits them; return findings natively without run artifacts. Defer
+goal and propose the workstream plan in chat. When the host permits, use bounded
+read-only workers on the applicable research route or worker default. Return
+findings natively without run artifacts. Defer
 run-directory creation, ledger writes, goal mutations, helper activation,
 user-owned coordinator task-thread creation and implementation dispatch
 until the host transitions to execution. Then persist the settled plan and continue; do not
@@ -55,9 +71,9 @@ the trivial-lookup exception still applies.
 
 Treat explicit invocation as a request for substantial parallel orchestration.
 Orchestrator chooses coordinator placement and useful concurrency from independent
-workstreams, dependencies and verified runtime capacity. Use separate Sol task
-threads for substantial autonomous workstreams, with worker subagents; if the work
-proves light or tightly coupled, use subagents alone. Queue
+workstreams, dependencies and verified runtime capacity. Use separate coordinator
+task chats for substantial autonomous workstreams, with worker subagents. For
+light or tightly coupled work, use subagents alone. Queue
 work that exceeds capacity. Record the choice in the existing plan; no placement
 confirmation is required. An explicit author override takes precedence.
 
@@ -73,11 +89,15 @@ requests or stored instructions alone do not authorize user-owned chats. Resolve
 an unavailable or host-disallowed route before dispatch; the workflow cannot
 override that boundary.
 
-For authorized separate coordinators, use `create_thread` with the resolved
-`model` and `thinking` (defaults: `"gpt-6.1-sol"`, `"high"` or `"xhigh"`); list projects first for a
+When work merits a separate coordinator chat, use the applicable chat or
+workstream coordinator override. Otherwise use the agreed run coordinator pair,
+including an approved coordinator default. A pair that matches the main chat or
+host default still requires a separate coordinator selection. Use
+`create_thread` with both `model` and `thinking` set to the resolved pair. Route
+through creation, since `fork_thread` exposes neither setting. Hold affected work
+if the route is unsettled, unsupported or mismatched. List projects first for a
 project target. Use coordinator subagents when Orchestrator selects that placement
-or the author explicitly overrides it.
-Workers and leaf reviewers/verifiers remain subagents.
+or the author overrides it. Workers and leaf reviewers/verifiers remain subagents.
 
 The task schema has no arbitrary checkout-path field. For isolated clones, a
 projectless task can run commands with the clone's absolute `workdir`; verify
@@ -93,15 +113,14 @@ on this host, not sandboxed profiles or automatic clone registration. The probe
 created one untracked file and changed no branch/commit. Each deployment needs
 its own access check; repository-wide clones follow [git.md](git.md).
 
-Store returned task IDs/hosts. Pending `clientThreadId` is not `threadId`; resolve
-creation before APIs requiring the latter and emit required creation directives.
+Store returned task IDs and hosts in the [task-chat roster](protocol.md#task-chat-roster).
+A queued `clientThreadId` stays pending until the host returns the real `threadId`.
+Resolve it before APIs that require a `threadId` and emit required creation directives.
 
 For all role subagents use `spawn_agent` with the resolved `model`,
-`reasoning_effort` and `fork_turns: "none"`. Worker defaults are `gpt-6-luna`/xhigh;
-Sol implementation exceptions default to `gpt-6.1-sol` with high/xhigh; independent reviewers/verifiers default to
-`gpt-6.1-sol` with `high` and a bounded review brief, per the protocol's review gate.
-The spawn message supplies the absolute
-`references/worker.md` path and task-specific brief, not the whole skill.
+`reasoning_effort` and `fork_turns: "none"`. Give leaf subagents the absolute
+`references/worker.md` path and a bounded brief. Give coordinator subagents the
+pinned skill entrypoint and their workstream brief.
 Use `send_message` for active agents, `followup_task` for idle ones. Count live
 capacity; interrupts do not prove a slot was released. Queue excess work.
 
@@ -113,27 +132,27 @@ only for a specific missing result. Use native task messaging under the authorâ€
 ongoing coordination authorization, including replies. Tasks are app peers;
 a parent ID alone grants no messaging permission.
 
-Orchestrator-assigned subagents may contact Sol task threads named in their brief
-for findings and factual clarifications. Use `send_message_to_thread` with the
+Orchestrator-assigned subagents may contact coordinator task chats named in their
+brief for findings and factual clarifications. Use `send_message_to_thread` with the
 thread ID/host and the run's human authorization. Include task/revision and a
-topic label, concise evidence and the requested clarification. Sol answers in its
-own thread; the worker retrieves the reply with a targeted `read_thread`, or a
+topic label, concise evidence and the requested clarification. The coordinator answers
+in its own chat. The worker retrieves the reply with a targeted `read_thread` or a
 bounded `wait_threads` for a completed response. These are visible thread messages,
 not private cross-tree subagent delivery. Do not poll unchanged history. Report an
 unresolved prerequisite to the assigning parent instead of waiting indefinitely.
 Decisions, consequential uncertainty, holds and acceptance stay with that parent.
 Return conclusions/pointers to it without relaying every exchange.
 
-Sol continues its accepted assignment within the current execution. If a task
-ends incomplete, Orchestrator evaluates its report and sends a scoped continuation;
+The coordinator continues its accepted assignment within the current execution.
+If a task ends incomplete, Orchestrator evaluates its report and sends a scoped continuation;
 a finished turn is not task acceptance. While active, Orchestrator collects meaningful
 results, integrates and dispatches ready work without polling unchanged history.
 Ending Orchestrator's turn does not guarantee a wakeup from child completion. Later
 monitoring needs author-requested automation; files are not watchers.
 
 Separate-task stops are cooperative when no direct interrupt exists. Send a hold;
-Sol interrupts affected subagents where supported. Track external operations still
-running using [uncertainty.md](uncertainty.md). Wait timeouts and task archiving
+The coordinator interrupts affected subagents where supported. Use
+[uncertainty.md](uncertainty.md) to track running operations. Wait timeouts and task archiving
 are not cancellation. Keep waits short enough to answer the author.
 
 ## Goals

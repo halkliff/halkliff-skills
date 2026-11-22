@@ -6,16 +6,20 @@ GitHub renders them in Markdown previews.
 
 ## Roles and goal loop
 
+The diagram shows the defaults. At setup, confirm models and efforts by role,
+including any choices specific to a workstream or kind of worker. The agreed
+plan also tracks spawned chats and the execution settings the host reports.
+
 ```mermaid
 flowchart TB
     author([Author])
-    orchestrator["Orchestrator<br/>Astra High / Sol 6.1 xHigh"]
+    orchestrator["Orchestrator<br/>Astra 6.2 High / Sol 6.2 xHigh"]
     research["Luna · xHigh<br/>Research · claim checks"]
-    sol["Sol 6.1 · High / xHigh<br/>Decompose · delegate · verify"]
+    sol["Sol 6.2 · High / xHigh<br/>Decompose · delegate · verify"]
     luna["Luna · xHigh<br/>Research · implement · test"]
-    complex["Sol 6.1 · High / xHigh<br/>Complex implementation"]
-    verifier["Independent Sol 6.1 · High<br/>Verify evidence · critique"]
-    confirmation{"Author confirms outcome<br/>and verification?"}
+    complex["Sol 6.2 · High / xHigh<br/>Complex implementation"]
+    verifier["Independent Sol 6.2 · High<br/>Verify evidence · critique"]
+    confirmation{"Confirm outcome, models<br/>and verification?"}
     activation["Activate agreed goal / helpers"]
     acceptance{"Goal criteria met?"}
     complete([Complete])
@@ -67,10 +71,10 @@ Correct concrete deficiencies within the limit, then hold the failed batch and
 its dependents. Routine edits share a batch; passing work proceeds without
 another round for optional polish.
 
-Repeat the coordinator and worker branches for each needed workstream. Each Sol
+Repeat the coordinator and worker branches for each needed workstream. Each coordinator
 owns an autonomous workstream and reviews its workers against the parent
-contract and its derived criteria. Sol implementation workers remain leaves;
-research and summaries use Luna, with the skill's bounded trivial-lookup exception. Separate Sol tasks and a top-level goal each
+contract and its derived criteria. Implementation workers remain leaves.
+Research and summaries default to Luna. Separate coordinator tasks and a top-level goal each
 require the author's explicit request. There is no fixed coordinator count;
 concurrent coordinators and workers follow runtime capacity, with excess work
 queued. xHigh is an effort setting, not a termination guarantee.

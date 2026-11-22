@@ -22,30 +22,20 @@ project criteria. Cover the whole change, every functional and non-functional
 requirement, and its relevant blast radius. Keep unrelated discoveries separate.
 Reuse accepted criteria; obtain author agreement before changing acceptance.
 
-Reuse `orchestrate-work` placement, goal choice, uncertainty and resource lifecycle
-as scoped in workflow.md. This review's roles and single-assessment process
-override its Luna-first routing, shared-code writes and correction loops. Loading
-those references starts no separate orchestration. Never create a goal implicitly.
+Reuse `orchestrate-work` setup, dispatch, uncertainty and resource lifecycle as
+scoped in workflow.md. Apply the review's own defaults, workspace boundary and
+single-assessment process. Loading those references starts no separate run.
+Create a goal only on the author's explicit request.
 
 ## Route the work
 
-| Role | Model / effort | Responsibility |
-| --- | --- | --- |
-| Main | GPT-6 Astra / High | Contract, author decisions, integrated assessment |
-| Coordinators | GPT-6 Astra / High | Domain ownership and reconciliation; task chats when authorized |
-| Review workers | GPT-6.1 Sol / High or xHigh | Source, research, behavior and evidence |
-| Independent verifiers | Distinct GPT-6.1 Sol / High | Blockers, coverage, scores and missed issues |
-| HTML author | GPT-6.1 Sol | Render accepted results and check report fidelity |
-| Summarizers | Luna | Context, interim and final summaries at any stage |
-
-Check actual availability; disclose mismatches and resolve an authorized fallback.
-Choose useful concurrency from live capacity, with no fixed coordinator ceiling.
-Create or message user-owned chats only under actual human authorization. Delegate
-source investigation to Sol and summarization to Luna. Summaries preserve source
-pointers, candidate identity, qualifications and unresolved objections; Sol owns
-review findings, scores and verification. Main and coordinators retain consequential
-uncertainty and decisions. Send concise native results and necessary
-clarifications, without routine acknowledgments or per-message artifacts.
+Settle model and effort together during setup using the
+[review roles and defaults](references/workflow.md#assign-focused-roles). Apply
+explicit author choices within their scope. Create or message user-owned chats
+only under actual human authorization. Keep the role's responsibility when its
+model changes. Summaries preserve source pointers, candidate identity, evidence
+limits and unresolved objections. Main and coordinators retain consequential
+uncertainty and decisions.
 
 ## Review and challenge
 
@@ -62,11 +52,11 @@ targeted skills by role using workflow.md; workers need only their brief and
 relevant procedures. Use `test-audit` for meaningful tests/probes, reuse valid
 evidence, and run focused checks when a material claim remains unsettled.
 
-A different Sol High agent must verify every proposed blocker. It establishes the
-expectation and tries to disprove the claim. Independent Sol agents also challenge
+An independent verifier must verify every proposed blocker. It establishes the
+expectation and tries to disprove the claim. Independent verifiers also challenge
 coverage, scores and missed blockers, including a review with no findings. Complete
-this challenge before Ready. Astra resolves disagreements from evidence and agreed
-criteria; preserve material objections and their resolution.
+this challenge before Ready. Main and coordinators resolve disagreements from
+evidence and agreed criteria. Preserve material objections and their resolution.
 
 ## Decide and report
 

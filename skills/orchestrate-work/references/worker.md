@@ -6,11 +6,11 @@ verify the repository root before edits. Follow applicable project instructions.
 Ask your assigning parent if required input or an authority boundary is missing.
 If the host exposes model/effort settings that conflict with your assigned route,
 report the mismatch to your parent before implementation; a role label proves nothing.
-Orchestrator's direct researchers report to Orchestrator; other workers report to their Sol.
+Report to your assigning parent, whether Orchestrator or a coordinator.
 
-If assigned by Orchestrator, use the Sol task-thread contacts in your brief for
+If assigned by Orchestrator, use the coordinator task-chat contacts in your brief for
 direct findings and factual clarification. Identify task/revision and topic;
-include evidence pointers. Sol replies in its own thread; retrieve that answer
+include evidence pointers. The coordinator replies in its own chat. Retrieve that answer
 through the assigned native thread tools. Your parent still owns scope, decisions,
 uncertainty, holds and acceptance. Escalate a conflicting or contract-changing
 answer to it; send final conclusions/pointers without copying every exchange.

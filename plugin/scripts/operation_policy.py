@@ -20,15 +20,20 @@ from typing import Any
 _ID = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$")
 _HEX = re.compile(r"^[0-9a-f]{64}$")
 _HEAD = re.compile(r"^(?:[0-9a-fA-F]{40}|[0-9a-fA-F]{64})$")
+_EFFORTS = {"low", "medium", "high", "xhigh", "max", "ultra"}
 _MODELS = {
-    "gpt-6.1-sol": {"high", "xhigh"},
-    "gpt-6-luna": {"xhigh"},
-    "gpt-6.1-terra": {"high", "xhigh"},
+    "gpt-6.2-astra": _EFFORTS,
+    "gpt-6.2-sol": _EFFORTS,
+    "gpt-6.1-sol": _EFFORTS,
+    "gpt-6.1-terra": _EFFORTS,
+    "gpt-6-astra": _EFFORTS,
+    "gpt-6-sol": _EFFORTS,
+    "gpt-6-luna": _EFFORTS - {"ultra"},
 }
 _CLAIMS = {"source", "commit", "build", "installed_caller", "integrated", "hosted"}
 _DEFAULT_ROLES = {
-    "coordinator": {"model": "gpt-6.1-sol", "effort": "xhigh"},
-    "orchestrator": {"model": "gpt-6.1-sol", "effort": "xhigh"},
+    "coordinator": {"model": "gpt-6.2-sol", "effort": "high"},
+    "orchestrator": {"model": "gpt-6.2-sol", "effort": "xhigh"},
     "worker": {"model": "gpt-6-luna", "effort": "xhigh"},
 }
 _REQUEST_KEYS = {

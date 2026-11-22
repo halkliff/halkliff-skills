@@ -40,7 +40,7 @@ postchecks detect races but cannot promise rollback of concurrent work.
 ## Slices
 
 Start workstream clones from the committed baseline; remove their push destination.
-Retain source commits. Sol reviews base-to-result diffs and evidence. Orchestrator fetches
+Retain source commits. The coordinator reviews base-to-result diffs and evidence. Orchestrator fetches
 explicit source refs into its clone and integrates small accepted slices, recording
 source-to-integration commit mapping. It reopens local review only for an integration
 issue or evidence gap. Avoid ZIPs, whole-repo evidence copies and manual file transfers.

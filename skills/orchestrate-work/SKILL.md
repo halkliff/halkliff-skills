@@ -1,6 +1,6 @@
 ---
 name: orchestrate-work
-description: Explicitly invoked orchestration with selectable Astra/Sol leadership, Sol workstreams, Luna-first execution, and evidence-based acceptance.
+description: Explicitly invoked orchestration with author-selected model routes, parallel workstreams, and evidence-based acceptance.
 ---
 
 # Orchestrate work
@@ -24,37 +24,26 @@ recommending a goal defined with `define-goal`. Establish the compact
 [verification process](references/verification.md) before dispatch.
 Use [runtime.md](references/runtime.md) for goal and dispatch operations.
 
-Select the Orchestrator's model in the main thread before invocation; the skill
-does not switch it.
+Settle the main-chat, coordinator and worker model/effort choices with the author
+during setup. Use [model routing](references/runtime.md#model-routing) for defaults,
+scoped choices and host readback. Record the settled routes in the plan and keep
+the [task-chat roster](references/protocol.md#task-chat-roster) current.
 
-| Role | Default model / effort | Responsibility |
-| --- | --- | --- |
-| Orchestrator | GPT-6 Astra / high or GPT-6.1 Sol / xhigh | Architecture, goal, shared contracts, author interaction, integration, final acceptance |
-| Coordinator | GPT-6.1 Sol / high or xhigh | Decompose and complete a workstream; assign workers and verify results |
-| Default worker | Luna / xhigh | Research, claim checks, summaries, implementation, tests, documentation |
-| Complex implementation worker | GPT-6.1 Sol / high or xhigh | Bounded implementation too complex for Luna; remains a leaf |
+The Orchestrator owns shared contracts, author interaction, integration and final
+acceptance. Coordinators decompose and complete workstreams, assign workers and
+verify their results. Worker, reviewer and verifier assignments remain leaves.
+Model selection leaves these responsibilities with their assigned owners.
 
-Apply the latest explicit run-level role overrides without changing other roles
-or these defaults. Resolve actual dispatch parameters through
-[model routing](references/runtime.md#model-routing); names and prompts do not select models.
-
-Route research and summarization, including Orchestrator's fact-finding, to Luna
-xHigh. A parent may make one known file read or targeted read-only command for a
-trivial lookup; delegate if unresolved. Repeated lookups or a command wrapping an
-investigation do not qualify. Sol implementation workers receive no research
-assignments. Researchers return complete relevant findings, sources, counterevidence and
-limits without search transcripts.
-
-Sol uses High normally and xHigh for difficult coordination. Record a short reason
-for using a Sol implementation worker. Queue work when slots are occupied; worker
-promotion is not a capacity workaround. Workers remain leaves. xHigh is not a
-termination guarantee.
+Delegate research and summarization through the resolved worker route. A parent may
+make one known file read or targeted read-only command for a trivial lookup. Delegate
+if unresolved. Research briefs name the question and stop condition. Researchers
+return relevant findings, sources, counterevidence and limits.
 
 ## Read by role
 
 - Orchestrator: this entrypoint, [protocol.md](references/protocol.md), and runtime;
   [uncertainty.md](references/uncertainty.md) when deciding or holding work.
-- Sol: this entrypoint and protocol; runtime when dispatching, uncertainty when
+- Coordinators: this entrypoint and protocol; runtime when dispatching, uncertainty when
   resolving questions. Decompose, implement, review and correct until complete or held.
 - Workers: send only [worker.md](references/worker.md) plus a sufficient brief.
   They do not load this manual or coordinator references by default.
@@ -73,7 +62,7 @@ and integration. A tightly coupled implementation fix may stay local when dispat
 adds no useful independence; record a bounded reason for substantial parent
 implementation. This exception does not expand research routing.
 
-Use as many Sol coordinators as needed within runtime capacity; queue excess work.
+Use as many coordinators as needed within runtime capacity; queue excess work.
 Dispatch ready work with usable prerequisites and integrate accepted slices before
 growing an avoidable backlog. Protocol owns contracts, status and rollout.
 Only load supporting skills when they change the current task: interface design,
@@ -93,9 +82,9 @@ hold acknowledgments, resumption and abandoning an approach.
 ## Acceptance and cost
 
 Workers run meaningful checks and report evidence. Apply the
-[review gate](references/protocol.md#review-gate) to substantial deliverables: Sol
-reviews the artifact and behavior against the contract, independent GPT-6.1 Sol
-High verifiers assess it, and Orchestrator checks the integrated result. Reuse
+[review gate](references/protocol.md#review-gate) to substantial deliverables. The
+coordinator reviews the artifact and behavior against the contract, an independent
+verifier assesses it, and Orchestrator checks the integrated result. Reuse
 valid checks; repeat only for changed inputs, conflicting evidence or a specific
 gap. Run mechanical inventories once by script. Protocol defines acceptance states.
 

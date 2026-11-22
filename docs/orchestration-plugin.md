@@ -10,7 +10,7 @@ The standalone skill installation remains available separately.
 From the repository root, run:
 
 ```powershell
-python scripts/build_plugin.py --dest work/plugin-package/halkliff-orchestration-0.1.11
+python scripts/build_plugin.py --dest work/plugin-package/halkliff-orchestration-0.2.0
 ```
 
 To validate sources and destination safety without writing the package, add
@@ -25,7 +25,7 @@ to rebuild. A conflicting destination is left untouched; choose a fresh output
 directory when package inputs change.
 
 The repository's local marketplace entry points to
-`work/plugin-package/halkliff-orchestration-0.1.11`. Build first, then install that
+`work/plugin-package/halkliff-orchestration-0.2.0`. Build first, then install that
 local marketplace plugin through Codex. Plugin installation and hook trust are
 separate host actions; building or installing alone does not establish that
 hooks are trusted or that the host has delivered events to them.
@@ -78,13 +78,13 @@ does not activate a live goal; the orchestrator confirms that through the goal t
 
 The core chooses [coordinator placement](../skills/orchestrate-work/references/runtime.md#dispatch-and-workspace)
 and useful concurrency without a placement question. Substantial autonomous work
-normally uses separate Sol task threads. Suggested invocations authorize task
+normally uses separate coordinator task threads. Suggested invocations authorize task
 creation and scoped coordination explicitly; existing runs
 retain their pinned instructions and chosen placement.
 
 Invocation requests the necessary parallel task creation without a separate setup
 question, subject to the host's actual authorization requirements. Main-thread
-subagents can send findings and factual clarifications to the Sol task threads
+subagents can send findings and factual clarifications to the coordinator task threads
 listed in their briefs and retrieve replies from those threads. Parent authority
 over decisions, uncertainty, holds and acceptance is preserved. These routes are
 native messages; the plugin adds no private cross-tree agent bus.
@@ -98,7 +98,8 @@ creation, helper activation and implementation until execution resumes.
 
 The core [review gate](../skills/orchestrate-work/references/protocol.md#review-gate)
 asks about missing score/assessment-limit preferences during setup, defaulting
-to 9/10 and three total assessments. Independent Sol High verification applies
+to 9/10 and three total assessments. Independent verification, using GPT-6.2 Sol
+High by default, applies
 to substantial acceptance batches; all functional and non-functional requirements
 remain mandatory. The skill owns scores, evidence and scoped holds. Hooks do not
 score artifacts or enforce the review counter.
@@ -142,8 +143,12 @@ and acceptance; the backend stores mechanical selection and invocation facts.
 The active dispatch guard consumes the selected policy. A short marker in the
 existing assignment identifies role, grant and revision; actual tool model,
 effort and fork arguments must match. An ordinary follow-up preserves current
-chat settings. Sol remains the reusable coordinator default; a selected run
-override does not change that default or authorize an Astra fallback.
+chat settings. For a new coordinator chat, pass the model and effort agreed
+for that workstream to `create_thread(model=..., thinking=...)`. If the plan
+has no workstream exception, use its run-wide **coordinator** choice. A main
+chat running Astra can therefore create a Sol coordinator with Terra workers
+and a Luna summarizer. Record the child ID and host along with the requested
+settings and any execution settings the host reports.
 
 For selected execution, `operation --session <id> --request <absolute-file>`
 validates the grant and current candidate, acquires only its declared resource
@@ -265,7 +270,7 @@ The installed hook bootstrap is read-only until an exact active session binding
 is found. It then verifies the pinned package before routing to the pinned CLI.
 For supported local `spawn_agent` and `Agent` events it requires explicit
 model/effort and `fork_turns: "none"`. A policy-free run uses the default
-Luna/xHigh or GPT-6.1 Sol/High or xHigh guard; a selected-policy run checks its
+Luna/xHigh or GPT-6.2 Sol/High or xHigh guard; a selected-policy run checks its
 actual role/grant/revision instead. The core resolves author run overrides and
 checks exposed execution settings. Prompt text alone does not select a model,
 and this hook does not validate separate-chat dispatch or later UI changes.

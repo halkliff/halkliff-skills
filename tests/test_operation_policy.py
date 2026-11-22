@@ -139,6 +139,75 @@ class OperationPolicyTests(RuntimeFixture, unittest.TestCase):
         self.assertEqual(status["policy"]["revision"], 2)
         self.assertFalse(self.cli("status", "--session", "unbound")["active"])
 
+    def test_selected_policy_routes_workstream_roles_independently(self) -> None:
+        self.policy_value["grants"]["review"]["roles"].extend(["coordinator", "orchestrator"])
+        self.write_json("policy-1.json", self.policy_value)
+        active = self.start()
+        routes = {
+            "storage.coordinator": ("gpt-6.2-sol", "xhigh"),
+            "storage.worker": ("gpt-6.1-terra", "high"),
+            "storage.summary": ("gpt-6-luna", "xhigh"),
+            "storage.bulk": ("gpt-6-luna", "low"),
+            "current-astra": ("gpt-6.2-astra", "high"),
+            "previous-astra": ("gpt-6-astra", "high"),
+            "previous-sol": ("gpt-6.1-sol", "high"),
+            "legacy-sol": ("gpt-6-sol", "ultra"),
+        }
+        updated = copy.deepcopy(self.policy_value)
+        updated["revision"] = 2
+        updated["roles"] = {role: {"model": model, "effort": effort}
+                            for role, (model, effort) in routes.items()}
+        updated["grants"]["review"]["roles"].extend(["current-astra", "previous-astra", "previous-sol", "legacy-sol"])
+        dispatch_grant = self.policy_value["grants"]["review"]
+        updated["grants"]["start-storage"] = dispatch_grant | {"roles": ["storage.coordinator"]}
+        updated["grants"]["storage"] = dispatch_grant | {
+            "owner": "storage-coordinator", "roles": ["storage.worker", "storage.summary", "storage.bulk"],
+        }
+        self.update_policy(updated)
+        invalid = copy.deepcopy(updated)
+        invalid["revision"] = 3
+        invalid["roles"]["storage.bulk"]["effort"] = "ultra"
+        self.assertIn("roles.storage.bulk has an unsupported model or reasoning effort",
+                      self.update_policy(invalid, expected=2, ok=False)["stderr"])
+        recovered = self.activate("storage-coordinator", run_id=active["run_id"])
+        self.assertEqual(recovered["cli"], active["cli"])
+
+        def dispatch(session: str, grant: str, role: str, model: str, effort: str) -> bytes:
+            return self.hook(self.spawn(
+                session, model=model, reasoning_effort=effort, fork_turns="none",
+                message=f"ORCHESTRATION role={role} grant={grant} revision=2",
+            )).stdout
+
+        for session, grant, role in (
+            ("enrolled", "start-storage", "storage.coordinator"),
+            ("storage-coordinator", "storage", "storage.worker"),
+            ("storage-coordinator", "storage", "storage.summary"),
+            ("storage-coordinator", "storage", "storage.bulk"),
+            ("enrolled", "review", "current-astra"),
+            ("enrolled", "review", "previous-astra"),
+            ("enrolled", "review", "previous-sol"),
+            ("enrolled", "review", "legacy-sol"),
+        ):
+            with self.subTest(role=role):
+                self.assertEqual(dispatch(session, grant, role, *routes[role]), b"")
+
+        for role, model, effort in (("coordinator", "gpt-6.2-sol", "high"),
+                                    ("orchestrator", "gpt-6.2-sol", "xhigh"),
+                                    ("worker", "gpt-6-luna", "xhigh")):
+            with self.subTest(default_role=role):
+                self.assertEqual(dispatch("enrolled", "review", role, model, effort), b"")
+
+        for session, grant, role, route, reason in (
+            ("enrolled", "review", "worker", routes["storage.worker"], "selected role"),
+            ("storage-coordinator", "storage", "storage.bulk", routes["storage.summary"], "selected role"),
+            ("enrolled", "review", "storage.worker", routes["storage.worker"], "grant, owner, or role"),
+            ("enrolled", "storage", "storage.worker", routes["storage.worker"], "grant, owner, or role"),
+        ):
+            with self.subTest(session=session, grant=grant, role=role):
+                decision = json.loads(dispatch(session, grant, role, *route))["hookSpecificOutput"]
+                self.assertEqual(decision["permissionDecision"], "deny")
+                self.assertIn(reason, decision["permissionDecisionReason"])
+
     def test_policy_selection_has_one_root_cas_and_immutable_hash(self) -> None:
         active = self.start()
         self.activate("worker", run_id=active["run_id"])

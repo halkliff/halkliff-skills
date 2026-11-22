@@ -1,6 +1,6 @@
 interface:
   display_name: "Orchestrate work"
-  short_description: "Choose the orchestrator; Sol 6.1 verifies, Luna executes"
-  default_prompt: "Use $orchestrate-work for this outcome with my selected orchestrator. Create and coordinate GPT-6.1 Sol task threads as needed for substantial parallel work; use subagents alone for light work. Allow main-thread workers and Sol task threads to exchange findings and clarifications directly, keeping decisions and uncertainty with their parents. Confirm goal-backed execution (recommended, using $define-goal) or goal-free execution, and my understood outcome and verification process before activation or implementation. Follow the workflow setup and acceptance rules."
+  short_description: "Coordinate parallel work with selected model routes"
+  default_prompt: "Use $orchestrate-work for this outcome. Settle any missing model and effort choices for the main chat, coordinators and workers in one setup question, recommending economical defaults. Create and coordinate separate task chats for substantial parallel work with my confirmed coordinator model and effort (GPT-6.2 Sol High is the recommended default). Use subagents alone for light work. Let main-chat workers and coordinators exchange findings and clarifications directly, keeping decisions and uncertainty with their parents. Confirm goal-backed execution (recommended, using $define-goal) or goal-free execution, my understood outcome and the verification process before activation or implementation."
 policy:
   allow_implicit_invocation: false

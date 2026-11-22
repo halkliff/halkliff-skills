@@ -203,10 +203,11 @@ evidence truth. Main and independent verifiers establish those facts and check
 the actual entry points. A typed handle or a coverage table cannot establish an
 unexercised lifetime or ordering outcome.
 
-Sol renders the accepted dataset and checks fidelity in a browser: overview and
-candidate identity, three verdict labels, calibration limit, requirement evidence,
-quality dimensions, findings and possible fixes, unrelated findings, filters,
-keyboard access, light/dark appearance, narrow layout, and print output. Escape
+The HTML author renders the accepted dataset and checks report fidelity in a
+browser. Check the overview and candidate identity, three verdict labels,
+calibration limit, requirement evidence, quality dimensions, findings and possible
+fixes, unrelated findings, filters, keyboard access, light/dark appearance, narrow
+layout, and print output. Escape
 all source content. The included template has no remote resources. Verify the
 actual output after changing it; renderer tests alone do not establish usability.
 
@@ -220,5 +221,5 @@ decisions, calibration status, and retained resources. Link the report and evide
 
 Send the handoff to a work chat only with established author authorization. The
 handoff proposes fixes. It does not authorize edits, commits, merge, publication,
-or an automatic re-review. Luna summarizes these settled results without changing
-the assessment. A negative verdict still produces the report and handoff.
+or an automatic re-review. The summarizer preserves the settled assessment. A
+negative verdict still produces the report and handoff.

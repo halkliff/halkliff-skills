@@ -15,9 +15,10 @@ directory.
    rules, and acceptance requirements. Complete the core's execution-isolation
    gate before write-capable tools, including dependency setup and browser QA.
 2. Load named dependencies from `<plugin-root>/support/skills/<name>/` by absolute
-   path. Give delegated reviewers the bundled review core and their sufficient
-   brief. The review profile takes precedence over any bundled orchestration
-   defaults, including Luna assignments and the three-assessment limit.
+   path, including the shared routing and roster references when called for.
+   Use the core review skill's grouped routing choice, independent roles and
+   single-assessment process. Give each worker the bundled core and its brief.
+   Verify actual author authorization for any user-owned task chat or scoped message.
 3. Render the agreed report using the bundled helper. Read its usage with:
 
    ```text

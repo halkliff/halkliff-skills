@@ -1,6 +1,6 @@
 # Terms that affect decisions
 
-- **Local acceptance:** Sol has reviewed a result against the task criteria.
+- **Local acceptance:** The coordinator has reviewed a result against the task criteria.
 - **Delivery:** Accepted source changes have reached the author's checkout,
   uncommitted. This alone does not establish integrated behavior.
 - **Root acceptance:** Orchestrator has verified relevant integrated criteria. The accepted
