@@ -67,13 +67,13 @@ installation needs fresh calibration before regular reliance on its Ready verdic
 Build the review package with:
 
 ```sh
-python scripts/build_plugin.py --plugin review --dest work/plugin-package/halkliff-review-0.2.0
+python scripts/build_plugin.py --plugin review --dest work/plugin-package/halkliff-review-0.2.1
 ```
 
 Build the local plugin with its selected dependency resources:
 
 ```sh
-python scripts/build_plugin.py --dest work/plugin-package/halkliff-orchestration-0.2.0
+python scripts/build_plugin.py --dest work/plugin-package/halkliff-orchestration-0.2.1
 ```
 
 The plugin exposes `$orchestrate-work-plugin`, a small adapter to the existing
@@ -204,6 +204,14 @@ pinned instructions until you explicitly migrate them.
 | This collection | `orchestrate-work`, `review-work`, `define-goal` |
 | pstack, adapted for Codex | `pstack-principles`, `unslop`, `how`, `why`, `blast-radius`, `no-comments`, `benchmark-checklist`, `correct`, `in-your-own-words`, `sharpen`, `create-verification-skill`, `maintain-verification-skill` |
 | Matt Pocock, with selected compatibility adaptations | `grilling`, `writing-for-agents`, `domain-modeling`, `codebase-design`, `research`, `handoff`, `chief-of-staff` |
+| Additional pstack skills | `create-formal-verification-skill`, `maintain-formal-verification-skill`, `statechart`, `reframe` |
+
+Use the formal verification pair to create or maintain a repeatable check for a
+specific invariant. The existing verification pair exercises the application's
+public behavior. For TLA+ work, `statechart` runs TLC and writes a Mermaid chart
+and a report of counterexamples. It needs a supported TypeScript runtime, Java
+and TLC when invoked. `reframe` helps turn an ambiguous description into a
+precise prompt using terminology from the relevant field.
 
 The exact file list and pinned revisions live in [dependencies.json](dependencies.json).
 Unchanged files come directly from submodules. Adapted files live under `adapters/`.

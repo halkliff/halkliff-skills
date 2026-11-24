@@ -15,7 +15,7 @@ code can express directly.
 1. Establish scope from the user's files, diff, or working tree.
 2. Classify each comment as explanatory, constraint-bearing, stale, redundant, or misleading.
 3. Keep comments only when the reason cannot be made clear through types, names, structure, tests, or a narrow runtime check.
-4. For a claimed external constraint, verify it with the relevant source, type, runtime behavior, test, or CI rule when practical.
+4. For a claimed external constraint or an unexplained "do not remove", trace the symbol and verify the constraint against source, runtime behavior, a contract, or a CI rule. Check relevant history when current code cannot explain the reason. When an enforceable constraint still lives only in prose, propose the cheapest in-scope type or executable check.
 5. Remove the smallest set of comments that no longer earn their place.
 6. If the review reveals a code defect, report it separately. Change code only when the user requested implementation or the surrounding workflow authorizes it.
 

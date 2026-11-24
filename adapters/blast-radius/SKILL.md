@@ -11,7 +11,7 @@ because of, plus the risks that survive real inspection.
 
 ## Workflow
 
-1. Read the diff, changed symbols, deleted behavior, and the behavior the diff does not spell out.
+1. Read the diff, changed symbols, deleted behavior, and the behavior the diff does not spell out. For a PR, inspect its description and relevant commits before tracing consumers.
 2. Find the central safety fact. If it holds, most scary cases should disappear.
 3. Follow what symbol search misses: dependency source, pinned versions, wire formats, database columns, feature flags, teardown timing, and downstream consumers.
 4. Give each remaining risk a real failure path, likelihood, cost, and evidence.

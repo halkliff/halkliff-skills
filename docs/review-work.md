@@ -20,7 +20,7 @@ not update upstream pins. Use `--dry-run` first when checking an existing setup.
 For the separate local plugin, build its self-contained package:
 
 ```sh
-python scripts/build_plugin.py --plugin review --dest work/plugin-package/halkliff-review-0.2.0
+python scripts/build_plugin.py --plugin review --dest work/plugin-package/halkliff-review-0.2.1
 ```
 
 Register the repository marketplace if it is not already registered, then install:

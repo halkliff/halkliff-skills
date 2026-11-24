@@ -1,13 +1,12 @@
-# Explain the number
+# Explain the Number
 
-Before trusting or reporting a measurement, establish what limits it and rule out measurements of different or skipped work.
+Before trusting a measurement, establish what limits it and confirm it measured the intended work.
 
-- **Ask "why not double?"** Name the resource or code path that bounds the result, such as a core, a lock, the disk, the network, or the load generator itself. Get it from a profile or from system counters taken during a run, then map it to source. A guess from reading the code is not a limiter. If you cannot say why the number is not twice as good, you do not know what you measured.
-- **List what else the number could be measuring, and rule out each one with evidence.** The usual suspects are errors, skipped or cached work, code that never ran, an untuned side (one left on default settings), noise, and a piece too small to matter end to end.
-- **Keep the evidence with the number.** Put the run count, the spread, and the limiter in the notes or a linked artifact.
+- **Write the decision before you run.** Name the result that would change it, and the noise floor. Stop when the run-to-run spread is larger than the effect.
+- **Ask "why not double?"** Name the resource or code path that bounds the result, from a profile or counters taken during a run. A guess from reading the code is not a limiter.
+- **List what else the number could be measuring** (errors, skipped or cached work, code that never ran, an untuned side, noise, a piece too small to matter) and rule out each one with evidence.
+- **Keep the run count, the spread, and the limiter with the number.**
 
-For a performance number, run the full procedure with [benchmark-checklist](../../benchmark-checklist/SKILL.md). Its explicitly requested one-run ballpark exception still requires checking errors and actual work and labelling the result as one run. For an eval result, ask the same of the trials: did every run do the task, does the gap hold across trials and models, and does the scenario matter.
+For a performance number, run the [benchmark-checklist](../../benchmark-checklist/SKILL.md) skill. Its requested one-run ballpark exception still requires checking errors and actual work and labeling the run as a ballpark. For an eval result, ask whether every run did the task, whether the gap holds across trials and models, and whether the scenario matters.
 
-You skipped this when evidence for a comparative claim has no run count, no spread, or no named limiter, or when the time saved is larger than the time the changed piece took.
-
-Distinct from [Prove it works](principle-prove-it-works.md), which checks that an output is real.
+Check that the claimed time saved fits within the time the changed part used to take. See [Prove it works](principle-prove-it-works.md) for direct verification of the artifact.

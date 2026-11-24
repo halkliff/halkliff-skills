@@ -20,9 +20,9 @@ but usually cannot prove why it exists.
 ## Workflow
 
 1. Parse the target and the actual why-question.
-2. Establish a code anchor with files, symbols, relevant history, and linked change records.
-3. Search the evidence sources available in this environment. These may include git history, pull requests, issue trackers, documents, team chat, observability, error tracking, and analytics.
-4. Keep a coverage map across source control, issue trackers, long-form documents, team chat, infrastructure observability, error tracking, and product analytics. Search each available category, using independent workers when useful. Record unavailable, searched-and-empty, and demonstrably irrelevant categories separately. A null result does not prove a discussion never happened.
+2. Establish a code anchor with files and symbols. Read the introducing commit and PR discussion, then trace material later changes and their linked decisions.
+3. Use issue trackers, documents, team chat, observability, error tracking, or analytics to fill gaps, resolve contradictions, or corroborate the record.
+4. For a broad investigation, track the sources you searched and distinguish unavailable, searched-and-empty, and irrelevant sources. A null result does not prove a discussion never happened.
 5. Compare the evidence against competing explanations.
 6. Present what is directly supported, what is inferred, what remains unknown, and what constraints the next change should preserve.
 

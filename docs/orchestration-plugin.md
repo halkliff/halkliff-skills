@@ -10,7 +10,7 @@ The standalone skill installation remains available separately.
 From the repository root, run:
 
 ```powershell
-python scripts/build_plugin.py --dest work/plugin-package/halkliff-orchestration-0.2.0
+python scripts/build_plugin.py --dest work/plugin-package/halkliff-orchestration-0.2.1
 ```
 
 To validate sources and destination safety without writing the package, add
@@ -25,7 +25,7 @@ to rebuild. A conflicting destination is left untouched; choose a fresh output
 directory when package inputs change.
 
 The repository's local marketplace entry points to
-`work/plugin-package/halkliff-orchestration-0.2.0`. Build first, then install that
+`work/plugin-package/halkliff-orchestration-0.2.1`. Build first, then install that
 local marketplace plugin through Codex. Plugin installation and hook trust are
 separate host actions; building or installing alone does not establish that
 hooks are trusted or that the host has delivered events to them.

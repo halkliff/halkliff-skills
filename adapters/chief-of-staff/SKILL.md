@@ -14,8 +14,10 @@ For a standalone request, establish the outcome, evidence, reserved decisions an
 stop condition. Use `define-goal` for explicitly requested goal-backed execution.
 Delegate the bulk of research and execution to subagents and authorized coordinator
 task threads while staying available to the author. Keep decisions, reconciliation
-and evidence pointers in the main context. Communicate sparse facts
-and pointers to existing evidence instead of copying reports between agents.
+and evidence pointers in the main context. Start new independent workers with
+fresh context and the scoped brief. Preserve context when resuming the same
+assignment. Communicate facts and pointers to contracts, reports, commits, and
+authorized knowledge records.
 
 At setup or when friction recurs, inspect the smallest relevant environment:
 
@@ -32,7 +34,14 @@ propose the trade-off to the author. Treat a convention mismatch as evidence to
 investigate, not an automatic prerequisite for unrelated cleanup.
 
 At handoff, identify recurring friction and the strongest supported improvement
-for later work. Keep proposals in the existing handoff. Recurring schedules need
+for later work. Keep proposals in the existing handoff. If the author has put a
+project wiki or durable decision record in scope, follow its conventions. Record
+durable decisions with their date and source, pin code claims to a revision, and
+mark superseded claims while preserving history. Check the relevant record before
+reopening a decision and verify current behavior against live evidence. Keep
+session findings in the run handoff when a durable record is outside scope.
+
+Recurring schedules need
 an explicit author request and supported automation tools; a long-running goal
 alone grants no scheduling, publication, external messaging or repository-action
 authority. Preserve the author's workspace and data.

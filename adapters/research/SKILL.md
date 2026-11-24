@@ -7,7 +7,9 @@ Investigate the assigned question and return a complete, cited answer.
 
 If you are already the assigned research worker, investigate directly. Otherwise,
 delegate a bounded investigation only when the runtime and parent assignment
-permit it and useful independent work can continue. Respect model, leaf-worker
+permit it and useful independent work can continue. Start the delegated worker
+with fresh context containing the question, constraints, and relevant source
+pointers. Respect model, leaf-worker
 and capacity constraints; loading this skill does not create recursive agents.
 
 1. Use primary sources: official docs, source code, specifications, or first-party

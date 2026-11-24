@@ -27,6 +27,12 @@ ownership. Orchestration uses the generators' procedures without generating a
 new skill unless requested. All selected `why` playbooks are mapped so their
 installed relative links resolve.
 
+The formal verification generators, `statechart` and `reframe` carry the reviewed
+Codex instructions and metadata. Most statechart modules come directly from the
+pinned source. Its runtime lookup and rendering notes are adapted for native
+Windows, including a PowerShell guide. Development tests and their model corpora
+remain in the submodule. Java, TLC and the optional SVG renderer are external tools.
+
 ## Matt Pocock skills
 
 Source: [mattpocock/skills](https://github.com/mattpocock/skills), checked out at
@@ -52,6 +58,10 @@ substantial reusable findings and contract-required reports remain Markdown
 artifacts. The writing-for-agents invocation reference describes Codex's
 `agents/openai.yaml` policy. The latter preserves the required skill description
 and does not treat another client's frontmatter as Codex configuration.
+
+The `grilling` overlay carries the Codex worker brief and direct-lookup fallback.
+The same context boundary applies to the independent design exercise, research
+and chief-of-staff delegations.
 
 The domain-modeling overlay follows upstream `GLOSSARY.md` naming for new
 projects while preserving existing `CONTEXT.md` glossaries. `handoff` uses

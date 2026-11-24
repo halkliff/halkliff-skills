@@ -13,8 +13,8 @@ not an annotated copy of the source.
 
 1. State your best interpretation of the question and its scope. Do not stop for clarification when the repository can answer it.
 2. Anchor the investigation in real entry points, symbols, types, and files.
-3. For a simple question, trace one complete path from input or trigger to output or effect.
-4. For a complex question, divide exploration into two to four distinct slices such as data model, request path, configuration, and side effects. Use available parallel workers when they materially help. If they are unavailable, explore the slices sequentially. When uncertain, start with the simple path.
+3. Start with one read-only exploration and explanation pass. Trace from input or trigger to observable output. If delegating, give one worker the scoped question and enough context to build a mental model for an engineer new to the subsystem.
+4. Split the question into independent slices only when one pass would miss material cross-cutting behavior. Use available read-only workers when they materially help, or inspect the slices directly.
 5. Read the actual callers, callees, type definitions, tests, and relevant configuration. Do not infer behavior from filenames.
 6. Reconcile the evidence yourself. Do not pass through raw worker reports.
 
